@@ -17,4 +17,67 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    finalizedBy 'jacocoTestReport'
+}
+
+// Jacoco 설정
+jacoco {
+    toolVersion = "0.8.12"
+//    // report가 생성될 디렉토리 설정
+//    // 설정하지 않는다면 reports/jacoco가 기본 값
+//    reportsDirectory = layout.buildDirectory.dir('customJacocoReportDir')
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+
+        html.required = true // 로컬에서 확인용으로 html 리포트 파일 생성
+        html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+
+        xml.required = true  // SonarCloud로 전송하기 위해 XML 리포트 생성
+        xml.outputLocation = layout.buildDirectory.file('jacoco.xml')
+
+        finalizedBy 'jacocoTestCoverageVerification'
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            enabled = true // 이 rule을 적용할 것이다.
+            element = 'CLASS' // class 단위로
+
+            // 브랜치 커버리지 최소 60%
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = 0.60
+            }
+
+            // 라인 커버리지 최소한 80%
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.80
+            }
+
+            // 빈 줄을 제외한 코드의 라인수 최대 300라인
+            limit {
+                counter = 'LINE'
+                value = 'TOTALCOUNT'
+                maximum = 0.3
+            }
+
+//            // 커버리지 체크를 제외할 클래스들
+//            excludes = [
+//                    '**.*Application*',
+//                    '**.*Request*',
+//                    '**.*Response*',
+//                    '**.*OAuthClient*',
+//                    '**.*Interceptor*',
+//                    '**.*Exception*',
+//            ] + Qdomains
+        }
+    }
 }
