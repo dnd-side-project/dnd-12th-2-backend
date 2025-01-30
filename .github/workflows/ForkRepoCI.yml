@@ -15,7 +15,10 @@ jobs:
   test-and-analyze:
     runs-on: ubuntu-22.04
 
-    if: ${{ secrets.REPO_ROLE == 'FORK_REPO'}}  # Fork된 레포인지 체크
+    env:
+      REPO_ROLE: ${{ secrets.REPO_ROLE }}  # 환경 변수로 할당
+
+    if: env.REPO_ROLE == 'FORK_REPO'  # 환경 변수를 이용해 비교
 
     steps:
       - name: Check out the repository
