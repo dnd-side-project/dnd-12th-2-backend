@@ -1,6 +1,8 @@
 plugins {
     id 'java'
     id 'jacoco'
+    id 'org.sonarqube' version '4.4.1.3373'
+
 }
 
 group = 'ac.dnd'
@@ -33,16 +35,15 @@ jacocoTestReport {
     reports {
 
         html.required = true // 로컬에서 확인용으로 html 리포트 파일 생성
-        html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
-
         xml.required = true  // SonarCloud로 전송하기 위해 XML 리포트 생성
-        xml.outputLocation = layout.buildDirectory.file('jacoco.xml')
+        csv.required = false
 
         finalizedBy 'jacocoTestCoverageVerification'
     }
 }
 
 jacocoTestCoverageVerification {
+    dependsOn jacocoTestReport
     violationRules {
         rule {
             enabled = true // 이 rule을 적용할 것이다.
@@ -81,3 +82,15 @@ jacocoTestCoverageVerification {
         }
     }
 }
+
+//sonar {
+//    properties {
+//        property 'sonar.host.url', 'https://sonarcloud.io'
+//        property 'sonar.organization', '???'
+//        property 'sonar.projectKey', 'SonarCloud-information에 있는 값을 넣어주시면 됩니다.'
+//        property 'sonar.coverage.jacoco.xmlReportPaths', '${buildDir}/reports/jacoco/test/jacocoTestReport.xml'
+//    }
+//}
+
+// 1. SonarCloud를 사용하려면 레포 주인이어야 한다.
+// 2. SonarCloud에서 무료 플랜을 사용하려면 레포 주인이어야 한다.
