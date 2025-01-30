@@ -15,7 +15,7 @@ jobs:
   test-and-analyze:
     runs-on: ubuntu-22.04
 
-    if: github.event.pull_request.head.repo.fork == true  # Fork된 레포인지 체크
+    if: ${{secrets.REPO_ROLE == 'FORK_REPO'}}  # Fork된 레포인지 체크
 
     steps:
       - name: Check out the repository

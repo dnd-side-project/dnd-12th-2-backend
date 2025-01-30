@@ -7,7 +7,7 @@ on:
 jobs:
   Docker_Build_And_Push:
 
-    if: github.event.pull_request.head.repo.fork != true  # 원본 레포인지 체크
+    if: ${{secrets.REPO_ROLE == 'ORIGIN_REPO'}}  # 코드를 배포할 레포인지 체크
 
     runs-on: ubuntu-22.04
 
