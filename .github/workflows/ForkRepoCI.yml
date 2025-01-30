@@ -15,12 +15,19 @@ jobs:
   test-and-analyze:
     runs-on: ubuntu-22.04
 
-    env:
-      REPO_ROLE: ${{ secrets.REPO_ROLE }}  # 환경 변수로 할당
-
-    if: env.REPO_ROLE == 'FORK_REPO'  # 환경 변수를 이용해 비교
-
     steps:
+      - name: Check REPO_ROLE
+        env:
+          REPO_ROLE: ${{ secrets.REPO_ROLE }}
+
+        run: |
+          if [ "$REPO_ROLE" == "FORK_REPO" ]; then
+            echo "Running CI for Forked Repo..."
+          else
+            echo "Skipping CI (Not a Forked Repo)"
+            exit 1
+          fi
+
       - name: Check out the repository
         uses: actions/checkout@v4
 

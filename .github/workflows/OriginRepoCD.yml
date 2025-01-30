@@ -7,14 +7,21 @@ on:
 jobs:
   Docker_Build_And_Push:
 
-    env:
-      REPO_ROLE: ${{ secrets.REPO_ROLE }}  # 환경 변수로 할당
-
-    if: env.REPO_ROLE == 'ORIGIN_REPO'  # 환경 변수를 이용해 비교
-
     runs-on: ubuntu-22.04
 
     steps:
+      - name: Check REPO_ROLE
+        env:
+          REPO_ROLE: ${{ secrets.REPO_ROLE }}
+
+        run: |
+          if [ "$REPO_ROLE" == "ORIGIN_REPO" ]; then
+            echo "Running CI for Forked Repo..."
+          else
+            echo "Skipping CI (Not a Forked Repo)"
+            exit 1
+          fi
+
       # 1. 리포지토리 코드 체크아웃
       - name: Check out the repository
         uses: actions/checkout@v3
