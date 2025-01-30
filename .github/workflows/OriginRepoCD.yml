@@ -1,0 +1,61 @@
+name: CD Pipeline for Main Branch
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  Docker_Build_And_Push:
+
+    if: github.event.pull_request.head.repo.fork != true  # 원본 레포인지 체크
+
+    runs-on: ubuntu-22.04
+
+    steps:
+      # 1. 리포지토리 코드 체크아웃
+      - name: Check out the repository
+        uses: actions/checkout@v3
+
+#      # 2. properties 파일 설정 (JASYPT를 사용하므로 패스)
+#      - name: Set PROPERTIES file
+#        run: |
+#          mkdir -p ./src/main/resources
+#          [ ! -f "./src/main/resources/application.properties" ] && echo "${{ secrets.APPLICATION_PROD_PROPERTIES }}" | base64 --decode > ./src/main/resources/application.properties
+#          find src
+
+      # 2. Docker Hub 로그인
+      - name: Log in to Docker Hub
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      # 3. 현재 디렉토리 파일 리스트 확인 (디버깅 용도)
+      - name: List files in current directory
+        run: ls -la
+
+      # 4. Docker 이미지 빌드 및 푸시
+      - name: Build and Push Docker image
+        # JASYPT_ENCRYPTOR_PASSWORD 가 secrets에 들어가야 함.
+        run: |
+          docker buildx build --platform linux/amd64 --push --build-arg JASYPT_ENCRYPTOR_PASSWORD=${{ secrets.JASYPT_KEY }} --tag 5hseok/dodal-server:0.0.1 -f ./Dockerfile .
+
+  Deploy:
+    needs: Docker_Build_And_Push
+    runs-on: ubuntu-22.04
+
+    steps:
+      # EC2에 SSH로 연결하여 배포
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@v0.1.5
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: 22
+          script: |            
+            cd /home/ubuntu 
+            sudo docker pull 5hseok/dodal-server:0.0.1
+            
+            sudo docker stop dodal-server || true
+            sudo docker rm dodal-server || true
+            
+            sudo docker run -d --name spring_server -p 8080:8080 5hseok/dodal-server:0.0.1
