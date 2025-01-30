@@ -83,14 +83,11 @@ jacocoTestCoverageVerification {
     }
 }
 
-//sonar {
-//    properties {
-//        property 'sonar.host.url', 'https://sonarcloud.io'
-//        property 'sonar.organization', '???'
-//        property 'sonar.projectKey', 'SonarCloud-information에 있는 값을 넣어주시면 됩니다.'
-//        property 'sonar.coverage.jacoco.xmlReportPaths', '${buildDir}/reports/jacoco/test/jacocoTestReport.xml'
-//    }
-//}
-
-// 1. SonarCloud를 사용하려면 레포 주인이어야 한다.
-// 2. SonarCloud에서 무료 플랜을 사용하려면 레포 주인이어야 한다.
+sonar {
+    properties {
+        property 'sonar.host.url', 'https://sonarcloud.io'
+        property 'sonar.organization', '5hseok'
+        property 'sonar.projectKey', '5hseok_DODAL_BE_SERVER'
+        property 'sonar.coverage.jacoco.xmlReportPaths', '${buildDir}/reports/jacoco/test/jacocoTestReport.xml'
+    }
+}
