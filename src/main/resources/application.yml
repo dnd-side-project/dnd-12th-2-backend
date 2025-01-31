@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: dodal
+
+# Jasypt
+jasypt:
+  encryptor:
+    password: ${JASYPT_ENCRYPTOR_PASSWORD}
