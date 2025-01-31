@@ -26,13 +26,6 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@v3
 
-#      # 2. properties 파일 설정 (JASYPT를 사용하므로 패스)
-#      - name: Set PROPERTIES file
-#        run: |
-#          mkdir -p ./src/main/resources
-#          [ ! -f "./src/main/resources/application.properties" ] && echo "${{ secrets.APPLICATION_PROD_PROPERTIES }}" | base64 --decode > ./src/main/resources/application.properties
-#          find src
-
       # 2. Docker Hub 로그인
       - name: Log in to Docker Hub
         run: |
