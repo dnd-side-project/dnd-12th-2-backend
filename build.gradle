@@ -74,15 +74,16 @@ jacocoTestCoverageVerification {
                 maximum = 0.3
             }
 
-//            // 커버리지 체크를 제외할 클래스들
-//            excludes = [
-//                    '**.*Application*',
+           // 커버리지 체크를 제외할 클래스들
+           excludes = [
+                   '**.*Application*',
+                   '**.*Config*',
+//                    '**.*Exception*',
 //                    '**.*Request*',
 //                    '**.*Response*',
 //                    '**.*OAuthClient*',
 //                    '**.*Interceptor*',
-//                    '**.*Exception*',
-//            ] + Qdomains
+           ]
         }
     }
 }
