@@ -41,9 +41,9 @@ public class DodalControllerAdvice {
         return ApiResponse.failure(e.getResultCode(), e.getMessage());
     }
 
-    @ExceptionHandler(InternalServerError.class)
+    @ExceptionHandler(InternalServerErrorException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ApiResponse<?> handleInternalServerErrorException(InternalServerError e) {
+    public ApiResponse<?> handleInternalServerErrorException(InternalServerErrorException e) {
         return ApiResponse.failure(e.getResultCode(), e.getMessage());
     }
 
