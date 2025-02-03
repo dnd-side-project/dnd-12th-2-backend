@@ -2,6 +2,10 @@ spring:
   application:
     name: dodal
 
+  profiles:
+    active: local
+
+
 # Jasypt
 jasypt:
   encryptor:
