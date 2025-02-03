@@ -2,7 +2,8 @@ plugins {
     id 'java'
     id 'jacoco'
     id 'org.sonarqube' version '4.4.1.3373'
-
+    id 'org.springframework.boot' version '3.2.3'
+    id 'io.spring.dependency-management' version '1.1.4'
 }
 
 group = 'ac.dnd'
@@ -13,6 +14,9 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
+
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }
@@ -70,15 +74,16 @@ jacocoTestCoverageVerification {
                 maximum = 0.3
             }
 
-//            // 커버리지 체크를 제외할 클래스들
-//            excludes = [
-//                    '**.*Application*',
+           // 커버리지 체크를 제외할 클래스들
+           excludes = [
+                   '**.*Application*',
+                   '**.*Config*',
+//                    '**.*Exception*',
 //                    '**.*Request*',
 //                    '**.*Response*',
 //                    '**.*OAuthClient*',
 //                    '**.*Interceptor*',
-//                    '**.*Exception*',
-//            ] + Qdomains
+           ]
         }
     }
 }
