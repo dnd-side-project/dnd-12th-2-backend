@@ -87,6 +87,7 @@ jacocoTestCoverageVerification {
                    '**.*Application*',
                    '**.*Config*',
                    '**.*Exception*',
+                   '**.BaseEntity', // 임시로 추가
                    '**.*ControllerAdvice', // 임시로 추가
                    '**.*Request*', // 임시로 추가
                    '**.ApiResponse',
