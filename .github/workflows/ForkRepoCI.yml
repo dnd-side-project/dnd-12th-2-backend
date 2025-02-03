@@ -4,6 +4,9 @@ on:
   pull_request:
     branches:
       - main
+    reviewers:
+      - sueelly
+      - 5hseok
 
 permissions:
   contents: read
