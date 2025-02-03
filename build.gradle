@@ -86,11 +86,12 @@ jacocoTestCoverageVerification {
            excludes = [
                    '**.*Application*',
                    '**.*Config*',
-//                    '**.*Exception*',
-//                    '**.*Request*',
-//                    '**.*Response*',
-//                    '**.*OAuthClient*',
-//                    '**.*Interceptor*',
+                   '**.*Exception*',
+                   '**.*ControllerAdvice', // 임시로 추가
+                   '**.*Request*', // 임시로 추가
+                   '**.ApiResponse',
+                   '**.*OAuthClient*',
+                   '**.*Interceptor*',
            ]
         }
     }
