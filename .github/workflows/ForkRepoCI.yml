@@ -3,7 +3,7 @@ name: CI/CD Workflow for Forked Repo
 on:
   pull_request:
     branches:
-      - main
+      - '*'
     reviewers:
       - sueelly
       - 5hseok
@@ -71,3 +71,4 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew build
+        
