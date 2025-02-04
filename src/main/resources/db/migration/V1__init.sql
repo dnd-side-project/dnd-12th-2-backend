@@ -93,27 +93,29 @@ CREATE TABLE IF NOT EXISTS feedback_questions (
     order_number INT NOT NULL,
     code VARCHAR(5) NOT NULL,
 
-    PRIMARY KEY (question),
+    PRIMARY KEY (question, type),
     CONSTRAINT question_code_unique UNIQUE (code),
     CONSTRAINT question_type_check CHECK (type IN ('SUCCESS', 'FAILURE'))
 );
 
 CREATE TABLE IF NOT EXISTS default_feedback_indicators (
     question VARCHAR(50) NOT NULL,
+    type VARCHAR(20) NOT NULL,
     indicator VARCHAR(255) NOT NULL,
     code VARCHAR(11) NOT NULL,
 
-    PRIMARY KEY (question, indicator),
-    CONSTRAINT indicator_code_unique UNIQUE (code),
-    FOREIGN KEY (question) REFERENCES feedback_questions(question)
+    PRIMARY KEY (question, type, indicator),
+    FOREIGN KEY (question, type) REFERENCES feedback_questions(question, type),
+    CONSTRAINT indicator_code_unique UNIQUE (code)
 );
 
 CREATE TABLE IF NOT EXISTS user_feedback_indicators (
     question VARCHAR(50) NOT NULL,
+    type VARCHAR(20) NOT NULL,
     indicator VARCHAR(255) NOT NULL,
     user_id BIGINT,
 
-    PRIMARY KEY (question, indicator, user_id),
-    FOREIGN KEY (question) REFERENCES feedback_questions(question),
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    PRIMARY KEY (question, type, indicator, user_id),
+    FOREIGN KEY (question, type) REFERENCES feedback_questions(question, type),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
