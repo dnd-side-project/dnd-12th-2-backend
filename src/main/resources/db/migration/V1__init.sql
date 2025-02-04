@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS users (
-    id BIGINT AUTO_INCREMENT,
+    user_id BIGINT AUTO_INCREMENT,
     nickname VARCHAR(20) NOT NULL,
     profile_image_url VARCHAR(255) NULL,
     device_token VARCHAR(255) NOT NULL,
@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS users (
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     deleted_at TIMESTAMP NULL,
 
-    PRIMARY KEY (id),
+    PRIMARY KEY (user_id),
     CONSTRAINT email_unique UNIQUE (email)
 );
 
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS user_guides (
     deleted_at TIMESTAMP NULL,
 
     PRIMARY KEY (user_id, type),
-    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
     CONSTRAINT guide_type_check CHECK (type IN ('PLAN', 'TIME'))
 );
 
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS goals (
     deleted_at TIMESTAMP NULL,
 
     PRIMARY KEY (goal_id),
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
 CREATE TABLE IF NOT EXISTS plan_histories (
