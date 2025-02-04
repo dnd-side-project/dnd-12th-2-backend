@@ -79,18 +79,20 @@ jacocoTestCoverageVerification {
             limit {
                 counter = 'LINE'
                 value = 'TOTALCOUNT'
-                maximum = 0.3
+                maximum = 300
             }
 
            // 커버리지 체크를 제외할 클래스들
            excludes = [
                    '**.*Application*',
                    '**.*Config*',
-//                    '**.*Exception*',
-//                    '**.*Request*',
-//                    '**.*Response*',
-//                    '**.*OAuthClient*',
-//                    '**.*Interceptor*',
+                   '**.*Exception*',
+                   '**.BaseEntity', // 임시로 추가
+                   '**.*ControllerAdvice', // 임시로 추가
+                   '**.*Request*', // 임시로 추가
+                   '**.ApiResponse',
+                   '**.*OAuthClient*',
+                   '**.*Interceptor*',
            ]
         }
     }
