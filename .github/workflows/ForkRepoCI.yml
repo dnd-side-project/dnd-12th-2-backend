@@ -56,12 +56,25 @@ jobs:
           min-coverage-overall: 80
           min-coverage-changed-files: 80
 
+      - name: Fetch full history
+        run: git fetch --unshallow
+
+      - name: Fetch main branch
+        run: git fetch origin main
+
       - name: Cache SonarCloud packages
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
 
       - name: Run SonarCloud analysis
         run: ./gradlew sonar --info
@@ -71,4 +84,3 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew build
-        
