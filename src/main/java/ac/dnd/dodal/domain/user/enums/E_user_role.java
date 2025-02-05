@@ -1,10 +1,7 @@
 package ac.dnd.dodal.domain.user.enums;
 
-import ac.dnd.dodal.domain.user.exception.UserException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import java.util.Arrays;
 
 @Getter
 @RequiredArgsConstructor
