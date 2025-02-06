@@ -18,7 +18,8 @@ public enum E_security_code implements ResultCode {
     NOT_FOUND_END_POINT("SEC007", "Not Found End Point"),
     EXTERNAL_SERVER_ERROR("SEC008", "External Server Error"),
     ACCESS_DENIED_ERROR("SEC009", "Access Denied Error"),
-    FAILURE_LOGOUT("SEC010", "Failure Logout"),;
+    FAILURE_LOGOUT("SEC010", "Failure Logout"),
+    FAILURE_LOGIN("SEC011", "Failure Login"),;
 
     private final String code;
     private final String message;
