@@ -5,13 +5,11 @@ spring:
     username: sa
     password:
 
-  # h2와 mysql 문법 호환이 안됨에 따라 적용 불가 -> flyway는 test container에서 적용하고
-  # h2는 data.sql, schema.sql 자동 실행으로 대체
   flyway:
-    enabled: false
-  #   baseline-on-migrate: true
-  #   locations: classpath:db/migration
-  #   table: dodal_flyway_schema_version
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+    table: dodal_flyway_schema_version
 
   jpa:
     show-sql: true
@@ -19,7 +17,7 @@ spring:
 
   sql:
     init:
-      mode: always # schema.sql, data.sql 자동 실행
+      mode: never
 
 jasypt:
   encryptor:
