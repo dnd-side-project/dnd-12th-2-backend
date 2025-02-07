@@ -1,4 +1,4 @@
-package ac.dnd.dodal.config;
+package ac.dnd.dodal.core.config;
 
 import ac.dnd.dodal.common.constant.Constants;
 import ac.dnd.dodal.common.interceptor.UserIdArgumentResolver;

@@ -1,8 +1,8 @@
-package ac.dnd.dodal.config.security.handler;
+package ac.dnd.dodal.core.config.security.handler;
 
 import ac.dnd.dodal.application.user.repository.UserRepository;
-import ac.dnd.dodal.config.security.info.CustomUserDetails;
-import ac.dnd.dodal.config.security.util.JwtUtil;
+import ac.dnd.dodal.core.config.security.info.CustomUserDetails;
+import ac.dnd.dodal.core.config.security.util.JwtUtil;
 import ac.dnd.dodal.ui.user.response.JwtTokenDto;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

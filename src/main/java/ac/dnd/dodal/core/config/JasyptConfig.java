@@ -1,4 +1,4 @@
-package ac.dnd.dodal.config;
+package ac.dnd.dodal.core.config;
 
 import org.jasypt.encryption.StringEncryptor;
 import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;

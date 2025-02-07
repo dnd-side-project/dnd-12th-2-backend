@@ -1,7 +1,7 @@
-package ac.dnd.dodal.config.security.handler;
+package ac.dnd.dodal.core.config.security.handler;
 
-import ac.dnd.dodal.config.security.AbstractFailureResponse;
-import ac.dnd.dodal.config.security.enums.E_security_code;
+import ac.dnd.dodal.core.config.security.AbstractFailureResponse;
+import ac.dnd.dodal.core.config.security.enums.E_security_code;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

@@ -1,4 +1,4 @@
-package ac.dnd.dodal.config.security;
+package ac.dnd.dodal.core.config.security;
 
 import ac.dnd.dodal.domain.user.enums.E_user_role;
 import org.springframework.security.authentication.AbstractAuthenticationToken;

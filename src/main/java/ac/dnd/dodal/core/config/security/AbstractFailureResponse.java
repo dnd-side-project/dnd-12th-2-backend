@@ -1,7 +1,7 @@
-package ac.dnd.dodal.config.security;
+package ac.dnd.dodal.core.config.security;
 
 import ac.dnd.dodal.common.response.ExceptionDto;
-import ac.dnd.dodal.config.security.enums.E_security_code;
+import ac.dnd.dodal.core.config.security.enums.E_security_code;
 import jakarta.servlet.http.HttpServletResponse;
 import net.minidev.json.JSONValue;
 import org.springframework.http.HttpStatus;

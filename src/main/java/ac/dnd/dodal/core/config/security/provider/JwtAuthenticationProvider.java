@@ -1,9 +1,9 @@
-package ac.dnd.dodal.config.security.provider;
+package ac.dnd.dodal.core.config.security.provider;
 
-import ac.dnd.dodal.config.security.JwtAuthenticationToken;
-import ac.dnd.dodal.config.security.info.CustomUserDetails;
-import ac.dnd.dodal.config.security.info.JwtUserInfo;
-import ac.dnd.dodal.config.security.service.CustomUserDetailsService;
+import ac.dnd.dodal.core.config.security.JwtAuthenticationToken;
+import ac.dnd.dodal.core.config.security.info.CustomUserDetails;
+import ac.dnd.dodal.core.config.security.info.JwtUserInfo;
+import ac.dnd.dodal.core.config.security.service.CustomUserDetailsService;
 import ac.dnd.dodal.domain.user.enums.E_user_role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;

@@ -1,10 +1,10 @@
-package ac.dnd.dodal.config.security.filter;
+package ac.dnd.dodal.core.config.security.filter;
 
 import ac.dnd.dodal.common.constant.Constants;
-import ac.dnd.dodal.config.security.JwtAuthenticationToken;
-import ac.dnd.dodal.config.security.info.JwtUserInfo;
-import ac.dnd.dodal.config.security.provider.JwtAuthenticationProvider;
-import ac.dnd.dodal.config.security.util.JwtUtil;
+import ac.dnd.dodal.core.config.security.JwtAuthenticationToken;
+import ac.dnd.dodal.core.config.security.info.JwtUserInfo;
+import ac.dnd.dodal.core.config.security.provider.JwtAuthenticationProvider;
+import ac.dnd.dodal.core.config.security.util.JwtUtil;
 import ac.dnd.dodal.domain.user.enums.E_user_role;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;

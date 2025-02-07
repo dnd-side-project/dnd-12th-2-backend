@@ -2,7 +2,7 @@ package ac.dnd.dodal.common.interceptor;
 
 import ac.dnd.dodal.annotation.UserId;
 import ac.dnd.dodal.common.exception.UnauthorizedException;
-import ac.dnd.dodal.config.security.enums.E_security_code;
+import ac.dnd.dodal.core.config.security.enums.E_security_code;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;

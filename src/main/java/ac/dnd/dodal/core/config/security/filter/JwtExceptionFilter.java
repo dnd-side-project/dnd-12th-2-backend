@@ -1,6 +1,6 @@
-package ac.dnd.dodal.config.security.filter;
+package ac.dnd.dodal.core.config.security.filter;
 
-import ac.dnd.dodal.config.security.enums.E_security_code;
+import ac.dnd.dodal.core.config.security.enums.E_security_code;
 import ac.dnd.dodal.domain.user.enums.E_user_code;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;

@@ -1,7 +1,7 @@
-package ac.dnd.dodal.config.security.service;
+package ac.dnd.dodal.core.config.security.service;
 
 import ac.dnd.dodal.application.user.repository.UserRepository;
-import ac.dnd.dodal.config.security.info.CustomUserDetails;
+import ac.dnd.dodal.core.config.security.info.CustomUserDetails;
 import ac.dnd.dodal.domain.user.enums.E_user_code;
 import ac.dnd.dodal.domain.user.exception.UserException;
 import ac.dnd.dodal.domain.user.model.Users;
