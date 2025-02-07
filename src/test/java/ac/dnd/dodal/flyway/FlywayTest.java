@@ -8,18 +8,16 @@ import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-@SpringBootTest
-@ActiveProfiles("test")
-public class FlywayTest {
+import ac.dnd.dodal.AcceptanceTest;
+
+public class FlywayTest extends AcceptanceTest {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    
+
     @DisplayName("Flyway DB Migration Test")
     @Test
     public void flywayMigrationTest() {
