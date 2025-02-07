@@ -9,7 +9,6 @@ import jakarta.persistence.Column;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
-import lombok.experimental.SuperBuilder;
 import lombok.NoArgsConstructor;
 
 import ac.dnd.dodal.common.model.BaseEntity;
@@ -22,7 +21,6 @@ import ac.dnd.dodal.domain.goal.exception.GoalExceptionCode;
 @Getter
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@SuperBuilder
 @NoArgsConstructor
 public class Goal extends BaseEntity {
 
