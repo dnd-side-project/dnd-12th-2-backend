@@ -8,6 +8,8 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 
+import org.springframework.http.HttpStatus;
+
 import ac.dnd.dodal.common.enums.CommonResultCode;
 import ac.dnd.dodal.common.response.ApiResponse;
 import ac.dnd.dodal.AcceptanceTest;
@@ -28,8 +30,8 @@ public class CreateGoalAcceptanceTest extends AcceptanceTest {
         Response response = GoalSteps.createGoal(authorizationHeader, request);
         ApiResponse<Long> apiResponse = response.as(new TypeRef<ApiResponse<Long>>() {});
 
-        // then
-        assertThat(response.getStatusCode()).isEqualTo(200);
+        // then 200
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
         // COM001
         assertThat(apiResponse.code()).isEqualTo(CommonResultCode.SUCCESS.getCode());
         // Success
@@ -48,10 +50,10 @@ public class CreateGoalAcceptanceTest extends AcceptanceTest {
         Response response = GoalSteps.createGoal(authorizationHeader, request);
         ApiResponse<?> apiResponse = response.as(new TypeRef<ApiResponse<?>>() {});
 
-        // then
-        assertThat(response.getStatusCode()).isEqualTo(400);
-        // COM002
-        assertThat(apiResponse.code()).isEqualTo(CommonResultCode.BAD_REQUEST.getCode());
+        // then 400
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        // GOA002
+        assertThat(apiResponse.code()).isEqualTo(GoalExceptionCode.GOAL_TITLE_EMPTY.getCode());
         // Goal title is empty
         assertThat(apiResponse.message())
                 .isEqualTo(GoalExceptionCode.GOAL_TITLE_EMPTY.getMessage());
@@ -70,9 +72,9 @@ public class CreateGoalAcceptanceTest extends AcceptanceTest {
         ApiResponse<?> apiResponse = response.as(new TypeRef<ApiResponse<?>>() {});
 
         // then
-        assertThat(response.getStatusCode()).isEqualTo(400);
-        // COM002
-        assertThat(apiResponse.code()).isEqualTo(CommonResultCode.BAD_REQUEST.getCode());
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        // GOA002
+        assertThat(apiResponse.code()).isEqualTo(GoalExceptionCode.GOAL_TITLE_EMPTY.getCode());
         // Goal title is empty
         assertThat(apiResponse.message())
                 .isEqualTo(GoalExceptionCode.GOAL_TITLE_EMPTY.getMessage());
@@ -90,10 +92,10 @@ public class CreateGoalAcceptanceTest extends AcceptanceTest {
         Response response = GoalSteps.createGoal(authorizationHeader, request);
         ApiResponse<?> apiResponse = response.as(new TypeRef<ApiResponse<?>>() {});
 
-        // then
-        assertThat(response.getStatusCode()).isEqualTo(400);
-        // COM002
-        assertThat(apiResponse.code()).isEqualTo(CommonResultCode.BAD_REQUEST.getCode());
+        // then 400
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        // GOA002
+        assertThat(apiResponse.code()).isEqualTo(GoalExceptionCode.GOAL_TITLE_EMPTY.getCode());
         // Goal title is empty
         assertThat(apiResponse.message())
             .isEqualTo(GoalExceptionCode.GOAL_TITLE_EMPTY.getMessage());
@@ -111,10 +113,10 @@ public class CreateGoalAcceptanceTest extends AcceptanceTest {
         Response response = GoalSteps.createGoal(authorizationHeader, request);
         ApiResponse<?> apiResponse = response.as(new TypeRef<ApiResponse<?>>() {});
 
-        // then
-        assertThat(response.getStatusCode()).isEqualTo(400);
-        // COM001
-        assertThat(apiResponse.code()).isEqualTo(CommonResultCode.BAD_REQUEST.getCode());
+        // then 400
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        // GOA001
+        assertThat(apiResponse.code()).isEqualTo(GoalExceptionCode.GOAL_TITLE_EXCEED_MAX_LENGTH.getCode());
         // Goal title is too long: Max length is 20
         assertThat(apiResponse.message())
             .isEqualTo(GoalExceptionCode.GOAL_TITLE_EXCEED_MAX_LENGTH.getMessage());
