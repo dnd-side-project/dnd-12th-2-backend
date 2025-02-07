@@ -44,6 +44,9 @@ public class Goal extends BaseEntity {
         if (this.deletedAt != null) {
             throw new BadRequestException(GoalExceptionCode.DELETED_GOAL);
         }
+        if (this.isAchieved) {
+            throw new BadRequestException(GoalExceptionCode.GOAL_ALREADY_ACHIEVED);
+        }
         this.isAchieved = true;
     }
 
