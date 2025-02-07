@@ -39,6 +39,16 @@ public class Goal extends BaseEntity {
     @Column(nullable = false)
     private Boolean isAchieved;
 
+    public void achieve(Long userId) {
+        if (this.userId != userId) {
+            throw new UnauthorizedException();
+        }
+        if (this.deletedAt != null) {
+            throw new BadRequestException(GoalExceptionCode.DELETED_GOAL);
+        }
+        this.isAchieved = true;
+    }
+
     public Goal(Long userId, String title) {
         super();
 
