@@ -16,7 +16,7 @@ import ac.dnd.dodal.domain.goal.exception.GoalExceptionCode;
 import ac.dnd.dodal.ui.goal.request.GoalCreateRequest;
 import ac.dnd.dodal.ui.goal.fixture.GoalUIFixture;
 
-public class GoalAcceptanceTest extends AcceptanceTest {
+public class CreateGoalAcceptanceTest extends AcceptanceTest {
 
     @Test
     @DisplayName("Create Goal Test with Valid Title")
