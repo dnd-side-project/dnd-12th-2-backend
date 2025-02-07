@@ -53,7 +53,7 @@ public class Goal extends BaseEntity {
     public Goal(Long userId, String title) {
         super();
 
-        if (title == null || title.isEmpty()) {
+        if (title == null || title.isEmpty() || title.isBlank()) {
             throw new BadRequestException(GoalExceptionCode.GOAL_TITLE_EMPTY);
         }
         if (title.length() > GoalConstraint.MAX_GOAL_TITLE_LENGTH) {
