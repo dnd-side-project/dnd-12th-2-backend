@@ -8,10 +8,10 @@ import org.jasypt.encryption.StringEncryptor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-public class JasyptConfigTest {
+import ac.dnd.dodal.IntegrationTest;
+
+public class JasyptConfigTest extends IntegrationTest {
 
     @Autowired
     @Qualifier("jasyptStringEncryptor")
