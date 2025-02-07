@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 import ac.dnd.dodal.common.model.BaseEntity;
 import ac.dnd.dodal.common.exception.BadRequestException;
 import ac.dnd.dodal.common.exception.UnauthorizedException;
+import ac.dnd.dodal.common.exception.ForbiddenException;
 import ac.dnd.dodal.domain.goal.constraint.GoalConstraint;
 import ac.dnd.dodal.domain.goal.exception.GoalExceptionCode;
 
@@ -42,7 +43,7 @@ public class Goal extends BaseEntity {
             throw new UnauthorizedException();
         }
         if (this.deletedAt != null) {
-            throw new BadRequestException(GoalExceptionCode.DELETED_GOAL);
+            throw new ForbiddenException(GoalExceptionCode.DELETED_GOAL);
         }
         if (this.isAchieved) {
             throw new BadRequestException(GoalExceptionCode.GOAL_ALREADY_ACHIEVED);
