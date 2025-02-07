@@ -45,4 +45,14 @@ public class GoalSteps extends AcceptanceTest {
                 .extract()
             .response();
     }
+
+    public static Response deleteGoal(Map<String, Object> header, Long goalId) {
+        return given().log().all()
+                .headers(header)
+            .when()
+                .delete(BASE_URL + "/" + goalId)
+            .then().log().all()
+                .extract()
+            .response();
+    }
 }
