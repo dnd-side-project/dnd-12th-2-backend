@@ -11,15 +11,17 @@ public class GoalFixture {
     private static final String TITLE = "title";
 
     public static Goal goal() {
-        return new Goal(GOAL_ID, USER_ID, TITLE, false, null, null, null);
+        return new Goal(GOAL_ID, USER_ID, TITLE, false,
+                LocalDateTime.now(), LocalDateTime.now(), null);
     }
 
     public static Goal achievedGoal() {
-        return new Goal(GOAL_ID, USER_ID, TITLE, true, null, null, null);
+        return new Goal(GOAL_ID, USER_ID, TITLE, true,
+                LocalDateTime.now(), LocalDateTime.now(), null);
     }
 
     public static Goal deletedGoal() {
-        return new Goal(GOAL_ID, USER_ID, TITLE, false, LocalDateTime.now(), LocalDateTime.now(),
-                LocalDateTime.now());
+        return new Goal(GOAL_ID, USER_ID, TITLE, false,
+                LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now());
     }
 }
