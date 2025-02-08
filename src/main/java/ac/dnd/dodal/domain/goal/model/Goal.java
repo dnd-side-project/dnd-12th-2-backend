@@ -1,5 +1,7 @@
 package ac.dnd.dodal.domain.goal.model;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -63,5 +65,15 @@ public class Goal extends BaseEntity {
         this.userId = userId;
         this.title = title;
         this.isAchieved = false;
+    }
+
+    public Goal(Long goalId, Long userId, String title, Boolean isAchieved,
+            LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
+        super(createdAt, updatedAt, deletedAt);
+
+        this.goalId = goalId;
+        this.userId = userId;
+        this.title = title;
+        this.isAchieved = isAchieved;
     }
 }
