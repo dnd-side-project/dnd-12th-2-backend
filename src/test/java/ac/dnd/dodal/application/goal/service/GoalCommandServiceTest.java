@@ -1,9 +1,13 @@
 package ac.dnd.dodal.application.goal.service;
 
 import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.verify;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import java.util.Optional;
 
 import org.mockito.Mock;
 import org.mockito.InjectMocks;
@@ -17,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import ac.dnd.dodal.common.exception.BadRequestException;
 import ac.dnd.dodal.common.exception.ForbiddenException;
+import ac.dnd.dodal.common.exception.NotFoundException;
 import ac.dnd.dodal.common.exception.UnauthorizedException;
 import ac.dnd.dodal.domain.goal.GoalFixture;
 import ac.dnd.dodal.domain.goal.exception.GoalExceptionCode;
@@ -47,9 +52,13 @@ public class GoalCommandServiceTest {
         goal = GoalFixture.goal();
         achievedGoal = GoalFixture.achievedGoal();
         deletedGoal = GoalFixture.deletedGoal();
+
         goalId = goal.getGoalId();
         userId = goal.getUserId();
         title = goal.getTitle();
+
+        lenient().when(goalCommandRepository.findById(goalId))
+            .thenReturn(Optional.of(goal));
     }
 
     @Test
@@ -61,13 +70,11 @@ public class GoalCommandServiceTest {
         when(goalCommandRepository.save(goalToSave)).thenReturn(goal);
 
         // when
-        goalCommandService.create(command);
+        Long savedGoalId = goalCommandService.create(command);
 
         // then
-        Goal savedGoal = verify(goalCommandRepository).save(goalToSave);
-        assertThat(savedGoal.getGoalId()).isEqualTo(goalId);
-        assertThat(savedGoal.getUserId()).isEqualTo(userId);
-        assertThat(savedGoal.getTitle()).isEqualTo(title);
+        verify(goalCommandRepository).save(goalToSave);
+        assertThat(savedGoalId).isEqualTo(goalId);
     }
 
     @Test
@@ -75,9 +82,6 @@ public class GoalCommandServiceTest {
     void create_goal_with_null_title() {
         // given
         CreateGoalCommand command = GoalCommandFixture.createGoalCommandWithNullTitle();
-        Goal goalToSave = CreateGoalCommand.toEntity(command);
-        when(goalCommandRepository.save(goalToSave))
-                .thenThrow(new BadRequestException(GoalExceptionCode.GOAL_TITLE_EMPTY));
 
         // when & then
         assertThatThrownBy(() -> goalCommandService.create(command))
@@ -90,14 +94,11 @@ public class GoalCommandServiceTest {
     void create_goal_with_empty_title() {
         // given
         CreateGoalCommand command = GoalCommandFixture.createGoalCommandWithEmptyTitle();
-        Goal goalToSave = CreateGoalCommand.toEntity(command);
-        when(goalCommandRepository.save(goalToSave))
-        .thenThrow(new BadRequestException(GoalExceptionCode.GOAL_TITLE_EMPTY));
-        
+
         // when & then
         assertThatThrownBy(() -> goalCommandService.create(command))
-        .isInstanceOf(BadRequestException.class)
-        .hasMessage(GoalExceptionCode.GOAL_TITLE_EMPTY.getMessage());
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage(GoalExceptionCode.GOAL_TITLE_EMPTY.getMessage());
     }
 
     @Test
@@ -105,9 +106,6 @@ public class GoalCommandServiceTest {
     void create_goal_with_blank_title() {
         // given
         CreateGoalCommand command = GoalCommandFixture.createGoalCommandWithBlankTitle();
-        Goal goalToSave = CreateGoalCommand.toEntity(command);
-        when(goalCommandRepository.save(goalToSave))
-                .thenThrow(new BadRequestException(GoalExceptionCode.GOAL_TITLE_EMPTY));
 
         // when & then
         assertThatThrownBy(() -> goalCommandService.create(command))
@@ -120,9 +118,6 @@ public class GoalCommandServiceTest {
     void create_goal_with_exceed_title_length() {
         // given
         CreateGoalCommand command = GoalCommandFixture.createGoalCommandExceedTitleLength();
-        Goal goalToSave = CreateGoalCommand.toEntity(command);
-        when(goalCommandRepository.save(goalToSave))
-                .thenThrow(new BadRequestException(GoalExceptionCode.GOAL_TITLE_EXCEED_MAX_LENGTH));
 
         // when & then
         assertThatThrownBy(() -> goalCommandService.create(command))
@@ -135,18 +130,26 @@ public class GoalCommandServiceTest {
     void achieve_goal_success() {
         // given
         AchieveGoalCommand command = GoalCommandFixture.achieveGoalCommand(userId, goalId);
-        when(goalCommandRepository.save(achievedGoal))
-                .thenReturn(achievedGoal);
 
         // when
         goalCommandService.achieve(command);
 
         // then
-        Goal savedGoal = verify(goalCommandRepository).save(achievedGoal);
-        assertThat(savedGoal.getGoalId()).isEqualTo(goalId);
-        assertThat(savedGoal.getUserId()).isEqualTo(userId);
-        assertThat(savedGoal.getTitle()).isEqualTo(title);
-        assertThat(savedGoal.getIsAchieved()).isTrue();
+        verify(goalCommandRepository).save(argThat(goal -> goal.getIsAchieved() == true));
+    }   
+
+    @Test
+    @DisplayName("Achieve a goal not found")
+    void achieve_goal_not_found() {
+        // given
+        AchieveGoalCommand command = GoalCommandFixture.achieveGoalCommand(userId, goalId);
+        when(goalCommandRepository.findById(goalId))
+            .thenReturn(Optional.empty());
+
+        // when & then
+        assertThatThrownBy(() -> goalCommandService.achieve(command))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage(GoalExceptionCode.GOAL_NOT_FOUND.getMessage());
     }
 
     @Test
@@ -155,8 +158,8 @@ public class GoalCommandServiceTest {
         // given
         AchieveGoalCommand command = GoalCommandFixture
                 .achieveGoalCommand(deletedGoal.getUserId(), deletedGoal.getGoalId());
-        when(goalCommandRepository.save(deletedGoal))
-                .thenThrow(new ForbiddenException(GoalExceptionCode.DELETED_GOAL));
+        when(goalCommandRepository.findById(goalId))
+            .thenReturn(Optional.of(deletedGoal));
 
         // when & then
         assertThatThrownBy(() -> goalCommandService.achieve(command))
@@ -170,8 +173,6 @@ public class GoalCommandServiceTest {
         // given
         AchieveGoalCommand command = GoalCommandFixture
                 .achieveGoalCommand(userId + 1, goalId);
-        when(goalCommandRepository.save(achievedGoal))
-                .thenThrow(new UnauthorizedException());
 
         // when & then
         assertThatThrownBy(() -> goalCommandService.achieve(command))
@@ -184,8 +185,8 @@ public class GoalCommandServiceTest {
         // given
         AchieveGoalCommand command = GoalCommandFixture.achieveGoalCommand(achievedGoal.getUserId(),
                 achievedGoal.getGoalId());
-        when(goalCommandRepository.save(achievedGoal))
-                .thenThrow(new BadRequestException(GoalExceptionCode.GOAL_ALREADY_ACHIEVED));
+        when(goalCommandRepository.findById(goalId))
+                .thenReturn(Optional.of(achievedGoal));
 
         // when & then
         assertThatThrownBy(() -> goalCommandService.achieve(command))
@@ -198,17 +199,26 @@ public class GoalCommandServiceTest {
     void delete_goal_success() {
         // given
         DeleteGoalCommand command = GoalCommandFixture.deleteGoalCommand(userId, goalId);
-        when(goalCommandRepository.save(deletedGoal)).thenReturn(deletedGoal);
 
         // when
         goalCommandService.delete(command);
 
         // then
-        Goal savedGoal = verify(goalCommandRepository).save(deletedGoal);
-        assertThat(savedGoal.getGoalId()).isEqualTo(goalId);
-        assertThat(savedGoal.getUserId()).isEqualTo(userId);
-        assertThat(savedGoal.getTitle()).isEqualTo(title);
-        assertThat(savedGoal.getDeletedAt()).isNotNull();
+        verify(goalCommandRepository).save(argThat(goal -> goal.getDeletedAt() != null));
+    }
+
+    @Test
+    @DisplayName("Delete a goal not found")
+    void delete_goal_not_found() {
+        // given
+        DeleteGoalCommand command = GoalCommandFixture.deleteGoalCommand(userId, goalId);
+        when(goalCommandRepository.findById(goalId))
+            .thenReturn(Optional.empty());
+
+        // when & then
+        assertThatThrownBy(() -> goalCommandService.delete(command))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage(GoalExceptionCode.GOAL_NOT_FOUND.getMessage());
     }
 
     @Test
@@ -216,11 +226,23 @@ public class GoalCommandServiceTest {
     void delete_goal_with_unauthorized_user() {
         // given
         DeleteGoalCommand command = GoalCommandFixture.deleteGoalCommand(userId + 1, goalId);
-        when(goalCommandRepository.save(deletedGoal))
-                .thenThrow(new UnauthorizedException());
 
         // when & then
         assertThatThrownBy(() -> goalCommandService.delete(command))
                 .isInstanceOf(UnauthorizedException.class);
+    }
+    
+    @Test
+    @DisplayName("Delete a goal which is already deleted")
+    void delete_goal_already_deleted() {
+        // given
+        DeleteGoalCommand command = GoalCommandFixture.deleteGoalCommand(userId, goalId);
+        when(goalCommandRepository.findById(goalId))
+            .thenReturn(Optional.of(deletedGoal));
+
+        // when & then
+        assertThatThrownBy(() -> goalCommandService.delete(command))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage(GoalExceptionCode.GOAL_ALREADY_DELETED.getMessage());
     }
 }
