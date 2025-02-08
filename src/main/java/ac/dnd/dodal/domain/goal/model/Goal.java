@@ -53,6 +53,13 @@ public class Goal extends BaseEntity {
         this.isAchieved = true;
     }
 
+    public void delete(Long userId) {
+        if (this.userId != userId) {
+            throw new UnauthorizedException();
+        }
+        super.delete();
+    }
+
     public Goal(Long userId, String title) {
         super();
 
