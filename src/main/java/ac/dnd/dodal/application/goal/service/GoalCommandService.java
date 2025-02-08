@@ -3,6 +3,7 @@ package ac.dnd.dodal.application.goal.service;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import ac.dnd.dodal.common.exception.NotFoundException;
 import ac.dnd.dodal.domain.goal.model.Goal;
@@ -16,6 +17,7 @@ import ac.dnd.dodal.application.goal.usecase.DeleteGoalUseCase;
 import ac.dnd.dodal.application.goal.repository.GoalCommandRepository;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class GoalCommandService
         implements CreateGoalUseCase, AchieveGoalUseCase, DeleteGoalUseCase {
