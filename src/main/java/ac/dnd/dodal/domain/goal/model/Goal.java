@@ -57,6 +57,9 @@ public class Goal extends BaseEntity {
         if (this.userId != userId) {
             throw new UnauthorizedException();
         }
+        if (this.deletedAt != null) {
+            throw new BadRequestException(GoalExceptionCode.GOAL_ALREADY_DELETED);
+        }
         super.delete();
     }
 
