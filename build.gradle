@@ -4,6 +4,7 @@ plugins {
     id 'org.sonarqube' version '4.4.1.3373'
     id 'org.springframework.boot' version '3.2.3'
     id 'io.spring.dependency-management' version '1.1.4'
+    id 'org.flywaydb.flyway' version '9.21.0'
 }
 
 group = 'ac.dnd'
@@ -17,8 +18,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.flywaydb:flyway-mysql'
+    implementation 'com.h2database:h2'
+    implementation 'org.projectlombok:lombok'
 
-    compileOnly 'org.projectlombok:lombok'
+    compileOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
 
     testImplementation platform('org.junit:junit-bom:5.10.0')
@@ -27,6 +32,7 @@ dependencies {
     testImplementation 'io.rest-assured:rest-assured'
 
     testRuntimeOnly 'com.h2database:h2'
+    testAnnotationProcessor 'org.projectlombok:lombok'
 }
 
 test {
@@ -34,18 +40,13 @@ test {
     finalizedBy 'jacocoTestReport'
 }
 
-// Jacoco 설정
 jacoco {
     toolVersion = "0.8.12"
-//    // report가 생성될 디렉토리 설정
-//    // 설정하지 않는다면 reports/jacoco가 기본 값
-//    reportsDirectory = layout.buildDirectory.dir('customJacocoReportDir')
 }
 
 jacocoTestReport {
     dependsOn test
     reports {
-
         html.required = true // 로컬에서 확인용으로 html 리포트 파일 생성
         xml.required = true  // SonarCloud로 전송하기 위해 XML 리포트 생성
         csv.required = false
@@ -83,17 +84,17 @@ jacocoTestCoverageVerification {
             }
 
            // 커버리지 체크를 제외할 클래스들
-           excludes = [
-                   '**.*Application*',
-                   '**.*Config*',
-                   '**.*Exception*',
-                   '**.BaseEntity', // 임시로 추가
-                   '**.*ControllerAdvice', // 임시로 추가
-                   '**.*Request*', // 임시로 추가
-                   '**.ApiResponse',
-                   '**.*OAuthClient*',
-                   '**.*Interceptor*',
-           ]
+            excludes = [
+                    '**.*Application*',
+                    '**.*Config*',
+                    '**.*Exception*',
+                    '**.BaseEntity', // 임시로 추가
+                    '**.*ControllerAdvice', // 임시로 추가
+                    '**.*Request*', // 임시로 추가
+                    '**.ApiResponse',
+                    '**.*OAuthClient*',
+                    '**.*Interceptor*',
+            ]
         }
     }
 }
