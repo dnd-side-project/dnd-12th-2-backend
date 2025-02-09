@@ -2,6 +2,7 @@ package ac.dnd.dodal.common.interceptor;
 
 import ac.dnd.dodal.common.enums.CommonResultCode;
 import ac.dnd.dodal.common.exception.DodalException;
+import ac.dnd.dodal.common.exception.UnauthorizedException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +20,7 @@ public class UserIdInterceptor implements HandlerInterceptor {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         log.info("authentication = {}", authentication);
         if (authentication == null) {
-            throw new DodalException(CommonResultCode.AUTH_EXCEPTION);
+            throw new UnauthorizedException(CommonResultCode.AUTH_EXCEPTION);
         }
         request.setAttribute("USER_ID", authentication.getName());
         log.info("USER_ID = {}", authentication.getName());
