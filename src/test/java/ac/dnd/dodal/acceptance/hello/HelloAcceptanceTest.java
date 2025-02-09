@@ -16,11 +16,10 @@ public class HelloAcceptanceTest extends AcceptanceTest {
     @Test
     public void hello() {
         Response response = given().log().all()
-            .port(port)
-        .when()
-            .get("/hello")
-        .then().log().all()
-            .extract()
+            .when()
+                .get("/hello")
+            .then().log().all()
+                .extract()
             .response();
 
         assertThat(response.getStatusCode()).isEqualTo(200);
