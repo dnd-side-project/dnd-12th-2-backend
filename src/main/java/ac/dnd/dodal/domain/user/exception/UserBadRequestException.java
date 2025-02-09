@@ -2,12 +2,12 @@ package ac.dnd.dodal.domain.user.exception;
 
 import ac.dnd.dodal.common.enums.ResultCode;
 import ac.dnd.dodal.common.exception.BadRequestException;
-import ac.dnd.dodal.domain.user.enums.EUserCode;
+import ac.dnd.dodal.domain.user.enums.UserExceptionCode;
 
 public class UserBadRequestException extends BadRequestException {
 
     public UserBadRequestException() {
-        super(EUserCode.NO_SUCH_ROLE);
+        super(UserExceptionCode.NO_SUCH_ROLE);
     }
 
     public UserBadRequestException(ResultCode resultCode) {
