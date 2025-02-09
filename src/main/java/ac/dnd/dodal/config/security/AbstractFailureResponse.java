@@ -1,7 +1,7 @@
 package ac.dnd.dodal.config.security;
 
 import ac.dnd.dodal.common.response.ExceptionDto;
-import ac.dnd.dodal.config.security.enums.E_security_code;
+import ac.dnd.dodal.config.security.enums.ESecurityCode;
 import jakarta.servlet.http.HttpServletResponse;
 import net.minidev.json.JSONValue;
 import org.springframework.http.HttpStatus;
@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class AbstractFailureResponse {
-    protected void setFailureResponse(HttpServletResponse response, E_security_code securityCode) throws IOException {
+    protected void setFailureResponse(HttpServletResponse response, ESecurityCode securityCode) throws IOException {
         response.setStatus(HttpStatus.BAD_REQUEST.value());
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
