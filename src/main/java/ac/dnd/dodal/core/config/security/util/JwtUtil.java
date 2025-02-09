@@ -1,7 +1,7 @@
 package ac.dnd.dodal.core.config.security.util;
 
 import ac.dnd.dodal.common.constant.Constants;
-import ac.dnd.dodal.domain.user.enums.E_user_role;
+import ac.dnd.dodal.domain.user.enums.EUserRole;
 import ac.dnd.dodal.ui.user.response.JwtTokenDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -17,6 +17,7 @@ import java.util.Date;
 
 @Component
 public class JwtUtil implements InitializingBean {
+
     @Value("${jwt.secret}")
     private String secretKey;
 
@@ -29,12 +30,12 @@ public class JwtUtil implements InitializingBean {
     private Key key;
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String createToken(String email, E_user_role role, Long expirationPeriod) {
+    public String createToken(String email, EUserRole role, Long expirationPeriod) {
         Claims claims = Jwts.claims();
         claims.put(Constants.USER_EMAIL_CLAIM_NAME, email);
         claims.put(Constants.USER_ROLE_CLAIM_NAME, role.toString());
@@ -50,7 +51,7 @@ public class JwtUtil implements InitializingBean {
                 .compact();
     }
 
-    public String createToken(Long id, E_user_role role, Long expirationPeriod) {
+    public String createToken(Long id, EUserRole role, Long expirationPeriod) {
         Claims claims = Jwts.claims();
         claims.put(Constants.USER_ID_CLAIM_NAME, id);
         claims.put(Constants.USER_ROLE_CLAIM_NAME, role.toString());
@@ -66,12 +67,12 @@ public class JwtUtil implements InitializingBean {
                 .compact();
     }
 
-    public JwtTokenDto generateToken(String email, E_user_role role) {
+    public JwtTokenDto generateToken(String email, EUserRole role) {
         return new JwtTokenDto(createToken(email, role, accessTokenExpirationPeriod),
                 createToken(email, role, refreshTokenExpirationPeriod));
     }
 
-    public JwtTokenDto generateToken(Long id, E_user_role role) {
+    public JwtTokenDto generateToken(Long id, EUserRole role) {
         return new JwtTokenDto(createToken(id, role, accessTokenExpirationPeriod),
                 createToken(id, role, refreshTokenExpirationPeriod));
     }

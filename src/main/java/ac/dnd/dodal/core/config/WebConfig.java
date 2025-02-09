@@ -16,6 +16,7 @@ import java.util.List;
 @EnableWebMvc
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
+
     private final UserIdArgumentResolver userIdArgumentResolver;
     private final UserIdInterceptor userIdInterceptor;
 

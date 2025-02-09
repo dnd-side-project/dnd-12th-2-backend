@@ -25,6 +25,7 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfig {
+
     private final JwtUtil jwtUtil;
     private final CustomUserDetailsService customUserDetailsService;
     private final CustomSignOutProcessHandler customSignOutProcessHandler;

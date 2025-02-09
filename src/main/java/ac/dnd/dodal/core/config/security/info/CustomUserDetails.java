@@ -17,6 +17,7 @@ import java.util.Collection;
 @Builder
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class CustomUserDetails implements UserDetails {
+
     @Getter
     private final Long id;
     @Getter

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationProvider implements AuthenticationProvider {
+
     private final CustomUserDetailsService customUserDetailsService;
 
     @Override

@@ -21,6 +21,7 @@ public enum ESecurityCode implements ResultCode {
     FAILURE_LOGIN("SEC011", "Failure Login"),
     INVALID_AUTHENTICATION("SEC012", "Invalid Authentication"),
     ;
+
     private final String code;
     private final String message;
 }
