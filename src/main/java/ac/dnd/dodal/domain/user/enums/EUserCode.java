@@ -9,9 +9,9 @@ import lombok.RequiredArgsConstructor;
 public enum EUserCode implements ResultCode {
 
     //failure
-    NO_SUCH_ROLE("USER001", "No such user role"),
-    NOT_FOUND_USER("USER002", "User not found"),
-    ACCESS_DENIED("USER003", "User access denied"),
+    NO_SUCH_ROLE("USR001", "No such user role"),
+    NOT_FOUND_USER("USR002", "User not found"),
+    ACCESS_DENIED("USR003", "User access denied"),
     ;
 
     private final String code;
