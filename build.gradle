@@ -35,7 +35,6 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok'
 
 
-
     //jwt
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.0'

@@ -1,4 +1,4 @@
-package ac.dnd.dodal.annotation;
+package ac.dnd.dodal.common.annotation;
 
 import java.lang.annotation.*;
 

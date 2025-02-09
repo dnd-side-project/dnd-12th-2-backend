@@ -1,8 +1,8 @@
 package ac.dnd.dodal.core.config.security.info;
 
 import ac.dnd.dodal.common.constant.Constants;
-import ac.dnd.dodal.domain.user.enums.E_user_role;
-import ac.dnd.dodal.domain.user.model.Users;
+import ac.dnd.dodal.domain.user.enums.EUserRole;
+import ac.dnd.dodal.domain.user.model.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,10 +23,10 @@ public class CustomUserDetails implements UserDetails {
     private final String email;
 
     @Getter
-    private final E_user_role role;
+    private final EUserRole role;
     private final Collection<? extends GrantedAuthority> authorities;
 
-    public static CustomUserDetails create(Users user) {
+    public static CustomUserDetails create(User user) {
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(Constants.ROLE_PREFIX + user.getRole());
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(authority);
