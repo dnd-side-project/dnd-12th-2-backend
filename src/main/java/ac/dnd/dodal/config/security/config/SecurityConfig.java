@@ -2,13 +2,9 @@ package ac.dnd.dodal.config.security.config;
 
 import ac.dnd.dodal.common.constant.Constants;
 import ac.dnd.dodal.config.security.filter.CustomLogoutFilter;
-import ac.dnd.dodal.config.security.filter.JwtAuthenticationFilter;
-import ac.dnd.dodal.config.security.filter.JwtExceptionFilter;
 import ac.dnd.dodal.config.security.handler.CustomSignOutProcessHandler;
 import ac.dnd.dodal.config.security.handler.CustomSignOutResultHandler;
-import ac.dnd.dodal.config.security.provider.JwtAuthenticationProvider;
 import ac.dnd.dodal.config.security.service.CustomUserDetailsService;
-import ac.dnd.dodal.config.security.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,7 +21,6 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfig {
-    private final JwtUtil jwtUtil;
     private final CustomUserDetailsService customUserDetailsService;
     private final CustomSignOutProcessHandler customSignOutProcessHandler;
     private final CustomSignOutResultHandler customSignOutResultHandler;
@@ -52,11 +47,7 @@ public class SecurityConfig {
                                 .logoutSuccessHandler(customSignOutResultHandler)
                                 .deleteCookies(Constants.AUTHORIZATION_HEADER, Constants.REAUTHORIZATION))
 
-                .addFilterBefore(
-                        new JwtAuthenticationFilter(jwtUtil,
-                                new JwtAuthenticationProvider(customUserDetailsService)),
-                        LogoutFilter.class)
-                .addFilterAfter(new JwtExceptionFilter(), JwtAuthenticationFilter.class)
+
                 .addFilterBefore(new CustomLogoutFilter(), LogoutFilter.class)
                 .build();
     }
