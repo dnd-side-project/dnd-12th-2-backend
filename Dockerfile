@@ -19,7 +19,8 @@ RUN ./gradlew dependencies
 # 소스코드 복사 및 빌드
 COPY ./ ./
 # PR에서 테스트를 이미 Jacoco 등으로 검증했기 때문에 배포를 위한 빌드 시 테스트를 제외
-RUN ./gradlew clean build -x test
+# profile prod로 빌드
+RUN ./gradlew clean build -x test -Pprofile=prod
 
 # 실행 스테이지
 FROM openjdk:17-jdk-slim
