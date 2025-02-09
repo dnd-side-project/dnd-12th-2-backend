@@ -1,12 +1,15 @@
 package ac.dnd.dodal.core.config.security.filter;
 
 import ac.dnd.dodal.common.constant.Constants;
+import ac.dnd.dodal.common.exception.BadRequestException;
 import ac.dnd.dodal.core.config.security.JwtAuthenticationToken;
 import ac.dnd.dodal.core.config.security.info.JwtUserInfo;
 import ac.dnd.dodal.core.config.security.provider.JwtAuthenticationProvider;
 import ac.dnd.dodal.core.config.security.util.JwtUtil;
-import ac.dnd.dodal.domain.user.enums.E_user_role;
+import ac.dnd.dodal.domain.user.enums.EUserRole;
+import ac.dnd.dodal.domain.user.exception.UserException;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,37 +26,43 @@ import java.io.IOException;
 
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
     private final JwtUtil jwtUtil;
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+    protected boolean shouldNotFilter(HttpServletRequest request) {
         return Constants.NO_NEED_AUTH_URLS.stream().anyMatch(request.getRequestURI()::startsWith);
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        final String token = jwtUtil.getJwtFromRequest(request);
-        if (StringUtils.hasText(token)) {
-            Claims claims = jwtUtil.validateAndGetClaimsFromToken(token);
-            JwtUserInfo jwtUserInfo = JwtUserInfo.builder()
-                    .id(claims.get(Constants.USER_ID_CLAIM_NAME, Long.class))
-                    .role(E_user_role.valueOf(claims.get(Constants.USER_ROLE_CLAIM_NAME, String.class)))
-                    .build();
+        try{
+            final String token = jwtUtil.getJwtFromRequest(request);
 
-            JwtAuthenticationToken beforeAuthentication = new JwtAuthenticationToken(null, jwtUserInfo.id(),
-                    jwtUserInfo.role());
+            if (StringUtils.hasText(token)) {
+                Claims claims = jwtUtil.validateAndGetClaimsFromToken(token);
+                JwtUserInfo jwtUserInfo = JwtUserInfo.builder()
+                        .id(claims.get(Constants.USER_ID_CLAIM_NAME, Long.class))
+                        .role(EUserRole.valueOf(claims.get(Constants.USER_ROLE_CLAIM_NAME, String.class)))
+                        .build();
 
-            UsernamePasswordAuthenticationToken afterAuthentication = (UsernamePasswordAuthenticationToken) jwtAuthenticationProvider.authenticate(
-                    beforeAuthentication);
-            afterAuthentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                JwtAuthenticationToken beforeAuthentication = new JwtAuthenticationToken(null, jwtUserInfo.id(),
+                        jwtUserInfo.role());
 
-            SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-            securityContext.setAuthentication(afterAuthentication);
-            SecurityContextHolder.setContext(securityContext);
+                UsernamePasswordAuthenticationToken afterAuthentication = (UsernamePasswordAuthenticationToken) jwtAuthenticationProvider.authenticate(
+                        beforeAuthentication);
+                afterAuthentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+                securityContext.setAuthentication(afterAuthentication);
+                SecurityContextHolder.setContext(securityContext);
+            }
+
+            filterChain.doFilter(request, response);
+        }  catch (UserException | BadRequestException | JwtException e){
+            request.setAttribute("JwtAuthenticationFilterException", e);
         }
-
-        filterChain.doFilter(request, response);
     }
 }

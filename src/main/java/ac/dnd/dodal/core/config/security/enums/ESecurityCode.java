@@ -19,8 +19,8 @@ public enum ESecurityCode implements ResultCode {
     ACCESS_DENIED_ERROR("SEC009", "Access Denied Error"),
     FAILURE_LOGOUT("SEC010", "Failure Logout"),
     FAILURE_LOGIN("SEC011", "Failure Login"),
+    INVALID_AUTHENTICATION("SEC012", "Invalid Authentication"),
     ;
-
     private final String code;
     private final String message;
 }
