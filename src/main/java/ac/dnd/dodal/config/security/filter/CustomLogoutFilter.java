@@ -1,5 +1,6 @@
 package ac.dnd.dodal.config.security.filter;
 
+import ac.dnd.dodal.common.response.ApiResponse;
 import ac.dnd.dodal.config.security.enums.ESecurityCode;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -11,8 +12,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class CustomLogoutFilter extends OncePerRequestFilter {
     @Override
@@ -28,15 +27,7 @@ public class CustomLogoutFilter extends OncePerRequestFilter {
 
             // 인증된 사용자가 아니라면 401 응답을 반환
             if (authentication == null || !authentication.isAuthenticated()) {
-                httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                httpResponse.setContentType("application/json;charset=UTF-8");
-
-                Map<String, Object> responseData = new HashMap<>();
-                responseData.put("success", false);
-                responseData.put("data", null);
-                responseData.put("error", ESecurityCode.FAILURE_LOGOUT.getMessage());
-
-                httpResponse.getWriter().write(JSONValue.toJSONString(responseData));
+                httpResponse.getWriter().write(JSONValue.toJSONString(ApiResponse.failure(ESecurityCode.FAILURE_LOGOUT)));
                 return; // 필터 체인을 끊고 응답을 반환
             }
         }
