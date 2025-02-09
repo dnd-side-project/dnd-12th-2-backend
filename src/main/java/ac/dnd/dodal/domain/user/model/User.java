@@ -1,9 +1,8 @@
 package ac.dnd.dodal.domain.user.model;
 
 import ac.dnd.dodal.common.model.BaseEntity;
-import ac.dnd.dodal.domain.user.enums.E_user_role;
+import ac.dnd.dodal.domain.user.enums.EUserRole;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,13 +35,13 @@ public class User extends BaseEntity {
     private String email;
 
     @Column(name="role", nullable = false)
-    private E_user_role role;
+    private EUserRole role;
 
     @Column(name="refresh_token")
     private String refreshToken;
 
     @Builder
-    public User(String nickname, String profileImageUrl, String deviceToken, String email, E_user_role role) {
+    public User(String nickname, String profileImageUrl, String deviceToken, String email, EUserRole role) {
         super(LocalDateTime.now(), LocalDateTime.now(), null);
 
         this.nickname = nickname;
