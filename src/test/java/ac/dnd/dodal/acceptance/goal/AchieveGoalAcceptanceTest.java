@@ -14,20 +14,17 @@ import ac.dnd.dodal.AcceptanceTest;
 import ac.dnd.dodal.acceptance.goal.steps.GoalSteps;
 import ac.dnd.dodal.common.response.ApiResponse;
 import ac.dnd.dodal.common.enums.CommonResultCode;
-import ac.dnd.dodal.ui.goal.request.CreateGoalRequest;
-import ac.dnd.dodal.ui.goal.fixture.GoalUIFixture;
 import ac.dnd.dodal.domain.goal.exception.GoalExceptionCode;
 
 public class AchieveGoalAcceptanceTest extends AcceptanceTest {
 
+    private Long goalId = 1L;
+
     @Test
     @DisplayName("Achieve Goal Test")
     public void achieve_goal() {
-        // given
-        CreateGoalRequest request = GoalUIFixture.createGoalRequest("test");
-
         // when
-        Response response = GoalSteps.createGoal(authorizationHeader, request);
+        Response response = GoalSteps.achieveGoal(authorizationHeader, goalId);
         ApiResponse<Long> apiResponse = response.as(new TypeRef<ApiResponse<Long>>() {});
 
         // then 200
@@ -43,11 +40,8 @@ public class AchieveGoalAcceptanceTest extends AcceptanceTest {
     @Test
     @DisplayName("Achieve Goal Test with Unauthorized User")
     public void achieve_goal_with_unauthorized_user() {
-        // given
-        CreateGoalRequest request = GoalUIFixture.createGoalRequest("test");
-
         // when
-        Response response = GoalSteps.createGoal(authorizationHeader, request);
+        Response response = GoalSteps.achieveGoal(authorizationHeader, goalId);
         ApiResponse<Long> apiResponse = response.as(new TypeRef<ApiResponse<Long>>() {});
 
         // then 401
@@ -63,11 +57,8 @@ public class AchieveGoalAcceptanceTest extends AcceptanceTest {
     @Test
     @DisplayName("Achieve Goal Test with Deleted Goal")
     public void achieve_goal_with_deleted_goal() {
-        // given
-        CreateGoalRequest request = GoalUIFixture.createGoalRequest("test");
-
         // when
-        Response response = GoalSteps.createGoal(authorizationHeader, request);
+        Response response = GoalSteps.achieveGoal(authorizationHeader, goalId);
         ApiResponse<Long> apiResponse = response.as(new TypeRef<ApiResponse<Long>>() {});
 
         // then 403
@@ -83,11 +74,8 @@ public class AchieveGoalAcceptanceTest extends AcceptanceTest {
     @Test
     @DisplayName("Achieve Goal Test with Already Achieved Goal")
     public void achieve_goal_with_already_achieved_goal() {
-        // given
-        CreateGoalRequest request = GoalUIFixture.createGoalRequest("test");
-
         // when
-        Response response = GoalSteps.createGoal(authorizationHeader, request);
+        Response response = GoalSteps.achieveGoal(authorizationHeader, goalId);
         ApiResponse<Long> apiResponse = response.as(new TypeRef<ApiResponse<Long>>() {});
 
         // then 403
