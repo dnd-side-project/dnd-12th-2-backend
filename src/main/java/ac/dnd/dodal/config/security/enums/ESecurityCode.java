@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ESecurityCode implements ResultCode {
 
-    // security
     TOKEN_MALFORMED_ERROR("SEC001", "Token Malformed Error"),
     TOKEN_TYPE_ERROR("SEC002", "Token Type Error"),
     EXPIRED_TOKEN_ERROR("SEC003", "Expired Token Error"),
@@ -19,7 +18,8 @@ public enum ESecurityCode implements ResultCode {
     EXTERNAL_SERVER_ERROR("SEC008", "External Server Error"),
     ACCESS_DENIED_ERROR("SEC009", "Access Denied Error"),
     FAILURE_LOGOUT("SEC010", "Failure Logout"),
-    FAILURE_LOGIN("SEC011", "Failure Login"),;
+    FAILURE_LOGIN("SEC011", "Failure Login"),
+    ;
 
     private final String code;
     private final String message;
