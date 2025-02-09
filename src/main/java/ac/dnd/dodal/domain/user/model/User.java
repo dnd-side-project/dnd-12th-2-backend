@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @DynamicUpdate
 @Table(name = "users")
-public class Users extends BaseEntity {
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,12 +38,12 @@ public class Users extends BaseEntity {
     @Column(name="refresh_token")
     private String refreshToken;
 
-    public Users() {
+    public User() {
         super(LocalDateTime.now(), LocalDateTime.now(), null);
     }
 
     @Builder
-    public Users(String nickname, String deviceToken, String email, E_user_role role) {
+    public User(String nickname, String deviceToken, String email, E_user_role role) {
         super(LocalDateTime.now(), LocalDateTime.now(), null);
 
         this.nickname = nickname;
