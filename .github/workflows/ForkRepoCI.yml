@@ -13,6 +13,9 @@ permissions:
   checks: write
   pull-requests: write
 
+env:
+  SPRING_CONFIG_LOCATION: classpath:test/resources/application-test.yml
+
 jobs:
   # ✅ Fork 레포에서 PR이 들어오면 Jacoco & SonarCloud 실행
   test-and-analyze:
