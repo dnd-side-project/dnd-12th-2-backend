@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import ac.dnd.dodal.domain.goal.model.Goal;
 
 @Repository
-public interface GoalCommandRepository extends JpaRepository<Goal, Long> {
+public interface GoalRepository extends JpaRepository<Goal, Long> {
 
     Optional<Goal> findById(Long goalId);
 }

@@ -14,7 +14,7 @@ import ac.dnd.dodal.application.goal.dto.command.DeleteGoalCommand;
 import ac.dnd.dodal.application.goal.usecase.CreateGoalUseCase;
 import ac.dnd.dodal.application.goal.usecase.AchieveGoalUseCase;
 import ac.dnd.dodal.application.goal.usecase.DeleteGoalUseCase;
-import ac.dnd.dodal.application.goal.repository.GoalCommandRepository;
+import ac.dnd.dodal.application.goal.repository.GoalRepository;
 
 @Service
 @Transactional
@@ -22,7 +22,7 @@ import ac.dnd.dodal.application.goal.repository.GoalCommandRepository;
 public class GoalCommandService
         implements CreateGoalUseCase, AchieveGoalUseCase, DeleteGoalUseCase {
 
-    private final GoalCommandRepository goalCommandRepository;
+    private final GoalRepository goalCommandRepository;
 
     @Override
     public Long create(CreateGoalCommand command) {

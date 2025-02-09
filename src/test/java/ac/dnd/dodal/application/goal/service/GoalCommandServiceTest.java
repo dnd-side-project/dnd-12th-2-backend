@@ -27,7 +27,7 @@ import ac.dnd.dodal.domain.goal.GoalFixture;
 import ac.dnd.dodal.domain.goal.exception.GoalExceptionCode;
 import ac.dnd.dodal.domain.goal.model.Goal;
 import ac.dnd.dodal.application.goal.dto.command.*;
-import ac.dnd.dodal.application.goal.repository.GoalCommandRepository;
+import ac.dnd.dodal.application.goal.repository.GoalRepository;
 import ac.dnd.dodal.application.goal.dto.GoalCommandFixture;
 
 @Service
@@ -35,7 +35,7 @@ import ac.dnd.dodal.application.goal.dto.GoalCommandFixture;
 public class GoalCommandServiceTest {
 
     @Mock
-    GoalCommandRepository goalCommandRepository;
+    GoalRepository goalCommandRepository;
 
     @InjectMocks
     GoalCommandService goalCommandService;
