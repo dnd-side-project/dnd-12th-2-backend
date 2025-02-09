@@ -3,7 +3,10 @@ name: CI/CD Workflow for Forked Repo
 on:
   pull_request:
     branches:
-      - main
+      - '*'
+    reviewers:
+      - sueelly
+      - 5hseok
 
 permissions:
   contents: read
@@ -31,17 +34,17 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@v4
 
-      - name: Set up JDK 17
+      - name: Set up JDK 22
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '22'
           cache: 'gradle'
 
       - name: Run tests and generate coverage report
         run: |
           chmod +x gradlew
-          ./gradlew test jacocoTestReport
+          ./gradlew clean test jacocoTestReport
 
       - name: Add coverage to PR
         id: jacoco
@@ -81,4 +84,3 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew build
-
