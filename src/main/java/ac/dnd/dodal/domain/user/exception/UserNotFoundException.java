@@ -4,26 +4,25 @@ import ac.dnd.dodal.common.enums.ResultCode;
 import ac.dnd.dodal.common.exception.NotFoundException;
 import ac.dnd.dodal.domain.user.enums.EUserCode;
 
-public class UserException extends NotFoundException {
+public class UserNotFoundException extends NotFoundException {
 
-    public UserException() {
+    public UserNotFoundException() {
         super(EUserCode.NOT_FOUND_USER);
     }
 
-    public UserException(ResultCode resultCode) {
+    public UserNotFoundException(ResultCode resultCode) {
         super(resultCode);
     }
 
-    public UserException(ResultCode resultCode, String message) {
+    public UserNotFoundException(ResultCode resultCode, String message) {
         super(resultCode, message);
     }
 
-    public UserException(ResultCode resultCode, Throwable cause) {
+    public UserNotFoundException(ResultCode resultCode, Throwable cause) {
         super(resultCode, cause);
     }
 
-    protected UserException(ResultCode resultCode, String message, Throwable cause) {
+    protected UserNotFoundException(ResultCode resultCode, String message, Throwable cause) {
         super(resultCode, message, cause);
     }
-
 }
