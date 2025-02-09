@@ -4,7 +4,6 @@ import ac.dnd.dodal.common.enums.ResultCode;
 import ac.dnd.dodal.common.exception.NotFoundException;
 import ac.dnd.dodal.domain.user.enums.EUserCode;
 
-
 public class UserException extends NotFoundException {
 
     public UserException() {
