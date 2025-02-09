@@ -1,11 +1,11 @@
 package ac.dnd.dodal.domain.user.exception;
 
 import ac.dnd.dodal.common.enums.ResultCode;
-import ac.dnd.dodal.common.exception.DodalException;
+import ac.dnd.dodal.common.exception.NotFoundException;
 import ac.dnd.dodal.domain.user.enums.EUserCode;
 
 
-public class UserException extends DodalException {
+public class UserException extends NotFoundException {
 
     public UserException() {
         super(EUserCode.NOT_FOUND_USER);
