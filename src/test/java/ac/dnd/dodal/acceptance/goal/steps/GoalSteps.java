@@ -30,7 +30,7 @@ public class GoalSteps extends AcceptanceTest {
         return given().log().all()
                 .headers(header)
             .when()
-                .post(BASE_URL + "/" + goalId + "/achieve")
+                .patch(BASE_URL + "/" + goalId + "/achieve")
             .then().log().all()
                 .extract()
             .response();
