@@ -3,8 +3,10 @@ package ac.dnd.dodal.domain.user.model;
 import ac.dnd.dodal.common.model.BaseEntity;
 import ac.dnd.dodal.domain.user.enums.E_user_role;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.LocalDateTime;
@@ -12,6 +14,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @DynamicUpdate
+@NoArgsConstructor
 @Table(name = "users")
 public class User extends BaseEntity {
 
@@ -38,16 +41,12 @@ public class User extends BaseEntity {
     @Column(name="refresh_token")
     private String refreshToken;
 
-    public User() {
-        super(LocalDateTime.now(), LocalDateTime.now(), null);
-    }
-
     @Builder
-    public User(String nickname, String deviceToken, String email, E_user_role role) {
+    public User(String nickname, String profileImageUrl, String deviceToken, String email, E_user_role role) {
         super(LocalDateTime.now(), LocalDateTime.now(), null);
 
         this.nickname = nickname;
-        this.profileImageUrl = null;
+        this.profileImageUrl = profileImageUrl;
         this.deviceToken = deviceToken;
         this.email = email;
         this.refreshToken = null;
