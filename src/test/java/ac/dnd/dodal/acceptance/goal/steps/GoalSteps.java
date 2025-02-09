@@ -8,13 +8,13 @@ import io.restassured.response.Response;
 import io.restassured.http.ContentType;
 
 import ac.dnd.dodal.AcceptanceTest;
-import ac.dnd.dodal.ui.goal.request.GoalCreateRequest;
+import ac.dnd.dodal.ui.goal.request.CreateGoalRequest;
 
 public class GoalSteps extends AcceptanceTest {
 
     private static final String BASE_URL = "/api/goals";
 
-    public static Response createGoal(Map<String, Object> header, GoalCreateRequest body) {
+    public static Response createGoal(Map<String, Object> header, CreateGoalRequest body) {
         return given().log().all()
                 .contentType(ContentType.JSON)
                 .headers(header)
