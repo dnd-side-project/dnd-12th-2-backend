@@ -22,9 +22,9 @@ public class CustomUserDetails implements UserDetails {
     private final Long id;
     @Getter
     private final String email;
-
     @Getter
     private final EUserRole role;
+
     private final Collection<? extends GrantedAuthority> authorities;
 
     public static CustomUserDetails create(User user) {
