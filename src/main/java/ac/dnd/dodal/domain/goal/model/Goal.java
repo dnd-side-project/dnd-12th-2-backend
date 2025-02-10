@@ -46,26 +46,23 @@ public class Goal extends BaseEntity {
     @Column(nullable = false)
     private Boolean isAchieved;
 
+    @OneToMany(mappedBy = "goalId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<PlanHistory> histories;
+
+    @OneToMany(mappedBy = "goalId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Plan> plans;
+
     public void achieve(Long userId) {
-        if (this.userId != userId) {
-            throw new UnauthorizedException();
-        }
-        if (this.deletedAt != null) {
-            throw new ForbiddenException(GoalExceptionCode.DELETED_GOAL);
-        }
-        if (this.isAchieved) {
-            throw new BadRequestException(GoalExceptionCode.GOAL_ALREADY_ACHIEVED);
-        }
+        validateAuthor(userId);
+        validateGoal();
+
         this.isAchieved = true;
     }
 
     public void delete(Long userId) {
-        if (this.userId != userId) {
-            throw new UnauthorizedException();
-        }
-        if (this.deletedAt != null) {
-            throw new BadRequestException(GoalExceptionCode.GOAL_ALREADY_DELETED);
-        }
+        validateAuthor(userId);
+        validateDeleted();
+
         super.delete();
     }
 
@@ -97,6 +94,29 @@ public class Goal extends BaseEntity {
         }
         if (title.length() > GoalConstraints.MAX_GOAL_TITLE_LENGTH) {
             throw new BadRequestException(GoalExceptionCode.GOAL_TITLE_EXCEED_MAX_LENGTH);
+        }
+    }
+
+    private void validateAuthor(Long userId) {
+        if (this.userId != userId) {
+            throw new UnauthorizedException();
+        }
+    }
+
+    private void validateGoal() {
+        validateDeleted();
+        validateAchieve();
+    }
+
+    private void validateAchieve() {
+        if (this.isAchieved) {
+            throw new BadRequestException(GoalExceptionCode.GOAL_ALREADY_ACHIEVED);
+        }
+    }
+
+    private void validateDeleted() {
+        if (this.deletedAt != null) {
+            throw new ForbiddenException(GoalExceptionCode.DELETED_GOAL);
         }
     }
 }
