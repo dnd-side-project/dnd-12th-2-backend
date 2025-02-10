@@ -17,8 +17,8 @@ public enum SecurityExceptionCode implements ResultCode {
     NOT_FOUND_END_POINT("SEC007", "Not Found End Point"),
     EXTERNAL_SERVER_ERROR("SEC008", "External Server Error"),
     ACCESS_DENIED_ERROR("SEC009", "Access Denied Error"),
-    FAILURE_LOGOUT("SEC010", "Failure Logout"),
-    FAILURE_LOGIN("SEC011", "Failure Login"),
+    FAILURE_LOGOUT("SEC010", "Logout Failure"),
+    FAILURE_LOGIN("SEC011", "Login Failure"),
     INVALID_AUTHENTICATION("SEC012", "Invalid Authentication"),
     ;
 
