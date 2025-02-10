@@ -52,18 +52,26 @@ public class Goal extends BaseEntity {
     @OneToMany(mappedBy = "goalId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Plan> plans;
 
-    public void addPlan(Plan plan) {
+    public void addPlan(Long userId, Plan plan) {
+        validateAuthor(userId);
+        validateGoal();
+
         plan.setGoal(this);
         this.plans.add(plan);
     }
 
-    public void addHistory(PlanHistory history) {
+    public void addHistory(Long userId, PlanHistory history) {
+        validateAuthor(userId);
+        validateGoal();
+
         history.setGoal(this);
         this.histories.add(history);
     }
 
-    public void succeedPlan(Plan plan, String guide) {
+    public void succeedPlan(Long userId, Plan plan, String guide) {
+        validateAuthor(userId);
         validateGoal();
+
         plan.succeed(guide);
     }
 
@@ -78,6 +86,7 @@ public class Goal extends BaseEntity {
         validateAuthor(userId);
         validateDeleted();
 
+        this.histories.forEach(PlanHistory::delete);
         super.delete();
     }
 
