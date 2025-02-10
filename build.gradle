@@ -4,7 +4,6 @@ plugins {
     id 'org.sonarqube' version '4.4.1.3373'
     id 'org.springframework.boot' version '3.2.3'
     id 'io.spring.dependency-management' version '1.1.4'
-    id 'org.flywaydb.flyway' version '9.21.0'
 }
 
 group = 'ac.dnd'
@@ -30,10 +29,12 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.rest-assured:rest-assured'
+    testImplementation 'org.testcontainers:testcontainers:1.19.3'
+    testImplementation 'org.testcontainers:junit-jupiter:1.19.3'
+    testImplementation 'org.testcontainers:mysql:1.19.3'
 
     testRuntimeOnly 'com.h2database:h2'
     testAnnotationProcessor 'org.projectlombok:lombok'
-
 
 
     //jwt

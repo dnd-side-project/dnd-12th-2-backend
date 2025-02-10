@@ -3,6 +3,7 @@ package ac.dnd.dodal.common.constant;
 import java.util.List;
 
 public class Constants {
+
     public static final String BEARER_PREFIX = "Bearer ";
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String REAUTHORIZATION = "refreshToken";
@@ -20,7 +21,7 @@ public class Constants {
             //로그인 URL
             //Swagger URL
             //로그인 없이 둘러볼 수 있는 URL
-
+            "/hello",
             // 회원가입
             "/api/auth/sign-up",
             // 로그인
@@ -30,6 +31,6 @@ public class Constants {
             "/api/auth/login/naver",
             "/api/auth/login/google",
             "/api/auth/login/apple"
-    );
 
+    );
 }
