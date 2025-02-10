@@ -49,6 +49,19 @@ public class Plan extends BaseEntity {
     @Column(nullable = false)
     private LocalDateTime endDate;
 
+    public void succeed() {
+        if (this.deletedAt != null) {
+            throw new ForbiddenException(PlanExceptionCode.PLAN_ALREADY_DELETED);
+        }
+        if (this.isSucceed) {
+            throw new BadRequestException(PlanExceptionCode.PLAN_ALREADY_SUCCEED);
+        }
+        if (this.startDate.isAfter(LocalDateTime.now())) {
+            throw new BadRequestException(PlanExceptionCode.PLAN_SUCCEED_AFTER_START_DATE);
+        }
+        this.isSucceed = true;
+    }
+
     public Plan(Long goalId, Long historyId,
             String title, LocalDateTime startDate, LocalDateTime endDate) {
         validateTitle(title);
