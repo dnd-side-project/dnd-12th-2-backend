@@ -66,6 +66,9 @@ public class Goal extends BaseEntity {
     public Goal(Long userId, String title) {
         super();
 
+        if (userId == null) {
+            throw new UnauthorizedException();
+        }
         if (title == null || title.isEmpty() || title.isBlank()) {
             throw new BadRequestException(GoalExceptionCode.GOAL_TITLE_EMPTY);
         }
