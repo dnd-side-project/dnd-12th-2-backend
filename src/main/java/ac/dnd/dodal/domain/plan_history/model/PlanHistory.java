@@ -1,0 +1,36 @@
+package ac.dnd.dodal.domain.plan_history.model;
+
+import java.util.List;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.FetchType;
+
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+import ac.dnd.dodal.common.model.BaseEntity;
+import ac.dnd.dodal.domain.plan.model.Plan;
+
+@Entity(name = "plan_histories")
+@Getter
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
+public class PlanHistory extends BaseEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long historyId;
+
+    private Long goalId;
+
+    @OneToMany(mappedBy = "historyId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Plan> plans;
+}
