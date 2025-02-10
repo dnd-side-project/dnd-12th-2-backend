@@ -1,5 +1,6 @@
 package ac.dnd.dodal.common.constant;
 
+import java.net.URI;
 import java.util.List;
 
 public class Constants {
@@ -14,6 +15,7 @@ public class Constants {
 
     // 소셜 로그인 관련 상수
     public static final String APPLE_PUBLIC_KEYS_URL = "https://appleid.apple.com/auth/keys";
+    public static final String KAKAO_RESOURCE_SERVER_URL = "https://kapi.kakao.com/v2/user/me";
 
 
     public static final List<String> NO_NEED_AUTH_URLS = List.of(
@@ -31,6 +33,8 @@ public class Constants {
             "/api/auth/login/naver",
             "/api/auth/login/google",
             "/api/auth/login/apple"
-
     );
+
+    public static final String CONTENT_TYPE = "Content-Type";
+
 }

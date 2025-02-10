@@ -19,8 +19,8 @@ public class CustomSignOutProcessHandler implements LogoutHandler {
 
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        processSignOut(userDetails.getId());
+        Long userId =  (Long) authentication.getPrincipal();
+        processSignOut(userId);
     }
 
     protected void processSignOut(Long userId) {
