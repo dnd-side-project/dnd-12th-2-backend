@@ -5,7 +5,12 @@ import java.time.LocalDateTime;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
@@ -15,19 +20,20 @@ import org.springframework.data.annotation.LastModifiedDate;
 @Getter
 @ToString
 @EqualsAndHashCode
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
 public class BaseEntity {
 
     @Column(updatable = false)
     @CreatedDate
-    private LocalDateTime createdAt;
+    protected LocalDateTime createdAt;
 
     @LastModifiedDate
-    private LocalDateTime updatedAt;
+    protected LocalDateTime updatedAt;
 
     @Column(nullable = true)
-    private LocalDateTime deletedAt;
+    protected LocalDateTime deletedAt;
 
     public void delete() {
         this.deletedAt = LocalDateTime.now();

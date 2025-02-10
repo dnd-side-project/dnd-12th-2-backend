@@ -1,7 +1,7 @@
 package ac.dnd.dodal.domain.user.model;
 
 import ac.dnd.dodal.common.model.BaseEntity;
-import ac.dnd.dodal.domain.user.enums.EUserRole;
+import ac.dnd.dodal.domain.user.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,13 +35,13 @@ public class User extends BaseEntity {
     private String email;
 
     @Column(name="role", nullable = false)
-    private EUserRole role;
+    private UserRole role;
 
     @Column(name="refresh_token")
     private String refreshToken;
 
     @Builder
-    public User(String nickname, String profileImageUrl, String deviceToken, String email, EUserRole role) {
+    public User(String nickname, String profileImageUrl, String deviceToken, String email, UserRole role) {
         super(LocalDateTime.now(), LocalDateTime.now(), null);
 
         this.nickname = nickname;
@@ -51,7 +51,6 @@ public class User extends BaseEntity {
         this.refreshToken = null;
         this.role = role;
     }
-
 
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
