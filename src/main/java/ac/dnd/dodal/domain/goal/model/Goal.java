@@ -52,6 +52,16 @@ public class Goal extends BaseEntity {
     @OneToMany(mappedBy = "goalId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Plan> plans;
 
+    public void addPlan(Plan plan) {
+        plan.setGoal(this);
+        this.plans.add(plan);
+    }
+
+    public void addHistory(PlanHistory history) {
+        history.setGoal(this);
+        this.histories.add(history);
+    }
+
     public void achieve(Long userId) {
         validateAuthor(userId);
         validateGoal();
