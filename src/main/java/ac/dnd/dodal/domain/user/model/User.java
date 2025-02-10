@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.LocalDateTime;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 @DynamicUpdate
 @NoArgsConstructor
 @Table(name = "users")
+@SuperBuilder
 public class User extends BaseEntity {
 
     @Id
@@ -41,8 +43,8 @@ public class User extends BaseEntity {
     private String refreshToken;
 
     @Builder
-    public User(String nickname, String profileImageUrl, String deviceToken, String email, UserRole role) {
-        super(LocalDateTime.now(), LocalDateTime.now(), null);
+    public User(String nickname, String profileImageUrl, String deviceToken, String email, EUserRole role) {
+        super();
 
         this.nickname = nickname;
         this.profileImageUrl = profileImageUrl;

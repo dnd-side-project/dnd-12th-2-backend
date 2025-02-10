@@ -31,5 +31,6 @@ public class Constants {
             "/api/auth/login/naver",
             "/api/auth/login/google",
             "/api/auth/login/apple"
+
     );
 }
