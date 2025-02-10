@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum EUserCode implements ResultCode {
+public enum UserExceptionCode implements ResultCode {
 
     //failure
     NO_SUCH_ROLE("USR001", "No such user role"),
