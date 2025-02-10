@@ -1,7 +1,7 @@
-package ac.dnd.dodal.core.config.security.handler;
+package ac.dnd.dodal.core.security.handler;
 
 import ac.dnd.dodal.application.user.repository.UserRepository;
-import ac.dnd.dodal.core.config.security.info.CustomUserDetails;
+import ac.dnd.dodal.core.security.info.CustomUserDetails;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

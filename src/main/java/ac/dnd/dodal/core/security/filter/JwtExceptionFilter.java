@@ -1,12 +1,10 @@
-package ac.dnd.dodal.core.config.security.filter;
+package ac.dnd.dodal.core.security.filter;
 
 import ac.dnd.dodal.common.enums.ResultCode;
-import ac.dnd.dodal.common.exception.BadRequestException;
 import ac.dnd.dodal.common.response.ApiResponse;
-import ac.dnd.dodal.core.config.security.enums.SecurityExceptionCode;
+import ac.dnd.dodal.core.security.enums.SecurityExceptionCode;
 import ac.dnd.dodal.domain.user.enums.UserExceptionCode;
 import ac.dnd.dodal.domain.user.exception.UserBadRequestException;
-import ac.dnd.dodal.domain.user.exception.UserNotFoundException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.MalformedJwtException;

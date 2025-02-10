@@ -1,11 +1,11 @@
-package ac.dnd.dodal.core.config.security.provider;
+package ac.dnd.dodal.core.security.provider;
 
 import ac.dnd.dodal.common.exception.BadRequestException;
-import ac.dnd.dodal.core.config.security.JwtAuthenticationToken;
-import ac.dnd.dodal.core.config.security.enums.SecurityExceptionCode;
-import ac.dnd.dodal.core.config.security.info.CustomUserDetails;
-import ac.dnd.dodal.core.config.security.info.JwtUserInfo;
-import ac.dnd.dodal.core.config.security.service.CustomUserDetailsService;
+import ac.dnd.dodal.core.security.JwtAuthenticationToken;
+import ac.dnd.dodal.core.security.enums.SecurityExceptionCode;
+import ac.dnd.dodal.core.security.info.CustomUserDetails;
+import ac.dnd.dodal.core.security.info.JwtUserInfo;
+import ac.dnd.dodal.core.security.service.CustomUserDetailsService;
 import ac.dnd.dodal.domain.user.enums.UserExceptionCode;
 import ac.dnd.dodal.domain.user.enums.UserRole;
 import ac.dnd.dodal.domain.user.exception.UserBadRequestException;

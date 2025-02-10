@@ -1,4 +1,4 @@
-package ac.dnd.dodal.core.config.security.enums;
+package ac.dnd.dodal.core.security.enums;
 
 import ac.dnd.dodal.common.enums.ResultCode;
 import lombok.Getter;

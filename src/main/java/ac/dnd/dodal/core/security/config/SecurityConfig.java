@@ -1,14 +1,14 @@
-package ac.dnd.dodal.core.config.security.config;
+package ac.dnd.dodal.core.security.config;
 
 import ac.dnd.dodal.common.constant.Constants;
-import ac.dnd.dodal.core.config.security.filter.CustomLogoutFilter;
-import ac.dnd.dodal.core.config.security.filter.JwtAuthenticationFilter;
-import ac.dnd.dodal.core.config.security.filter.JwtExceptionFilter;
-import ac.dnd.dodal.core.config.security.handler.CustomSignOutProcessHandler;
-import ac.dnd.dodal.core.config.security.handler.CustomSignOutResultHandler;
-import ac.dnd.dodal.core.config.security.provider.JwtAuthenticationProvider;
-import ac.dnd.dodal.core.config.security.service.CustomUserDetailsService;
-import ac.dnd.dodal.core.config.security.util.JwtUtil;
+import ac.dnd.dodal.core.security.filter.CustomLogoutFilter;
+import ac.dnd.dodal.core.security.filter.JwtAuthenticationFilter;
+import ac.dnd.dodal.core.security.filter.JwtExceptionFilter;
+import ac.dnd.dodal.core.security.handler.CustomSignOutProcessHandler;
+import ac.dnd.dodal.core.security.handler.CustomSignOutResultHandler;
+import ac.dnd.dodal.core.security.provider.JwtAuthenticationProvider;
+import ac.dnd.dodal.core.security.service.CustomUserDetailsService;
+import ac.dnd.dodal.common.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

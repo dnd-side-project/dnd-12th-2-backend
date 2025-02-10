@@ -1,6 +1,6 @@
-package ac.dnd.dodal.core.config.security.filter;
+package ac.dnd.dodal.core.security.filter;
 
-import ac.dnd.dodal.core.config.security.enums.SecurityExceptionCode;
+import ac.dnd.dodal.core.security.enums.SecurityExceptionCode;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

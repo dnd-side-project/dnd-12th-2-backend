@@ -1,4 +1,4 @@
-package ac.dnd.dodal.core.config.security.handler;
+package ac.dnd.dodal.core.security.handler;
 
 import ac.dnd.dodal.common.response.ApiResponse;
 import jakarta.servlet.ServletException;

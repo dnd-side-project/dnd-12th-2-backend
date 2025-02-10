@@ -1,4 +1,4 @@
-package ac.dnd.dodal.core.config.security.info;
+package ac.dnd.dodal.core.security.info;
 
 import ac.dnd.dodal.common.constant.Constants;
 import ac.dnd.dodal.domain.user.enums.UserRole;
