@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 import lombok.experimental.SuperBuilder;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @MappedSuperclass
 @Getter
@@ -26,10 +26,10 @@ import org.springframework.data.annotation.LastModifiedDate;
 public class BaseEntity {
 
     @Column(updatable = false)
-    @CreatedDate
+    @CreationTimestamp
     protected LocalDateTime createdAt;
 
-    @LastModifiedDate
+    @UpdateTimestamp
     protected LocalDateTime updatedAt;
 
     @Column(nullable = true)
