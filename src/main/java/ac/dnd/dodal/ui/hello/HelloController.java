@@ -23,7 +23,7 @@ public class HelloController {
 
     @GetMapping
     public ApiResponse<Object> hello() {
-        return ApiResponse.success("Hello!");
+        return ApiResponse.success("Hello, Dodal World!");
     }
 
     @GetMapping("/test")
