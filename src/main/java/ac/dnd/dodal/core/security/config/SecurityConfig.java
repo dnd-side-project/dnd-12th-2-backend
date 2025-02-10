@@ -53,12 +53,12 @@ public class SecurityConfig {
                                 .logoutSuccessHandler(customSignOutResultHandler)
                                 .deleteCookies(Constants.AUTHORIZATION_HEADER, Constants.REAUTHORIZATION))
 
+                .addFilterBefore(new CustomLogoutFilter(), LogoutFilter.class)
                 .addFilterBefore(
                         new JwtAuthenticationFilter(jwtUtil,
                                 new JwtAuthenticationProvider(customUserDetailsService)),
-                        LogoutFilter.class)
-                .addFilterAfter(new JwtExceptionFilter(), JwtAuthenticationFilter.class)
-                .addFilterBefore(new CustomLogoutFilter(), LogoutFilter.class)
+                        CustomLogoutFilter.class)
+                .addFilterBefore(new JwtExceptionFilter(), JwtAuthenticationFilter.class)
                 .build();
     }
 }
