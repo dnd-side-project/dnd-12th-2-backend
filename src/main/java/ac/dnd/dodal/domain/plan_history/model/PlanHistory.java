@@ -17,6 +17,7 @@ import lombok.ToString;
 
 import ac.dnd.dodal.common.model.BaseEntity;
 import ac.dnd.dodal.domain.plan.model.Plan;
+import ac.dnd.dodal.domain.goal.model.Goal;
 
 @Entity(name = "plan_histories")
 @Getter
@@ -33,4 +34,12 @@ public class PlanHistory extends BaseEntity {
 
     @OneToMany(mappedBy = "historyId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Plan> plans;
+
+    public void addPlan(Plan plan) {
+        plan.setHistory(this);
+    }
+
+    public void setGoal(Goal goal) {
+        this.goalId = goal.getGoalId();
+    }
 }
