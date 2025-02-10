@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import ac.dnd.dodal.common.response.ApiResponse;
 import ac.dnd.dodal.application.goal.usecase.*;
@@ -15,6 +16,7 @@ import ac.dnd.dodal.application.goal.dto.command.*;
 import ac.dnd.dodal.ui.goal.request.*;
 
 @RestController
+@RequestMapping("/api/goals")
 @RequiredArgsConstructor
 public class GoalController {
     
@@ -22,8 +24,8 @@ public class GoalController {
     private final Long userId = 1L;
 
     private final CreateGoalUseCase createGoalUseCase;
-    private final DeleteGoalUseCase deleteGoalUseCase;
     private final AchieveGoalUseCase achieveGoalUseCase;
+    private final DeleteGoalUseCase deleteGoalUseCase;
 
     @PostMapping
     public ApiResponse<Long> createGoal(@RequestBody CreateGoalRequest request) {
