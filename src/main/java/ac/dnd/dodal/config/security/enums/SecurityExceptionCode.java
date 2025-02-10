@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum ESecurityCode implements ResultCode {
+public enum SecurityExceptionCode implements ResultCode {
 
     TOKEN_MALFORMED_ERROR("SEC001", "Token Malformed Error"),
     TOKEN_TYPE_ERROR("SEC002", "Token Type Error"),

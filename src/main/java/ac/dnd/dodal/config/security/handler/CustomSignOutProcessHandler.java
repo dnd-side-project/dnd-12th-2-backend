@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class CustomSignOutProcessHandler implements LogoutHandler {
+
     private final UserRepository userRepository;
 
     @Override

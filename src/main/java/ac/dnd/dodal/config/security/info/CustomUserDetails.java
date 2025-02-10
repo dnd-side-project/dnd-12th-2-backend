@@ -17,13 +17,14 @@ import java.util.Collection;
 @Builder
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class CustomUserDetails implements UserDetails {
+
     @Getter
     private final Long id;
     @Getter
     private final String email;
-
     @Getter
     private final EUserRole role;
+
     private final Collection<? extends GrantedAuthority> authorities;
 
     public static CustomUserDetails create(User user) {

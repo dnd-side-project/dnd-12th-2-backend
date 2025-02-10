@@ -1,7 +1,7 @@
 package ac.dnd.dodal.config.security.filter;
 
 import ac.dnd.dodal.common.response.ApiResponse;
-import ac.dnd.dodal.config.security.enums.ESecurityCode;
+import ac.dnd.dodal.config.security.enums.SecurityExceptionCode;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,7 +27,7 @@ public class CustomLogoutFilter extends OncePerRequestFilter {
 
             // 인증된 사용자가 아니라면 401 응답을 반환
             if (authentication == null || !authentication.isAuthenticated()) {
-                httpResponse.getWriter().write(JSONValue.toJSONString(ApiResponse.failure(ESecurityCode.FAILURE_LOGOUT)));
+                httpResponse.getWriter().write(JSONValue.toJSONString(ApiResponse.failure(SecurityExceptionCode.FAILURE_LOGOUT)));
                 return; // 필터 체인을 끊고 응답을 반환
             }
         }

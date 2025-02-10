@@ -2,7 +2,7 @@ package ac.dnd.dodal.common.interceptor;
 
 import ac.dnd.dodal.common.annotation.UserId;
 import ac.dnd.dodal.common.exception.UnauthorizedException;
-import ac.dnd.dodal.config.security.enums.ESecurityCode;
+import ac.dnd.dodal.config.security.enums.SecurityExceptionCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -15,6 +15,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @Component
 @Slf4j
 public class UserIdArgumentResolver implements HandlerMethodArgumentResolver {
+
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         log.info("supportsParameter = {}", parameter.getParameterType().equals(Long.class) &&
@@ -30,7 +31,7 @@ public class UserIdArgumentResolver implements HandlerMethodArgumentResolver {
         final Object userIdObj = webRequest.getAttribute("USER_ID", NativeWebRequest.SCOPE_REQUEST);
         log.info("resolveArgument = {}", userIdObj);
         if (userIdObj == null) {
-            throw new UnauthorizedException(ESecurityCode.ACCESS_DENIED_ERROR);
+            throw new UnauthorizedException(SecurityExceptionCode.ACCESS_DENIED_ERROR);
         }
         return Long.valueOf(userIdObj.toString());
     }
