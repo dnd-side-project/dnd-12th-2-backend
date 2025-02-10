@@ -11,6 +11,7 @@ import ac.dnd.dodal.domain.user.enums.UserRole;
 import ac.dnd.dodal.domain.user.exception.UserBadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -34,8 +35,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
                 throw new UserBadRequestException(UserExceptionCode.NO_SUCH_ROLE) {
                 };
             }
-
-            return new JwtAuthenticationToken(userDetails.getAuthorities(), jwtUserInfo.id(), jwtUserInfo.role());
+            return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         }
 
         throw new BadRequestException(SecurityExceptionCode.INVALID_AUTHENTICATION);
