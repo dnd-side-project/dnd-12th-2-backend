@@ -1,11 +1,15 @@
 package ac.dnd.dodal.domain.plan.model;
 
 import java.time.LocalDateTime;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.FetchType;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -17,6 +21,10 @@ import ac.dnd.dodal.common.exception.BadRequestException;
 import ac.dnd.dodal.common.exception.ForbiddenException;
 import ac.dnd.dodal.domain.plan.exception.PlanExceptionCode;
 import ac.dnd.dodal.domain.plan.constraint.PlanConstraints;
+import ac.dnd.dodal.domain.plan_history.model.PlanHistory;
+import ac.dnd.dodal.domain.plan_history.exception.PlanHistoryExceptionCode;
+import ac.dnd.dodal.domain.goal.model.Goal;
+import ac.dnd.dodal.domain.goal.exception.GoalExceptionCode;
 
 @Entity(name = "plans")
 @Getter
@@ -29,11 +37,13 @@ public class Plan extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long planId;
 
-    @Column(nullable = false)
-    private Long goalId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "goal_id", nullable = false)
+    private Goal goal;
 
-    @Column(nullable = false)
-    private Long historyId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "history_id", nullable = false)
+    private PlanHistory history;
 
     @Column(nullable = false)
     private String title;
@@ -49,7 +59,16 @@ public class Plan extends BaseEntity {
     @Column(nullable = false)
     private LocalDateTime endDate;
 
-    public void succeed() {
+    public void succeed(String guide) {
+        if (this.goal.getDeletedAt() != null) {
+            throw new ForbiddenException(GoalExceptionCode.GOAL_ALREADY_DELETED);
+        }
+        if (this.goal.getIsAchieved()) {
+            throw new BadRequestException(GoalExceptionCode.GOAL_ALREADY_ACHIEVED);
+        }
+        if (this.history.getDeletedAt() != null) {
+            throw new ForbiddenException(PlanHistoryExceptionCode.PLAN_HISTORY_ALREADY_DELETED);
+        }
         if (this.deletedAt != null) {
             throw new ForbiddenException(PlanExceptionCode.PLAN_ALREADY_DELETED);
         }
@@ -60,21 +79,22 @@ public class Plan extends BaseEntity {
             throw new BadRequestException(PlanExceptionCode.PLAN_SUCCEED_AFTER_START_DATE);
         }
         this.isSucceed = true;
+        this.guide = guide;
     }
 
-    public Plan(Long goalId, Long historyId,
+    public Plan(Goal goal, PlanHistory history,
             String title, LocalDateTime startDate, LocalDateTime endDate) {
         validateTitle(title);
         validateDate(startDate, endDate);
 
-        this.goalId = goalId;
-        this.historyId = historyId;
+        this.goal = goal;
+        this.history = history;
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
     }
 
-    public Plan(Long planId, Long goalId, Long historyId,
+    public Plan(Long planId, Goal goal, PlanHistory history,
             String title, Boolean isSucceed, String guide, 
             LocalDateTime startDate, LocalDateTime endDate,
             LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
@@ -84,13 +104,21 @@ public class Plan extends BaseEntity {
         validateDate(startDate, endDate);
 
         this.planId = planId;
-        this.goalId = goalId;
-        this.historyId = historyId;
+        this.goal = goal;
+        this.history = history;
         this.title = title;
         this.isSucceed = isSucceed;
         this.guide = guide;
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    public void setGoal(Goal goal) {
+        this.goal = goal;
+    }
+
+    public void setHistory(PlanHistory history) {
+        this.history = history;
     }
 
     private void validateTitle(String title) {
