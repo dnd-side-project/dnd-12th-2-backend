@@ -1,7 +1,7 @@
 package ac.dnd.dodal.core.config.security.info;
 
 import ac.dnd.dodal.common.constant.Constants;
-import ac.dnd.dodal.domain.user.enums.EUserRole;
+import ac.dnd.dodal.domain.user.enums.UserRole;
 import ac.dnd.dodal.domain.user.model.User;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -23,7 +23,7 @@ public class CustomUserDetails implements UserDetails {
     @Getter
     private final String email;
     @Getter
-    private final EUserRole role;
+    private final UserRole role;
 
     private final Collection<? extends GrantedAuthority> authorities;
 
