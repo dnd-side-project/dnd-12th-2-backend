@@ -26,7 +26,6 @@ public class CustomLogoutFilter extends OncePerRequestFilter {
             // 인증된 사용자가 아니라면 401 응답을 반환
             if (authentication == null || !authentication.isAuthenticated()) {
                 request.setAttribute("exception", SecurityExceptionCode.INVALID_AUTHENTICATION);
-                return; // 필터 체인을 끊고 응답을 반환
             }
         }
         filterChain.doFilter(request, response);
