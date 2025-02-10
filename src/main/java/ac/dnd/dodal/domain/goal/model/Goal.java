@@ -62,6 +62,11 @@ public class Goal extends BaseEntity {
         this.histories.add(history);
     }
 
+    public void succeedPlan(Plan plan, String guide) {
+        validateGoal();
+        plan.succeed(guide);
+    }
+
     public void achieve(Long userId) {
         validateAuthor(userId);
         validateGoal();
