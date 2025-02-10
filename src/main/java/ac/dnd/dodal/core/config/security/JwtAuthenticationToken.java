@@ -1,6 +1,6 @@
 package ac.dnd.dodal.core.config.security;
 
-import ac.dnd.dodal.domain.user.enums.EUserRole;
+import ac.dnd.dodal.domain.user.enums.UserRole;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -9,9 +9,9 @@ import java.util.Collection;
 public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
     private Long userId;
-    private EUserRole role;
+    private UserRole role;
 
-    public JwtAuthenticationToken(Collection<? extends GrantedAuthority> authorities, Long id, EUserRole role) {
+    public JwtAuthenticationToken(Collection<? extends GrantedAuthority> authorities, Long id, UserRole role) {
         super(authorities);
         this.userId = id;
         this.role = role;

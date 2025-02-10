@@ -6,8 +6,8 @@ import ac.dnd.dodal.core.config.security.JwtAuthenticationToken;
 import ac.dnd.dodal.core.config.security.info.JwtUserInfo;
 import ac.dnd.dodal.core.config.security.provider.JwtAuthenticationProvider;
 import ac.dnd.dodal.core.config.security.util.JwtUtil;
-import ac.dnd.dodal.domain.user.enums.EUserRole;
-import ac.dnd.dodal.domain.user.exception.UserException;
+import ac.dnd.dodal.domain.user.enums.UserRole;
+import ac.dnd.dodal.domain.user.exception.UserBadRequestException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
@@ -45,7 +45,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 Claims claims = jwtUtil.validateAndGetClaimsFromToken(token);
                 JwtUserInfo jwtUserInfo = JwtUserInfo.builder()
                         .id(claims.get(Constants.USER_ID_CLAIM_NAME, Long.class))
-                        .role(EUserRole.valueOf(claims.get(Constants.USER_ROLE_CLAIM_NAME, String.class)))
+                        .role(UserRole.valueOf(claims.get(Constants.USER_ROLE_CLAIM_NAME, String.class)))
                         .build();
 
                 JwtAuthenticationToken beforeAuthentication = new JwtAuthenticationToken(null, jwtUserInfo.id(),
@@ -61,8 +61,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
 
             filterChain.doFilter(request, response);
-        }  catch (UserException | BadRequestException | JwtException e){
-            request.setAttribute("JwtAuthenticationFilterException", e);
+        }  catch (UserBadRequestException | JwtException e){
+            request.setAttribute("exception", e);
+        }  catch (BadRequestException e){
+            request.setAttribute("exception", e);
         }
     }
 }

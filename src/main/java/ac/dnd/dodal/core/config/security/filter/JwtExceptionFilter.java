@@ -3,9 +3,10 @@ package ac.dnd.dodal.core.config.security.filter;
 import ac.dnd.dodal.common.enums.ResultCode;
 import ac.dnd.dodal.common.exception.BadRequestException;
 import ac.dnd.dodal.common.response.ApiResponse;
-import ac.dnd.dodal.core.config.security.enums.ESecurityCode;
-import ac.dnd.dodal.domain.user.enums.EUserCode;
-import ac.dnd.dodal.domain.user.exception.UserException;
+import ac.dnd.dodal.core.config.security.enums.SecurityExceptionCode;
+import ac.dnd.dodal.domain.user.enums.UserExceptionCode;
+import ac.dnd.dodal.domain.user.exception.UserBadRequestException;
+import ac.dnd.dodal.domain.user.exception.UserNotFoundException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -31,51 +32,49 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
         } catch (SecurityException e) {
             e.printStackTrace();
             log.error("FilterException throw SecurityException Exception : {}", e.getMessage());
-            setErrorResponse(response, ESecurityCode.ACCESS_DENIED_ERROR);
+            setErrorResponse(response, SecurityExceptionCode.ACCESS_DENIED_ERROR);
 
             filterChain.doFilter(request, response);
         } catch (MalformedJwtException e) {
             e.printStackTrace();
             log.error("FilterException throw MalformedJwtException Exception : {}", e.getMessage());
-            setErrorResponse(response, ESecurityCode.TOKEN_MALFORMED_ERROR);
+            setErrorResponse(response, SecurityExceptionCode.TOKEN_MALFORMED_ERROR);
 
             filterChain.doFilter(request, response);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
             log.error("FilterException throw IllegalArgumentException Exception : {}", e.getMessage());
-            setErrorResponse(response, ESecurityCode.TOKEN_TYPE_ERROR);
+            setErrorResponse(response, SecurityExceptionCode.TOKEN_TYPE_ERROR);
 
             filterChain.doFilter(request, response);
         } catch (ExpiredJwtException e) {
             e.printStackTrace();
             log.error("FilterException throw ExpiredJwtException Exception : {}", e.getMessage());
-            setErrorResponse(response, ESecurityCode.EXPIRED_TOKEN_ERROR);
+            setErrorResponse(response, SecurityExceptionCode.EXPIRED_TOKEN_ERROR);
 
             filterChain.doFilter(request, response);
         } catch (UnsupportedJwtException e) {
             e.printStackTrace();
             log.error("FilterException throw UnsupportedJwtException Exception : {}", e.getMessage());
-            setErrorResponse(response, ESecurityCode.TOKEN_UNSUPPORTED_ERROR);
+            setErrorResponse(response, SecurityExceptionCode.TOKEN_UNSUPPORTED_ERROR);
 
             filterChain.doFilter(request, response);
         } catch (JwtException e) {
             e.printStackTrace();
             log.error("FilterException throw JwtException Exception : {}", e.getMessage());
-            setErrorResponse(response, ESecurityCode.TOKEN_UNKNOWN_ERROR);
+            setErrorResponse(response, SecurityExceptionCode.TOKEN_UNKNOWN_ERROR);
 
             filterChain.doFilter(request, response);
         } catch (Exception e) {
             // request에 저장된 예외 정보를 가져옴
             Object exception = request.getAttribute("exception");
             switch (exception) {
-                case BadRequestException badRequestException ->
-                        setErrorResponse(response, badRequestException.getResultCode());
-                case ESecurityCode securityCode -> setErrorResponse(response, securityCode);
-                case UserException userException -> setErrorResponse(response, userException.getResultCode());
-                case JwtException jwtException -> setErrorResponse(response, ESecurityCode.TOKEN_UNKNOWN_ERROR);
+                case UserBadRequestException userException -> setErrorResponse(response, userException.getResultCode());
+                case SecurityExceptionCode securityCode -> setErrorResponse(response, securityCode);
+                case JwtException jwtException -> setErrorResponse(response, SecurityExceptionCode.TOKEN_UNKNOWN_ERROR);
                 case null, default -> {
                     log.error("FilterException throw Exception Exception : {}", e.getMessage());
-                    setErrorResponse(response, EUserCode.NOT_FOUND_USER);
+                    setErrorResponse(response, UserExceptionCode.NOT_FOUND_USER);
                 }
             }
 

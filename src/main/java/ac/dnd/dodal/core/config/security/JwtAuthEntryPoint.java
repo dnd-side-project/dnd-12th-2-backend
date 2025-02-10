@@ -1,7 +1,7 @@
 package ac.dnd.dodal.core.config.security;
 
 import ac.dnd.dodal.common.response.ApiResponse;
-import ac.dnd.dodal.core.config.security.enums.ESecurityCode;
+import ac.dnd.dodal.core.config.security.enums.SecurityExceptionCode;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,6 +18,6 @@ public class JwtAuthEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException authException) throws IOException, ServletException {
-        response.getWriter().write(JSONValue.toJSONString(ApiResponse.failure(ESecurityCode.ACCESS_DENIED_ERROR)));
+        response.getWriter().write(JSONValue.toJSONString(ApiResponse.failure(SecurityExceptionCode.ACCESS_DENIED_ERROR)));
     }
 }

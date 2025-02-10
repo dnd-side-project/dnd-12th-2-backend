@@ -1,7 +1,7 @@
 package ac.dnd.dodal.core.config.security.util;
 
 import ac.dnd.dodal.common.constant.Constants;
-import ac.dnd.dodal.domain.user.enums.EUserRole;
+import ac.dnd.dodal.domain.user.enums.UserRole;
 import ac.dnd.dodal.ui.user.response.JwtTokenDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -35,7 +35,7 @@ public class JwtUtil implements InitializingBean {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String createToken(String email, EUserRole role, Long expirationPeriod) {
+    public String createToken(String email, UserRole role, Long expirationPeriod) {
         Claims claims = Jwts.claims();
         claims.put(Constants.USER_EMAIL_CLAIM_NAME, email);
         claims.put(Constants.USER_ROLE_CLAIM_NAME, role.toString());
@@ -51,7 +51,7 @@ public class JwtUtil implements InitializingBean {
                 .compact();
     }
 
-    public String createToken(Long id, EUserRole role, Long expirationPeriod) {
+    public String createToken(Long id, UserRole role, Long expirationPeriod) {
         Claims claims = Jwts.claims();
         claims.put(Constants.USER_ID_CLAIM_NAME, id);
         claims.put(Constants.USER_ROLE_CLAIM_NAME, role.toString());
@@ -67,12 +67,12 @@ public class JwtUtil implements InitializingBean {
                 .compact();
     }
 
-    public JwtTokenDto generateToken(String email, EUserRole role) {
+    public JwtTokenDto generateToken(String email, UserRole role) {
         return new JwtTokenDto(createToken(email, role, accessTokenExpirationPeriod),
                 createToken(email, role, refreshTokenExpirationPeriod));
     }
 
-    public JwtTokenDto generateToken(Long id, EUserRole role) {
+    public JwtTokenDto generateToken(Long id, UserRole role) {
         return new JwtTokenDto(createToken(id, role, accessTokenExpirationPeriod),
                 createToken(id, role, refreshTokenExpirationPeriod));
     }
