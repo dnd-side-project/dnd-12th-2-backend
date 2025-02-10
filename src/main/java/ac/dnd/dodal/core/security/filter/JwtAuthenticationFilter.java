@@ -5,7 +5,7 @@ import ac.dnd.dodal.common.exception.BadRequestException;
 import ac.dnd.dodal.core.security.JwtAuthenticationToken;
 import ac.dnd.dodal.core.security.info.JwtUserInfo;
 import ac.dnd.dodal.core.security.provider.JwtAuthenticationProvider;
-import ac.dnd.dodal.common.util.JwtUtil;
+import ac.dnd.dodal.core.security.util.JwtUtil;
 import ac.dnd.dodal.domain.user.enums.UserRole;
 import ac.dnd.dodal.domain.user.exception.UserBadRequestException;
 import io.jsonwebtoken.Claims;

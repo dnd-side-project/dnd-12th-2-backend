@@ -8,7 +8,7 @@ import ac.dnd.dodal.core.security.handler.CustomSignOutProcessHandler;
 import ac.dnd.dodal.core.security.handler.CustomSignOutResultHandler;
 import ac.dnd.dodal.core.security.provider.JwtAuthenticationProvider;
 import ac.dnd.dodal.core.security.service.CustomUserDetailsService;
-import ac.dnd.dodal.common.util.JwtUtil;
+import ac.dnd.dodal.core.security.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
