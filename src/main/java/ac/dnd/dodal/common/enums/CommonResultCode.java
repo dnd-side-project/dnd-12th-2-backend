@@ -25,6 +25,7 @@ public enum CommonResultCode implements ResultCode {
     PLAN_EXCEPTION("PLN000", "Plan Exception"),
     INDICATOR_EXCEPTION("IND000", "Indicator Exception"),
     NOTIFICATION_EXCEPTION("NOT000", "Notification Exception"),
+    PLAN_HISTORY_EXCEPTION("PLH000", "Plan History Exception"),
     ;
 
     private final String code;
