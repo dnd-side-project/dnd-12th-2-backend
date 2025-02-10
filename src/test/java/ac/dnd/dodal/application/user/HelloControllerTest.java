@@ -7,6 +7,8 @@ import ac.dnd.dodal.domain.user.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.Optional;
 
@@ -26,6 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class HelloControllerTest {
 
+    private static final Logger log = LoggerFactory.getLogger(HelloControllerTest.class);
     @Autowired
     private MockMvc mockMvc;
 
@@ -36,29 +40,30 @@ public class HelloControllerTest {
     private JwtUtil jwtUtil;
 
     private String accessToken;
+    private String refreshToken;
     private User savedUser;
 
     @BeforeEach
     void setUp() {
         userRepository.deleteAll(); // 데이터 초기화
-        User user = new User("testUser", "profile.jpg", "deviceToken123", "test@example.com", UserRole.USER);
-        savedUser = userRepository.save(user);
 
-        // JWT 생성 (User의 ID 포함)
-        accessToken = "Bearer " + jwtUtil.createToken(savedUser.getId(), savedUser.getRole(), 3600000L);
     }
 
     @Test
     @DisplayName("Hello API 호출 성공 - JWT에서 UserId가 정상적으로 추출되고 DB 조회됨")
     void testHelloEndpointWithUserId() throws Exception {
-        // given: SecurityContext 직접 설정
-        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-        securityContext.setAuthentication(new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(
-                savedUser.getId(), null, null));
-        SecurityContextHolder.setContext(securityContext);
+        // JWT 생성 (User의 ID 포함)
+        refreshToken = "Bearer refreshToken";
+        User user = new User("testUser", "profile.jpg", "deviceToken123", "test@example.com", UserRole.USER);
+        user.updateRefreshToken(refreshToken);
+
+        savedUser = userRepository.save(user);
+        assertThat(savedUser.getRefreshToken()).isNotNull();
+        accessToken = "Bearer " + jwtUtil.createToken(savedUser.getId(), savedUser.getRole(), 3600000L);
+
 
         // when: GET 요청 실행
-        mockMvc.perform(get("/hello")
+        mockMvc.perform(get("/hello/test")
                         .header("Authorization", accessToken)  // JWT 포함
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -75,7 +80,7 @@ public class HelloControllerTest {
     @Test
     @DisplayName("Hello API 호출 실패 - JWT 없음")
     void testHelloEndpointWithoutJwt() throws Exception {
-        mockMvc.perform(get("/hello")
+        mockMvc.perform(get("/hello/test")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized()); // 401 Unauthorized
     }
@@ -83,7 +88,7 @@ public class HelloControllerTest {
     @Test
     @DisplayName("Hello API 호출 실패 - 잘못된 JWT")
     void testHelloEndpointWithInvalidJwt() throws Exception {
-        mockMvc.perform(get("/hello")
+        mockMvc.perform(get("/hello/test")
                         .header("Authorization", "Bearer invalid-token")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized()); // 401 Unauthorized
