@@ -20,7 +20,7 @@ import ac.dnd.dodal.common.exception.ForbiddenException;
 import ac.dnd.dodal.domain.goal.constraint.GoalConstraint;
 import ac.dnd.dodal.domain.goal.exception.GoalExceptionCode;
 
-@Entity
+@Entity(name = "goals")
 @Getter
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
