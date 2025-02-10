@@ -1,5 +1,6 @@
 package ac.dnd.dodal.domain.goal.model;
 
+import java.util.List;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
@@ -7,6 +8,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.CascadeType;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -17,8 +21,10 @@ import ac.dnd.dodal.common.model.BaseEntity;
 import ac.dnd.dodal.common.exception.BadRequestException;
 import ac.dnd.dodal.common.exception.UnauthorizedException;
 import ac.dnd.dodal.common.exception.ForbiddenException;
-import ac.dnd.dodal.domain.goal.constraint.GoalConstraint;
+import ac.dnd.dodal.domain.goal.constraint.GoalConstraints;
 import ac.dnd.dodal.domain.goal.exception.GoalExceptionCode;
+import ac.dnd.dodal.domain.plan_history.model.PlanHistory;
+import ac.dnd.dodal.domain.plan.model.Plan;
 
 @Entity(name = "goals")
 @Getter
@@ -69,12 +75,7 @@ public class Goal extends BaseEntity {
         if (userId == null) {
             throw new UnauthorizedException();
         }
-        if (title == null || title.isEmpty() || title.isBlank()) {
-            throw new BadRequestException(GoalExceptionCode.GOAL_TITLE_EMPTY);
-        }
-        if (title.length() > GoalConstraint.MAX_GOAL_TITLE_LENGTH) {
-            throw new BadRequestException(GoalExceptionCode.GOAL_TITLE_EXCEED_MAX_LENGTH);
-        }
+        validateTitle(title);
         this.userId = userId;
         this.title = title;
         this.isAchieved = false;
@@ -88,5 +89,14 @@ public class Goal extends BaseEntity {
         this.userId = userId;
         this.title = title;
         this.isAchieved = isAchieved;
+    }
+
+    private void validateTitle(String title) {
+        if (title == null || title.isEmpty()) {
+            throw new BadRequestException(GoalExceptionCode.GOAL_TITLE_EMPTY);
+        }
+        if (title.length() > GoalConstraints.MAX_GOAL_TITLE_LENGTH) {
+            throw new BadRequestException(GoalExceptionCode.GOAL_TITLE_EXCEED_MAX_LENGTH);
+        }
     }
 }
