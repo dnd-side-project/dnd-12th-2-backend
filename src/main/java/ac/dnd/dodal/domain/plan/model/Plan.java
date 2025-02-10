@@ -22,9 +22,7 @@ import ac.dnd.dodal.common.exception.ForbiddenException;
 import ac.dnd.dodal.domain.plan.exception.PlanExceptionCode;
 import ac.dnd.dodal.domain.plan.constraint.PlanConstraints;
 import ac.dnd.dodal.domain.plan_history.model.PlanHistory;
-import ac.dnd.dodal.domain.plan_history.exception.PlanHistoryExceptionCode;
 import ac.dnd.dodal.domain.goal.model.Goal;
-import ac.dnd.dodal.domain.goal.exception.GoalExceptionCode;
 
 @Entity(name = "plans")
 @Getter
@@ -60,15 +58,6 @@ public class Plan extends BaseEntity {
     private LocalDateTime endDate;
 
     public void succeed(String guide) {
-        if (this.goal.getDeletedAt() != null) {
-            throw new ForbiddenException(GoalExceptionCode.GOAL_ALREADY_DELETED);
-        }
-        if (this.goal.getIsAchieved()) {
-            throw new BadRequestException(GoalExceptionCode.GOAL_ALREADY_ACHIEVED);
-        }
-        if (this.history.getDeletedAt() != null) {
-            throw new ForbiddenException(PlanHistoryExceptionCode.PLAN_HISTORY_ALREADY_DELETED);
-        }
         if (this.deletedAt != null) {
             throw new ForbiddenException(PlanExceptionCode.PLAN_ALREADY_DELETED);
         }
