@@ -2,10 +2,13 @@ package ac.dnd.dodal.core.security.filter;
 
 import ac.dnd.dodal.common.constant.Constants;
 import ac.dnd.dodal.common.exception.BadRequestException;
+import ac.dnd.dodal.common.response.ApiResponse;
 import ac.dnd.dodal.core.security.JwtAuthenticationToken;
+import ac.dnd.dodal.core.security.enums.SecurityExceptionCode;
 import ac.dnd.dodal.core.security.info.JwtUserInfo;
 import ac.dnd.dodal.core.security.provider.JwtAuthenticationProvider;
 import ac.dnd.dodal.core.security.util.JwtUtil;
+import ac.dnd.dodal.domain.user.enums.UserExceptionCode;
 import ac.dnd.dodal.domain.user.enums.UserRole;
 import ac.dnd.dodal.domain.user.exception.UserBadRequestException;
 import io.jsonwebtoken.Claims;
@@ -15,15 +18,19 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import net.minidev.json.JSONValue;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+@Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -32,7 +39,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        return Constants.NO_NEED_AUTH_URLS.stream().anyMatch(request.getRequestURI()::startsWith);
+        String requestURI = request.getRequestURI();
+        AntPathMatcher antPathMatcher = new AntPathMatcher();
+        return Constants.NO_NEED_AUTH_URLS.stream().anyMatch(pattern -> antPathMatcher.match(pattern, requestURI));
     }
 
     @Override
@@ -61,10 +70,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
 
             filterChain.doFilter(request, response);
-        }  catch (UserBadRequestException | JwtException e){
+        }  catch (UserBadRequestException e){
             request.setAttribute("exception", e);
-        }  catch (BadRequestException e){
+            filterChain.doFilter(request, response);
+
+        } catch (JwtException e) {
             request.setAttribute("exception", e);
+            filterChain.doFilter(request, response);
+
+        } catch (BadRequestException e){
+            request.setAttribute("exception", e);
+            filterChain.doFilter(request, response);
+
+        } catch (Exception e){
+            request.setAttribute("exception", e);
+
+            filterChain.doFilter(request, response);
         }
     }
 }

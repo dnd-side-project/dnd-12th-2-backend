@@ -5,6 +5,7 @@ import ac.dnd.dodal.common.response.ApiResponse;
 import ac.dnd.dodal.core.security.enums.SecurityExceptionCode;
 import ac.dnd.dodal.domain.user.enums.UserExceptionCode;
 import ac.dnd.dodal.domain.user.exception.UserBadRequestException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -21,6 +22,8 @@ import java.io.IOException;
 
 @Slf4j
 public class JwtExceptionFilter extends OncePerRequestFilter {
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -81,6 +84,12 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
     }
 
     private void setErrorResponse(HttpServletResponse response, ResultCode securityCode) throws IOException {
-        response.getWriter().write(JSONValue.toJSONString(ApiResponse.failure(securityCode)));
+
+        response.setContentType("application/json;charset=UTF-8");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+
+        ApiResponse<Object> apiResponse = ApiResponse.failure(securityCode);
+        String jsonResponse = objectMapper.writeValueAsString(apiResponse);
+        response.getWriter().write(jsonResponse);
     }
 }
