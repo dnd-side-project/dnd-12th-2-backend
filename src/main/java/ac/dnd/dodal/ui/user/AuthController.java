@@ -1,9 +1,10 @@
 package ac.dnd.dodal.ui.user;
 
-import ac.dnd.dodal.application.user.service.AuthKakaoLoginService;
+import ac.dnd.dodal.application.user.service.AuthLoginService;
 import ac.dnd.dodal.application.user.service.AuthSignUpService;
 import ac.dnd.dodal.common.constant.Constants;
 import ac.dnd.dodal.common.response.ApiResponse;
+import ac.dnd.dodal.ui.user.request.AppleAuthorizationRequestDto;
 import ac.dnd.dodal.ui.user.request.OAuthUserInfoRequestDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-  private final AuthKakaoLoginService authKakaoLoginService;
+  private final AuthLoginService authLoginService;
   private final AuthSignUpService authSignUpService;
 
   // 카카오 소셜 로그인
@@ -25,10 +26,17 @@ public class AuthController {
   public ApiResponse<?> authKakaoSocialLogin(
       @NotNull @RequestHeader(Constants.AUTHORIZATION_HEADER) String accessToken) {
     log.info("accessToken : {}", accessToken); // 'bearer ' 제거 필요
-    return ApiResponse.success(authKakaoLoginService.authSocialLogin(accessToken));
+    return ApiResponse.success(authLoginService.kakaoAuthSocialLogin(accessToken));
   }
 
-  // 회원가입 API
+  // 애플 소셜 로그인
+  @PostMapping("/login/apple")
+  public ApiResponse<?> authAppleSocialLogin(
+      @RequestBody @Valid AppleAuthorizationRequestDto appleAuthorizationRequestDto) {
+    return ApiResponse.success(authLoginService.appleAuthSocialLogin(appleAuthorizationRequestDto));
+  }
+
+  // 기타 회원가입 API
   @PostMapping("/sign-up")
   public ApiResponse<?> authSignUp(
       @RequestBody @Valid OAuthUserInfoRequestDto authSignUpRequestDto) {
