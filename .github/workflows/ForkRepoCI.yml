@@ -1,0 +1,89 @@
+name: CI/CD Workflow for Forked Repo
+
+on:
+  pull_request:
+    branches:
+      - '*'
+    reviewers:
+      - sueelly
+      - 5hseok
+
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+
+env:
+  SPRING_CONFIG_LOCATION: classpath:test/resources/application-test.yml
+
+jobs:
+  # ✅ Fork 레포에서 PR이 들어오면 Jacoco & SonarCloud 실행
+  test-and-analyze:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Check REPO_ROLE
+        env:
+          REPO_ROLE: ${{ secrets.REPO_ROLE }}
+
+        run: |
+          if [ "$REPO_ROLE" == "FORK_REPO" ]; then
+            echo "Running CI for Forked Repo..."
+          else
+            echo "Skipping CI (Not a Forked Repo)"
+            exit 1
+          fi
+
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 22
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '22'
+          cache: 'gradle'
+
+      - name: Run tests and generate coverage report
+        run: |
+          chmod +x gradlew
+          ./gradlew clean test jacocoTestReport
+
+      - name: Add coverage to PR
+        id: jacoco
+        uses: madrapps/jacoco-report@v1.6.1
+        with:
+          paths: |
+            ${{ github.workspace }}/**/build/reports/jacoco/**/jacocoTestReport.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 80
+          min-coverage-changed-files: 80
+
+      - name: Fetch full history
+        run: git fetch --unshallow
+
+      - name: Fetch main branch
+        run: git fetch origin main
+
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
+
+      - name: Run SonarCloud analysis
+        run: ./gradlew sonar --info
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Build with Gradle
+        run: ./gradlew build

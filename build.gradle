@@ -1,5 +1,9 @@
 plugins {
     id 'java'
+    id 'jacoco'
+    id 'org.sonarqube' version '4.4.1.3373'
+    id 'org.springframework.boot' version '3.2.3'
+    id 'io.spring.dependency-management' version '1.1.4'
 }
 
 group = 'ac.dnd'
@@ -10,10 +14,112 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.flywaydb:flyway-mysql'
+    implementation 'com.h2database:h2'
+    implementation 'org.projectlombok:lombok'
+
+    compileOnly 'com.mysql:mysql-connector-j'
+    annotationProcessor 'org.projectlombok:lombok'
+
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'io.rest-assured:rest-assured'
+    testImplementation 'org.testcontainers:testcontainers:1.19.3'
+    testImplementation 'org.testcontainers:junit-jupiter:1.19.3'
+    testImplementation 'org.testcontainers:mysql:1.19.3'
+
+    testRuntimeOnly 'com.h2database:h2'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
+
+    //jwt
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.0'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    // JSON
+    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'net.minidev:json-smart:2.5.0'
+    //Security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.security:spring-security-test'
 }
 
 test {
     useJUnitPlatform()
+    finalizedBy 'jacocoTestReport'
+}
+
+jacoco {
+    toolVersion = "0.8.12"
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        html.required = true // 로컬에서 확인용으로 html 리포트 파일 생성
+        xml.required = true  // SonarCloud로 전송하기 위해 XML 리포트 생성
+        csv.required = false
+
+        finalizedBy 'jacocoTestCoverageVerification'
+    }
+}
+
+jacocoTestCoverageVerification {
+    dependsOn jacocoTestReport
+    violationRules {
+        rule {
+            enabled = true // 이 rule을 적용할 것이다.
+            element = 'CLASS' // class 단위로
+
+            // 브랜치 커버리지 최소 60%
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = 0.60
+            }
+
+            // 라인 커버리지 최소한 80%
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.80
+            }
+
+            // 빈 줄을 제외한 코드의 라인수 최대 300라인
+            limit {
+                counter = 'LINE'
+                value = 'TOTALCOUNT'
+                maximum = 300
+            }
+
+           // 커버리지 체크를 제외할 클래스들
+            excludes = [
+                    '**.*Application*',
+                    '**.*Config*',
+                    '**.*Exception*',
+                    '**.BaseEntity', // 임시로 추가
+                    '**.*ControllerAdvice', // 임시로 추가
+                    '**.*Request*', // 임시로 추가
+                    '**.ApiResponse',
+                    '**.*OAuthClient*',
+                    '**.*Interceptor*',
+            ]
+        }
+    }
+}
+
+sonar {
+    properties {
+        property 'sonar.host.url', 'https://sonarcloud.io'
+        property 'sonar.organization', '5hseok'
+        property 'sonar.projectKey', '5hseok_DODAL_BE_SERVER'
+        property 'sonar.coverage.jacoco.xmlReportPaths', '${buildDir}/reports/jacoco/test/jacocoTestReport.xml'
+    }
 }
