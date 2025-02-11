@@ -27,6 +27,7 @@ import ac.dnd.dodal.domain.plan.constraint.PlanConstraints;
 import ac.dnd.dodal.domain.plan_history.model.PlanHistory;
 import ac.dnd.dodal.domain.plan_feedback.model.PlanFeedback;
 import ac.dnd.dodal.domain.goal.model.Goal;
+import ac.dnd.dodal.domain.guide.service.GuidianceService;
 
 @Entity(name = "plans")
 @Getter
@@ -44,7 +45,7 @@ public class Plan extends BaseEntity {
     private Goal goal;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "history_id", nullable = false)
+    @JoinColumn(name = "plan_history_id", nullable = false)
     private PlanHistory history;
 
     @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -64,27 +65,28 @@ public class Plan extends BaseEntity {
     @Column(nullable = false)
     private LocalDateTime endDate;
 
-    public void succeed(String guide) {
+    public void succeed(List<PlanFeedback> feedbacks) {
         if (this.deletedAt != null) {
             throw new ForbiddenException(PlanExceptionCode.PLAN_ALREADY_DELETED);
         }
-        if (this.isSucceeded) {
+        if (this.isSucceeded || this.feedbacks != null) {
             throw new BadRequestException(PlanExceptionCode.PLAN_ALREADY_SUCCEED);
         }
         if (this.startDate.isAfter(LocalDateTime.now())) {
             throw new BadRequestException(PlanExceptionCode.PLAN_SUCCEED_AFTER_START_DATE);
         }
+        if (feedbacks == null || feedbacks.size() == 0) {
+            throw new BadRequestException(PlanExceptionCode.REQUIRED_FEEDBACK);
+        }
         this.isSucceeded = true;
-        this.guide = guide;
+        this.feedbacks = feedbacks;
+        this.guide = GuidianceService.generateGuide(feedbacks);
     }
 
-    public Plan(Goal goal, PlanHistory history,
-            String title, LocalDateTime startDate, LocalDateTime endDate) {
+    public Plan(String title, LocalDateTime startDate, LocalDateTime endDate) {
         validateTitle(title);
         validateDate(startDate, endDate);
 
-        this.goal = goal;
-        this.history = history;
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -132,4 +134,3 @@ public class Plan extends BaseEntity {
         }
     }
 }
-

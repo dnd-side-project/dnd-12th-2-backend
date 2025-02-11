@@ -19,6 +19,7 @@ public enum PlanExceptionCode implements ResultCode {
     PLAN_SUCCEED_AFTER_START_DATE("PLN_005", "Plan succeed date is after start date"),
     PLAN_ALREADY_SUCCEED("PLN_006", "Plan already succeed"),
     PLAN_ALREADY_DELETED("PLN_007", "Plan already deleted"),
+    REQUIRED_FEEDBACK("PLN_008", "Feedback is required"),
     ;
 
     private final String code;
