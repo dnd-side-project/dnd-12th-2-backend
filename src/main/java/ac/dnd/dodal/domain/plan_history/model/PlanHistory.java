@@ -39,9 +39,13 @@ public class PlanHistory extends BaseEntity {
     @OneToMany(mappedBy = "history", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Plan> plans;
 
+    // Todo: 추후 plans 전체 조회 성능 개선 필요
     public void addPlan(Plan plan) {
         validateDeleted();
 
+        if (this.plans != null && !this.plans.getLast().isCompleted()) {
+            throw new BadRequestException(PlanHistoryExceptionCode.PLAN_CAN_BE_ADDED_ONLY_TO_LAST);
+        }
         plan.setHistory(this);
     }
 
