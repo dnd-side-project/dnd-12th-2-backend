@@ -1,5 +1,5 @@
-INSERT INTO users (user_id, nickname, profile_image_url, device_token, email, role) 
-VALUES (1, 'test1', 'profile_image_url1', 'device_token1', 'test1@test.com', 'USER');
+INSERT INTO users (user_id, nickname, profile_image_url, device_token, email, role, refresh_token) 
+VALUES (1, 'test1', 'profile_image_url1', 'device_token1', 'test1@test.com', 'USER', 'eyJhbGciOiJIUzUxMiJ9.eyJ1aWQiOjEsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzM5MzA4OTc1LCJleHAiOjE3NDAxODc4NTl9.7nH4G9T2PW9AI7JTCm7RteiechdLWsoeWanh4kX-Yt6UQ4qQVhohXlpA7DYR9fZZwjiyn7GLN73m1LXsNT1Djw');
 INSERT INTO users (user_id, nickname, profile_image_url, device_token, email, role) 
 VALUES (2, 'test2', 'profile_image_url2', 'device_token2', 'test2@test.com', 'USER');
 INSERT INTO users (user_id, nickname, profile_image_url, device_token, email, role) 
