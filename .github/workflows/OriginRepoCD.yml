@@ -61,4 +61,7 @@ jobs:
             sudo docker stop dodal-server || true
             sudo docker rm dodal-server || true
             
-            sudo docker run -d --name spring_server -p 8080:8080 5hseok/dodal-server:0.0.1
+            sudo docker run -d --name dodal-server \
+            -p 8080:8080 \
+            -e JASYPT_ENCRYPTOR_PASSWORD=${{ secrets.JASYPT_KEY }} \
+            5hseok/dodal-server:0.0.1
