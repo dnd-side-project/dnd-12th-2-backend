@@ -24,3 +24,7 @@ jasypt:
   encryptor:
     password: ${JASYPT_ENCRYPTOR_PASSWORD}
 
+jwt:
+  secret: ENC(hp14qv/4tmW3/d1xoygJlrjX2Hj658Ruqm+fjTwG4xBkrDzpN7u7STBvtaPvWIxMck/f06AT5ySZ0Jo9xu75pq1YFByHlK9QJZryT7qzHrqA6VYKdkY7Y+YdwVlG3sZfiCfbP2z3Y8NGqjSRRWcaxyWksnPlT/uXJ6eyRDkB5KFvFynvqhHU0q3Z/B8JRTts)
+  access-token-validity-in-milli-seconds: ENC(QukQXX9xhFAnuUF0IiwoPg==)
+  refresh-token-validity-in-milli-seconds: ENC(8U0nryOJ+bP1FSXBO1Rr9qdwIia5pjSo)

@@ -21,6 +21,16 @@ public class Constants {
             //로그인 URL
             //Swagger URL
             //로그인 없이 둘러볼 수 있는 URL
+            "/hello",
+            // 회원가입
+            "/api/auth/sign-up",
+            // 로그인
+            "/api/auth/sign-in",
+            "/api/auth/login/**",
+            "/api/auth/login/kakao",
+            "/api/auth/login/naver",
+            "/api/auth/login/google",
+            "/api/auth/login/apple"
 
     );
 }

@@ -11,7 +11,6 @@ public enum UserExceptionCode implements ResultCode {
     //failure
     NO_SUCH_ROLE("USR001", "No such user role"),
     NOT_FOUND_USER("USR002", "User not found"),
-    ACCESS_DENIED("USR003", "User access denied"),
     ;
 
     private final String code;
