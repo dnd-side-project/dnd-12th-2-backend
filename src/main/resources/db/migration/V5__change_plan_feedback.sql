@@ -1,0 +1,1 @@
+ALTER TABLE plans CHANGE COLUMN is_succeed is_succeeded BOOLEAN DEFAULT FALSE;
