@@ -36,7 +36,7 @@ public class PlanHistory extends BaseEntity {
     @Column(nullable = false)
     private Long goalId;
 
-    @OneToMany(mappedBy = "historyId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "history", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Plan> plans;
 
     public void addPlan(Plan plan) {

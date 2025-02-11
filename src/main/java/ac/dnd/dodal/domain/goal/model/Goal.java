@@ -49,7 +49,7 @@ public class Goal extends BaseEntity {
     @OneToMany(mappedBy = "goalId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<PlanHistory> histories;
 
-    @OneToMany(mappedBy = "goalId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "goal", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Plan> plans;
 
     public void addPlan(Long userId, Plan plan) {
