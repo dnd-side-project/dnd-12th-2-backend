@@ -91,7 +91,9 @@ public class Goal extends BaseEntity {
             throw new ForbiddenException(GoalExceptionCode.GOAL_ALREADY_DELETED);
         }
 
-        this.histories.forEach(PlanHistory::delete);
+        if (this.histories != null) {
+            this.histories.forEach(PlanHistory::delete);
+        }
         super.delete();
     }
 
