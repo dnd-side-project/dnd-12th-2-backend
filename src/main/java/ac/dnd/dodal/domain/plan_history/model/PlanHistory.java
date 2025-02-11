@@ -31,7 +31,7 @@ public class PlanHistory extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long historyId;
+    private Long planHistoryId;
 
     @Column(nullable = false)
     private Long goalId;
