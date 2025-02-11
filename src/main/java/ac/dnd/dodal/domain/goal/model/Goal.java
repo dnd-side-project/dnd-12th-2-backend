@@ -25,6 +25,7 @@ import ac.dnd.dodal.domain.goal.constraint.GoalConstraints;
 import ac.dnd.dodal.domain.goal.exception.GoalExceptionCode;
 import ac.dnd.dodal.domain.plan_history.model.PlanHistory;
 import ac.dnd.dodal.domain.plan.model.Plan;
+import ac.dnd.dodal.domain.plan_feedback.model.PlanFeedback;
 
 @Entity(name = "goals")
 @Getter
@@ -68,11 +69,11 @@ public class Goal extends BaseEntity {
         this.histories.add(history);
     }
 
-    public void succeedPlan(Long userId, Plan plan, String guide) {
+    public void succeedPlan(Long userId, Plan plan, List<PlanFeedback> feedbacks) {
         validateAuthor(userId);
         validateGoal();
 
-        plan.succeed(guide);
+        plan.succeed(feedbacks);
     }
 
     public void achieve(Long userId) {
