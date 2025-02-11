@@ -141,7 +141,7 @@ public class Goal extends BaseEntity {
 
     private void validateAchieve() {
         if (this.isAchieved) {
-            throw new BadRequestException(GoalExceptionCode.GOAL_ALREADY_ACHIEVED);
+            throw new ForbiddenException(GoalExceptionCode.ACHIEVED_GOAL);
         }
     }
 
