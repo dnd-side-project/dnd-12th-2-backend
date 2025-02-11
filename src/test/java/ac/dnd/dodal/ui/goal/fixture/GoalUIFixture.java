@@ -1,27 +1,27 @@
 package ac.dnd.dodal.ui.goal.fixture;
 
-import ac.dnd.dodal.ui.goal.request.GoalCreateRequest;
+import ac.dnd.dodal.ui.goal.request.CreateGoalRequest;
 
 public class GoalUIFixture {
 
-    public static GoalCreateRequest createGoalRequest(String title) {
-        return new GoalCreateRequest(title);
+    public static CreateGoalRequest createGoalRequest(String title) {
+        return new CreateGoalRequest(title);
     }
 
-    public static GoalCreateRequest createBlackGoalRequest() {
-        return new GoalCreateRequest("       ");
+    public static CreateGoalRequest createBlackGoalRequest() {
+        return new CreateGoalRequest("       ");
     }
 
-    public static GoalCreateRequest createEmptyGoalRequest() {
-        return new GoalCreateRequest("");
+    public static CreateGoalRequest createEmptyGoalRequest() {
+        return new CreateGoalRequest("");
     }
 
-    public static GoalCreateRequest createNullGoalRequest() {
-        return new GoalCreateRequest(null);
+    public static CreateGoalRequest createNullGoalRequest() {
+        return new CreateGoalRequest(null);
     }
 
-    public static GoalCreateRequest createExceedTitleGoalRequest() {
-        return new GoalCreateRequest("a".repeat(21));
+    public static CreateGoalRequest createExceedTitleGoalRequest() {
+        return new CreateGoalRequest("a".repeat(21));
     }
 
     // TODO: 목표 시각화 fixture 추가
