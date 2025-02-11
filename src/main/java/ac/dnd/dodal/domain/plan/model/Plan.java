@@ -24,6 +24,7 @@ import ac.dnd.dodal.common.exception.BadRequestException;
 import ac.dnd.dodal.common.exception.ForbiddenException;
 import ac.dnd.dodal.domain.plan.exception.PlanExceptionCode;
 import ac.dnd.dodal.domain.plan.constraint.PlanConstraints;
+import ac.dnd.dodal.domain.plan.enums.PlanStatus;
 import ac.dnd.dodal.domain.plan_history.model.PlanHistory;
 import ac.dnd.dodal.domain.plan_feedback.model.PlanFeedback;
 import ac.dnd.dodal.domain.goal.model.Goal;
@@ -55,7 +56,7 @@ public class Plan extends BaseEntity {
     private String title;
 
     @Column(nullable = false)
-    private Boolean isSucceeded = false;
+    private PlanStatus status = PlanStatus.NONE;
 
     private String guide;
 
@@ -65,12 +66,12 @@ public class Plan extends BaseEntity {
     @Column(nullable = false)
     private LocalDateTime endDate;
 
-    public void succeed(List<PlanFeedback> feedbacks) {
+    public void complete(PlanStatus status, List<PlanFeedback> feedbacks) {
         if (this.deletedAt != null) {
             throw new ForbiddenException(PlanExceptionCode.PLAN_ALREADY_DELETED);
         }
-        if (this.isSucceeded || this.feedbacks != null) {
-            throw new BadRequestException(PlanExceptionCode.PLAN_ALREADY_SUCCEED);
+        if (this.isCompleted()) {
+            throw new BadRequestException(PlanExceptionCode.PLAN_ALREADY_COMPLETED);
         }
         if (this.startDate.isAfter(LocalDateTime.now())) {
             throw new BadRequestException(PlanExceptionCode.PLAN_SUCCEED_AFTER_START_DATE);
@@ -78,7 +79,7 @@ public class Plan extends BaseEntity {
         if (feedbacks == null || feedbacks.size() == 0) {
             throw new BadRequestException(PlanExceptionCode.REQUIRED_FEEDBACK);
         }
-        this.isSucceeded = true;
+        this.status = status;
         this.feedbacks = feedbacks;
         this.guide = GuidianceService.generateGuide(feedbacks);
     }
@@ -93,7 +94,7 @@ public class Plan extends BaseEntity {
     }
 
     public Plan(Long planId, Goal goal, PlanHistory history,
-            String title, Boolean isSucceeded, String guide, 
+            String title, PlanStatus status, String guide, 
             LocalDateTime startDate, LocalDateTime endDate,
             LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
         super(createdAt, updatedAt, deletedAt);
@@ -105,7 +106,7 @@ public class Plan extends BaseEntity {
         this.goal = goal;
         this.history = history;
         this.title = title;
-        this.isSucceeded = isSucceeded;
+        this.status = status;
         this.guide = guide;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -117,6 +118,14 @@ public class Plan extends BaseEntity {
 
     public void setHistory(PlanHistory history) {
         this.history = history;
+    }
+
+    public boolean isSucceeded() {
+        return this.status == PlanStatus.SUCCESS;
+    }
+
+    public boolean isCompleted() {
+        return this.status != PlanStatus.NONE;
     }
 
     private void validateTitle(String title) {
