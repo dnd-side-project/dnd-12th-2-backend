@@ -120,7 +120,7 @@ public class Goal extends BaseEntity {
     }
 
     private void validateTitle(String title) {
-        if (title == null || title.isEmpty()) {
+        if (title == null || title.isEmpty() || title.isBlank()) {
             throw new BadRequestException(GoalExceptionCode.GOAL_TITLE_EMPTY);
         }
         if (title.length() > GoalConstraints.MAX_GOAL_TITLE_LENGTH) {
