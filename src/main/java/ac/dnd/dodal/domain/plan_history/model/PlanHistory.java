@@ -52,7 +52,9 @@ public class PlanHistory extends BaseEntity {
     public void delete() {
         validateDeleted();
 
-        this.plans.forEach(Plan::delete);
+        if (this.plans != null) {
+            this.plans.forEach(Plan::delete);
+        }
         super.delete();
     }
 
