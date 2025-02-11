@@ -26,8 +26,8 @@ public class UserCommandService implements UserCommandUseCase {
         String nickname = authSignUpRequestDto.nickname();
         String deviceToken = authSignUpRequestDto.deviceToken();
         if (appleUserId != null) {
-      return userCommandRepository.save(new User());
+      return userCommandRepository.save(new User(nickname, profileImageUrl, deviceToken, appleUserId, UserRole.USER));
         }
-    return userCommandRepository.save(new User("testUser", "testProfileImageUrl","testDeviceToken", "test@test.example.com", UserRole.USER));
+    return userCommandRepository.save(new User(nickname, profileImageUrl,deviceToken, email, UserRole.USER));
     }
 }
