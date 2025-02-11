@@ -20,8 +20,9 @@ public abstract class AcceptanceTest {
 
     protected static final int port = 9999;
 
-    protected static String accessToken;
-    protected static String refreshToken;
+    protected static final String userId = "1";
+    protected static final String accessToken = "eyJhbGciOiJIUzUxMiJ9.eyJ1aWQiOjEsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzM5MzA4OTc1LCJleHAiOjE3NDAxODc4NTl9.7nH4G9T2PW9AI7JTCm7RteiechdLWsoeWanh4kX-Yt6UQ4qQVhohXlpA7DYR9fZZwjiyn7GLN73m1LXsNT1Djw";
+    protected static final String refreshToken = "eyJhbGciOiJIUzUxMiJ9.eyJ1aWQiOjEsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzM5MzA4OTc1LCJleHAiOjE3NDAxODc4NTl9.7nH4G9T2PW9AI7JTCm7RteiechdLWsoeWanh4kX-Yt6UQ4qQVhohXlpA7DYR9fZZwjiyn7GLN73m1LXsNT1Djw";
 
     protected static Map<String, Object> authorizationHeader;
     protected static Map<String, Object> refreshAuthorizationHeader;
@@ -32,20 +33,6 @@ public abstract class AcceptanceTest {
     @BeforeAll
     public static void setUp() {
         RestAssured.port = port;
-        // TODO: 로그인 테스트 추가
-        // Map<String, Object> data = RestAssured.given().log().all()
-        //     .when()
-        //         .post("/auth/login")
-        //     .then().log().all()
-        //         .extract()
-        //     .jsonPath()
-        //         .get("data");
-
-        // accessToken = (String) data.get("accessToken");
-        // refreshToken = (String) data.get("refreshToken");
-
-        accessToken = "accessToken";
-        refreshToken = "refreshToken";
 
         authorizationHeader = UIFixture.createAuthorizationHeader(accessToken);
         refreshAuthorizationHeader = UIFixture.createRefreshAuthorizationHeader(refreshToken);
