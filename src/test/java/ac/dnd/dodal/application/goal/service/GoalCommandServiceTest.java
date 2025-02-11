@@ -172,7 +172,7 @@ public class GoalCommandServiceTest {
 
         // when & then
         assertThatThrownBy(() -> goalCommandService.achieve(command))
-                .isInstanceOf(BadRequestException.class)
+                .isInstanceOf(ForbiddenException.class)
                 .hasMessage(GoalExceptionCode.GOAL_ALREADY_ACHIEVED.getMessage());
     }
 
@@ -210,7 +210,7 @@ public class GoalCommandServiceTest {
 
         // when & then
         assertThatThrownBy(() -> goalCommandService.delete(command))
-                .isInstanceOf(BadRequestException.class)
+                .isInstanceOf(ForbiddenException.class)
                 .hasMessage(GoalExceptionCode.GOAL_ALREADY_DELETED.getMessage());
     }
 }
