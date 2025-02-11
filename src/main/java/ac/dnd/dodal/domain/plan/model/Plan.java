@@ -13,6 +13,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -46,7 +48,7 @@ public class Plan extends BaseEntity {
     private Goal goal;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "plan_history_id", nullable = false)
+    @JoinColumn(name = "history_id", nullable = false)
     private PlanHistory history;
 
     @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -56,6 +58,7 @@ public class Plan extends BaseEntity {
     private String title;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private PlanStatus status = PlanStatus.NONE;
 
     private String guide;
