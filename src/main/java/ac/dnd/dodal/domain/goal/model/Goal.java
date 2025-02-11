@@ -26,6 +26,7 @@ import ac.dnd.dodal.domain.goal.exception.GoalExceptionCode;
 import ac.dnd.dodal.domain.plan_history.model.PlanHistory;
 import ac.dnd.dodal.domain.plan.model.Plan;
 import ac.dnd.dodal.domain.plan_feedback.model.PlanFeedback;
+import ac.dnd.dodal.domain.plan.enums.PlanStatus;
 
 @Entity(name = "goals")
 @Getter
@@ -69,11 +70,12 @@ public class Goal extends BaseEntity {
         this.histories.add(history);
     }
 
-    public void succeedPlan(Long userId, Plan plan, List<PlanFeedback> feedbacks) {
+    public void completePlan(
+        Long userId, PlanStatus status, Plan plan, List<PlanFeedback> feedbacks) {
         validateAuthor(userId);
         validateGoal();
 
-        plan.succeed(feedbacks);
+        plan.complete(status, feedbacks);
     }
 
     public void achieve(Long userId) {
@@ -86,6 +88,7 @@ public class Goal extends BaseEntity {
         this.isAchieved = true;
     }
 
+    // Todo: 추후 delete 비동기 처리
     public void delete(Long userId) {
         validateAuthor(userId);
         if (this.deletedAt != null) {
