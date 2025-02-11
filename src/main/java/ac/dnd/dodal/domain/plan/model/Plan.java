@@ -47,7 +47,7 @@ public class Plan extends BaseEntity {
     private String title;
 
     @Column(nullable = false)
-    private Boolean isSucceed = false;
+    private Boolean isSucceeded = false;
 
     private String guide;
 
@@ -61,13 +61,13 @@ public class Plan extends BaseEntity {
         if (this.deletedAt != null) {
             throw new ForbiddenException(PlanExceptionCode.PLAN_ALREADY_DELETED);
         }
-        if (this.isSucceed) {
+        if (this.isSucceeded) {
             throw new BadRequestException(PlanExceptionCode.PLAN_ALREADY_SUCCEED);
         }
         if (this.startDate.isAfter(LocalDateTime.now())) {
             throw new BadRequestException(PlanExceptionCode.PLAN_SUCCEED_AFTER_START_DATE);
         }
-        this.isSucceed = true;
+        this.isSucceeded = true;
         this.guide = guide;
     }
 
@@ -84,7 +84,7 @@ public class Plan extends BaseEntity {
     }
 
     public Plan(Long planId, Goal goal, PlanHistory history,
-            String title, Boolean isSucceed, String guide, 
+            String title, Boolean isSucceeded, String guide, 
             LocalDateTime startDate, LocalDateTime endDate,
             LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
         super(createdAt, updatedAt, deletedAt);
@@ -96,7 +96,7 @@ public class Plan extends BaseEntity {
         this.goal = goal;
         this.history = history;
         this.title = title;
-        this.isSucceed = isSucceed;
+        this.isSucceeded = isSucceeded;
         this.guide = guide;
         this.startDate = startDate;
         this.endDate = endDate;
