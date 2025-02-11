@@ -77,14 +77,19 @@ public class Goal extends BaseEntity {
 
     public void achieve(Long userId) {
         validateAuthor(userId);
-        validateGoal();
+        validateDeleted();
+        if (this.isAchieved) {
+            throw new ForbiddenException(GoalExceptionCode.GOAL_ALREADY_ACHIEVED);
+        }
 
         this.isAchieved = true;
     }
 
     public void delete(Long userId) {
         validateAuthor(userId);
-        validateDeleted();
+        if (this.deletedAt != null) {
+            throw new ForbiddenException(GoalExceptionCode.GOAL_ALREADY_DELETED);
+        }
 
         this.histories.forEach(PlanHistory::delete);
         super.delete();
