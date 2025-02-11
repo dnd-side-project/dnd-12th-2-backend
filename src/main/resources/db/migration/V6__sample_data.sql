@@ -1,9 +1,9 @@
-INSERT INTO users (user_id, nickname, profile_image_url, device_token, email) 
-VALUES (1, 'test1', 'profile_image_url1', 'device_token1', 'test1@test.com');
-INSERT INTO users (user_id, nickname, profile_image_url, device_token, email) 
-VALUES (2, 'test2', 'profile_image_url2', 'device_token2', 'test2@test.com');
-INSERT INTO users (user_id, nickname, profile_image_url, device_token, email) 
-VALUES (3, 'test3', 'profile_image_url3', 'device_token3', 'test3@test.com');
+INSERT INTO users (user_id, nickname, profile_image_url, device_token, email, role) 
+VALUES (1, 'test1', 'profile_image_url1', 'device_token1', 'test1@test.com', 'USER');
+INSERT INTO users (user_id, nickname, profile_image_url, device_token, email, role) 
+VALUES (2, 'test2', 'profile_image_url2', 'device_token2', 'test2@test.com', 'USER');
+INSERT INTO users (user_id, nickname, profile_image_url, device_token, email, role) 
+VALUES (3, 'test3', 'profile_image_url3', 'device_token3', 'test3@test.com', 'USER');
 
 INSERT INTO user_guides (user_id, type, content) 
 VALUES (1, 'PLAN', 'plan_content1');
