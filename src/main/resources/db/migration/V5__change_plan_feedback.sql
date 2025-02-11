@@ -1,3 +1,0 @@
-ALTER TABLE plans CHANGE COLUMN is_succeed `status` VARCHAR(20) DEFAULT 'NONE';
-
-ALTER TABLE plans ADD CONSTRAINT status_check CHECK (status IN ('NONE', 'SUCCESS', 'FAILURE'));
