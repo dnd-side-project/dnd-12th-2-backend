@@ -17,7 +17,7 @@ public enum PlanExceptionCode implements ResultCode {
             "Plan title is too long: Max length is " + PlanConstraints.MAX_PLAN_TITLE_LENGTH),
     PLAN_START_DATE_AFTER_END_DATE("PLN_004", "Plan start date is after end date"),
     PLAN_SUCCEED_AFTER_START_DATE("PLN_005", "Plan succeed date is after start date"),
-    PLAN_ALREADY_SUCCEED("PLN_006", "Plan already succeed"),
+    PLAN_ALREADY_COMPLETED("PLN_006", "Plan already completed"),
     PLAN_ALREADY_DELETED("PLN_007", "Plan already deleted"),
     REQUIRED_FEEDBACK("PLN_008", "Feedback is required"),
     ;
