@@ -5,18 +5,22 @@ import ac.dnd.dodal.common.response.ApiResponse;
 import ac.dnd.dodal.core.security.enums.SecurityExceptionCode;
 import ac.dnd.dodal.domain.user.enums.UserExceptionCode;
 import ac.dnd.dodal.domain.user.exception.UserBadRequestException;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.springframework.web.filter.OncePerRequestFilter;
+
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import lombok.extern.slf4j.Slf4j;
-import net.minidev.json.JSONValue;
-import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
@@ -69,14 +73,15 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             // request에 저장된 예외 정보를 가져옴
             Object exception = request.getAttribute("exception");
-            switch (exception) {
-                case UserBadRequestException userException -> setErrorResponse(response, userException.getResultCode());
-                case SecurityExceptionCode securityCode -> setErrorResponse(response, securityCode);
-                case JwtException jwtException -> setErrorResponse(response, SecurityExceptionCode.TOKEN_UNKNOWN_ERROR);
-                case null, default -> {
-                    log.error("FilterException throw Exception Exception : {}", e.getMessage());
-                    setErrorResponse(response, UserExceptionCode.NOT_FOUND_USER);
-                }
+            if (exception instanceof UserBadRequestException userException) {
+                setErrorResponse(response, userException.getResultCode());
+            } else if (exception instanceof SecurityExceptionCode securityCode) {
+                setErrorResponse(response, securityCode);
+            } else if (exception instanceof JwtException) {
+                setErrorResponse(response, SecurityExceptionCode.TOKEN_UNKNOWN_ERROR);
+            } else {
+                log.error("FilterException throw Exception Exception : {}", e.getMessage());
+                setErrorResponse(response, UserExceptionCode.NOT_FOUND_USER);
             }
 
             filterChain.doFilter(request, response);

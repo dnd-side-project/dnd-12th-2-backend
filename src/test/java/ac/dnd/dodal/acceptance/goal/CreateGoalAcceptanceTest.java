@@ -15,7 +15,7 @@ import ac.dnd.dodal.common.response.ApiResponse;
 import ac.dnd.dodal.AcceptanceTest;
 import ac.dnd.dodal.acceptance.goal.steps.GoalSteps;
 import ac.dnd.dodal.domain.goal.exception.GoalExceptionCode;
-import ac.dnd.dodal.ui.goal.request.GoalCreateRequest;
+import ac.dnd.dodal.ui.goal.request.CreateGoalRequest;
 import ac.dnd.dodal.ui.goal.fixture.GoalUIFixture;
 
 public class CreateGoalAcceptanceTest extends AcceptanceTest {
@@ -24,7 +24,7 @@ public class CreateGoalAcceptanceTest extends AcceptanceTest {
     @DisplayName("Create Goal Test with Valid Title")
     public void create_goal() {
         // given
-        GoalCreateRequest request = GoalUIFixture.createGoalRequest("test");
+        CreateGoalRequest request = GoalUIFixture.createGoalRequest("test");
 
         // when
         Response response = GoalSteps.createGoal(authorizationHeader, request);
@@ -44,7 +44,7 @@ public class CreateGoalAcceptanceTest extends AcceptanceTest {
     @DisplayName("Create Goal Test with Black Title (\"       \")")
     public void create_goal_with_black_title() {
         // given
-        GoalCreateRequest request = GoalUIFixture.createBlackGoalRequest();
+        CreateGoalRequest request = GoalUIFixture.createBlackGoalRequest();
 
         // when
         Response response = GoalSteps.createGoal(authorizationHeader, request);
@@ -65,7 +65,7 @@ public class CreateGoalAcceptanceTest extends AcceptanceTest {
     @DisplayName("Create Goal Test with Empty Title (\"\")")
     public void create_goal_with_empty_title() {
         // given
-        GoalCreateRequest request = GoalUIFixture.createEmptyGoalRequest();
+        CreateGoalRequest request = GoalUIFixture.createEmptyGoalRequest();
 
         // when
         Response response = GoalSteps.createGoal(authorizationHeader, request);
@@ -86,7 +86,7 @@ public class CreateGoalAcceptanceTest extends AcceptanceTest {
     @DisplayName("Create Goal Test with Null Title (null)")
     public void create_goal_with_null_title() {
         // given
-        GoalCreateRequest request = GoalUIFixture.createNullGoalRequest();
+        CreateGoalRequest request = GoalUIFixture.createNullGoalRequest();
 
         // when
         Response response = GoalSteps.createGoal(authorizationHeader, request);
@@ -107,7 +107,7 @@ public class CreateGoalAcceptanceTest extends AcceptanceTest {
     @DisplayName("Create Goal Test with Exceed Title Length (21 characters)")
     public void create_goal_with_exceed_title_length() {
         // given
-        GoalCreateRequest request = GoalUIFixture.createExceedTitleGoalRequest();
+        CreateGoalRequest request = GoalUIFixture.createExceedTitleGoalRequest();
 
         // when
         Response response = GoalSteps.createGoal(authorizationHeader, request);

@@ -14,20 +14,19 @@ import ac.dnd.dodal.AcceptanceTest;
 import ac.dnd.dodal.acceptance.goal.steps.GoalSteps;
 import ac.dnd.dodal.common.response.ApiResponse;
 import ac.dnd.dodal.common.enums.CommonResultCode;
-import ac.dnd.dodal.ui.goal.request.GoalCreateRequest;
-import ac.dnd.dodal.ui.goal.fixture.GoalUIFixture;
 import ac.dnd.dodal.domain.goal.exception.GoalExceptionCode;
 
 public class AchieveGoalAcceptanceTest extends AcceptanceTest {
 
+    private Long unachievedGoalId = 4L;
+    private Long deletedGoalId = 2L;
+    private Long goalId = 1L;
+
     @Test
     @DisplayName("Achieve Goal Test")
     public void achieve_goal() {
-        // given
-        GoalCreateRequest request = GoalUIFixture.createGoalRequest("test");
-
         // when
-        Response response = GoalSteps.createGoal(authorizationHeader, request);
+        Response response = GoalSteps.achieveGoal(authorizationHeader, unachievedGoalId);
         ApiResponse<Long> apiResponse = response.as(new TypeRef<ApiResponse<Long>>() {});
 
         // then 200
@@ -40,34 +39,29 @@ public class AchieveGoalAcceptanceTest extends AcceptanceTest {
         assertThat(response.getBody().jsonPath().getMap("data")).isNull();
     }
 
-    @Test
-    @DisplayName("Achieve Goal Test with Unauthorized User")
-    public void achieve_goal_with_unauthorized_user() {
-        // given
-        GoalCreateRequest request = GoalUIFixture.createGoalRequest("test");
+    // Todo: 인증이 추가된 이후 테스트 추가
+    // @Test
+    // @DisplayName("Achieve Goal Test with Unauthorized User")
+    // public void achieve_goal_with_unauthorized_user() {
+    //     // when
+    //     Response response = GoalSteps.achieveGoal(unauthorizedAuthorizationHeader, unachievedGoalId);
+    //     ApiResponse<Long> apiResponse = response.as(new TypeRef<ApiResponse<Long>>() {});
 
-        // when
-        Response response = GoalSteps.createGoal(authorizationHeader, request);
-        ApiResponse<Long> apiResponse = response.as(new TypeRef<ApiResponse<Long>>() {});
-
-        // then 401
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
-        // COM003
-        assertThat(apiResponse.code()).isEqualTo(CommonResultCode.UNAUTHORIZED.getCode());
-        // Unauthorized
-        assertThat(apiResponse.message()).isEqualTo(CommonResultCode.UNAUTHORIZED.getMessage());
-        // data does not exist
-        assertThat(response.getBody().jsonPath().getMap("data")).isNull();
-    }
+    //     // then 401
+    //     assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+    //     // COM003
+    //     assertThat(apiResponse.code()).isEqualTo(CommonResultCode.UNAUTHORIZED.getCode());
+    //     // Unauthorized
+    //     assertThat(apiResponse.message()).isEqualTo(CommonResultCode.UNAUTHORIZED.getMessage());
+    //     // data does not exist
+    //     assertThat(response.getBody().jsonPath().getMap("data")).isNull();
+    // }
 
     @Test
     @DisplayName("Achieve Goal Test with Deleted Goal")
     public void achieve_goal_with_deleted_goal() {
-        // given
-        GoalCreateRequest request = GoalUIFixture.createGoalRequest("test");
-
         // when
-        Response response = GoalSteps.createGoal(authorizationHeader, request);
+        Response response = GoalSteps.achieveGoal(authorizationHeader, deletedGoalId);
         ApiResponse<Long> apiResponse = response.as(new TypeRef<ApiResponse<Long>>() {});
 
         // then 403
@@ -83,11 +77,8 @@ public class AchieveGoalAcceptanceTest extends AcceptanceTest {
     @Test
     @DisplayName("Achieve Goal Test with Already Achieved Goal")
     public void achieve_goal_with_already_achieved_goal() {
-        // given
-        GoalCreateRequest request = GoalUIFixture.createGoalRequest("test");
-
         // when
-        Response response = GoalSteps.createGoal(authorizationHeader, request);
+        Response response = GoalSteps.achieveGoal(authorizationHeader, goalId);
         ApiResponse<Long> apiResponse = response.as(new TypeRef<ApiResponse<Long>>() {});
 
         // then 403
