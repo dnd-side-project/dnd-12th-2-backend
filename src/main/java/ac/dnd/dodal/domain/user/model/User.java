@@ -33,7 +33,8 @@ public class User extends BaseEntity {
     @Column(name="email", nullable = false, unique = true)
     private String email;
 
-    @Column(name="role", nullable = false)
+    @Column(name = "role", nullable = false)
+    @Enumerated(EnumType.STRING)
     private UserRole role;
 
     @Column(name="refresh_token")
