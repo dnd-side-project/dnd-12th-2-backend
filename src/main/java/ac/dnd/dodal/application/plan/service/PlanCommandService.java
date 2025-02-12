@@ -81,7 +81,7 @@ public class PlanCommandService implements AddPlanUseCase, CreatePlanAndHistoryU
         LocalDateTime startDate;
         LocalDateTime endDate;
         Set<DayOfWeek> days;
-        int iterationCount = 0;
+        int iterationCount = command.iterationCount();
         int count = 0;
         Long gap;
 
