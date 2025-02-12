@@ -1,5 +1,7 @@
 package ac.dnd.dodal.ui.goal;
 
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,31 +10,54 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import ac.dnd.dodal.common.annotation.UserId;
 import ac.dnd.dodal.common.response.ApiResponse;
-import ac.dnd.dodal.ui.plan.request.CreateFirstPlanRequest;
+import ac.dnd.dodal.ui.plan.request.AddNewPlanRequest;
+import ac.dnd.dodal.ui.plan.request.AddSamePlanRequest;
 import ac.dnd.dodal.ui.plan.request.CreatePlanRequest;
+import ac.dnd.dodal.application.goal.usecase.AddPlanUseCase;
+import ac.dnd.dodal.application.goal.usecase.CreatePlanAndHistoryUseCase;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/goals/{goalId}")
 public class GoalPlanController {
 
-    @PostMapping("/plans")
-    public ApiResponse<?> addFirstPlanToHistory(
-            @UserId Long userId,
-            @PathVariable Long goalId,
-            @RequestBody CreateFirstPlanRequest request) {
-        //TODO: process POST request
+    private final AddPlanUseCase addPlanUseCase;
+    private final CreatePlanAndHistoryUseCase createPlanAndHistoryUseCase;
 
-        return ApiResponse.success();
+    @PostMapping("/plans")
+    public ApiResponse<?> createPlan(
+        @UserId Long userId,
+        @PathVariable Long goalId,
+        @RequestBody CreatePlanRequest request) {
+        Long planHistoryId = createPlanAndHistoryUseCase
+            .createPlanAndHistory(request.toCreatePlanAndHistoryCommand(userId, goalId));
+
+        return ApiResponse.success(planHistoryId);
     }
 
-    @PostMapping("/plan-histories/{planHistoryId}/plans")
-    public ApiResponse<?> addPlanToExistingHistory(
+    @PostMapping("/plan-histories/{planHistoryId}/plans/{planId}/success")
+    public ApiResponse<?> addPlanWhenSuccess(
             @UserId Long userId,
             @PathVariable Long goalId,
             @PathVariable Long planHistoryId,
-            @RequestBody CreatePlanRequest request) {
-        //TODO: process POST request
+            @PathVariable Long planId,
+            @RequestBody AddSamePlanRequest request) {
+        Long existingPlanHistoryId = addPlanUseCase
+            .addSamePlan(request.toAddSamePlanCommand(userId, goalId, planHistoryId, planId));
 
-        return ApiResponse.success();
+        return ApiResponse.success(existingPlanHistoryId);
+    }
+
+    @PostMapping("/plan-histories/{planHistoryId}/plans/{planId}/failure")
+    public ApiResponse<?> addPlanWhenFailure(
+        @UserId Long userId,
+        @PathVariable Long goalId,
+        @PathVariable Long planHistoryId,
+        @PathVariable Long planId,
+        @RequestBody AddNewPlanRequest request) {
+        Long existingPlanHistoryId = addPlanUseCase
+            .addNewPlan(request.toAddNewPlanCommand(userId, goalId, planHistoryId, planId));
+
+        return ApiResponse.success(existingPlanHistoryId);
     }
 }
