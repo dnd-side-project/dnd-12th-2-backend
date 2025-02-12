@@ -1,6 +1,5 @@
 package ac.dnd.dodal.application.user.service;
 
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.lenient;
 
@@ -17,83 +16,78 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 public class UserQueryServiceTest {
-    @Mock
-    UserRepository userRepository;
 
-    String email;
-    String nickname;
+  @Mock UserRepository userRepository;
 
-    @BeforeEach
-    void setUp() {
-        email = "test@test.example.com";
-        nickname = "testUser";
-        User saveUser = UserQueryFixture.saveUser();
+  String email;
+  String nickname;
 
-        lenient().when(userRepository.findByEmail(email))
-                .thenReturn(Optional.of(saveUser));
+  @BeforeEach
+  void setUp() {
+    email = "test@test.example.com";
+    nickname = "testUser";
+    User saveUser = UserQueryFixture.saveUser();
 
-        lenient().when(userRepository.existsByEmail(email))
-                .thenReturn(true);
-        lenient().when(userRepository.existsByNickname(nickname))
-                .thenReturn(true);
+    lenient().when(userRepository.findByEmail(email)).thenReturn(Optional.of(saveUser));
 
-        // 새로운 이메일과 닉네임에 대해 false 반환하도록 Mocking
-        lenient().when(userRepository.existsByEmail("test2@test2.com"))
-                .thenReturn(false);
-        lenient().when(userRepository.existsByNickname("testUser2"))
-                .thenReturn(false);
-    }
+    lenient().when(userRepository.existsByEmail(email)).thenReturn(true);
+    lenient().when(userRepository.existsByNickname(nickname)).thenReturn(true);
 
-    @Test
-    @DisplayName("이메일과 권한으로 사용자 조회 성공")
-    void userSocialLoginKakao() {
-        // given
-        User user = UserQueryFixture.saveUser();
-        // when
-        lenient().when(userRepository.findByEmail(email))
-                .thenReturn(Optional.of(user));
+    // 새로운 이메일과 닉네임에 대해 false 반환하도록 Mocking
+    lenient().when(userRepository.existsByEmail("test2@test2.com")).thenReturn(false);
+    lenient().when(userRepository.existsByNickname("testUser2")).thenReturn(false);
+  }
 
-        lenient().when(userRepository.existsByEmail(email))
-                .thenReturn(true);
+  @Test
+  @DisplayName("이메일과 권한으로 사용자 조회 성공")
+  void userSocialLoginKakao() {
+    // given
+    User user = UserQueryFixture.saveUser();
+    // when
+    lenient().when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
 
-        lenient().when(userRepository.existsByNickname(nickname))
-                .thenReturn(true);
+    lenient().when(userRepository.existsByEmail(email)).thenReturn(true);
 
-        // then
-    }
+    lenient().when(userRepository.existsByNickname(nickname)).thenReturn(true);
 
-    @Test
-    @DisplayName("이메일 중복 체크")
-    void userCheckDuplicatedEmail(){
-// given
-        String duplicatedEmail = email;
-        String newEmail = "test2@test2.com";
+    // then
+    assertThat(user.getEmail()).isEqualTo(userRepository.findByEmail(email).get().getEmail());
+    assertThat(user.getNickname()).isEqualTo(userRepository.findByEmail(email).get().getNickname());
+    assertThat(user.getId()).isEqualTo(userRepository.findByEmail(email).get().getId());
+  }
 
-        // when
-        boolean isDuplicated = userRepository.existsByEmail(duplicatedEmail);
-        boolean isNotDuplicated = userRepository.existsByEmail(newEmail);
+  @Test
+  @DisplayName("이메일 중복 체크")
+  void userCheckDuplicatedEmail() {
+    // given
+    String duplicatedEmail = email;
+    String newEmail = "test2@test2.com";
 
-        // then
-        assertThat(isDuplicated).isTrue();
-        assertThat(isNotDuplicated).isFalse();
-    }
+    // when
+    boolean isDuplicated = userRepository.existsByEmail(duplicatedEmail);
+    boolean isNotDuplicated = userRepository.existsByEmail(newEmail);
 
-    @Test
-    @DisplayName("닉네임 중복 체크")
-    void userCheckDuplicatedNickname(){
-        // given
-        String duplicatedNickname = nickname;
-        String newNickname = "testUser2";
-        // when
-        boolean isDuplicated = userRepository.existsByNickname(duplicatedNickname);
+    // then
+    assertThat(isDuplicated).isTrue();
+    assertThat(isNotDuplicated).isFalse();
+  }
 
-        // then
-        assertThat(isDuplicated).isTrue();
+  @Test
+  @DisplayName("닉네임 중복 체크")
+  void userCheckDuplicatedNickname() {
+    // given
+    String duplicatedNickname = nickname;
+    String newNickname = "testUser2";
+    // when
+    boolean isDuplicated = userRepository.existsByNickname(duplicatedNickname);
 
-        //when
-        boolean isNotDuplicated = userRepository.existsByNickname(newNickname);
+    // then
+    assertThat(isDuplicated).isTrue();
 
-        //then
-        assertThat(isNotDuplicated).isFalse();
-    }
+    // when
+    boolean isNotDuplicated = userRepository.existsByNickname(newNickname);
+
+    // then
+    assertThat(isNotDuplicated).isFalse();
+  }
 }
