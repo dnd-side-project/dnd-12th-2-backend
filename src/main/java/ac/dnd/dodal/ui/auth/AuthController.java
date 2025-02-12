@@ -1,10 +1,10 @@
-package ac.dnd.dodal.ui.user;
+package ac.dnd.dodal.ui.auth;
 
 import ac.dnd.dodal.application.user.service.AuthKakaoLoginService;
 import ac.dnd.dodal.application.user.service.AuthSignUpService;
 import ac.dnd.dodal.common.constant.Constants;
 import ac.dnd.dodal.common.response.ApiResponse;
-import ac.dnd.dodal.ui.user.request.OAuthUserInfoRequestDto;
+import ac.dnd.dodal.ui.auth.request.OAuthUserInfoRequestDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;

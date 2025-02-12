@@ -2,7 +2,7 @@ package ac.dnd.dodal.core.security.util;
 
 import ac.dnd.dodal.common.constant.Constants;
 import ac.dnd.dodal.domain.user.enums.UserRole;
-import ac.dnd.dodal.ui.user.response.JwtTokenDto;
+import ac.dnd.dodal.ui.auth.response.JwtTokenDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

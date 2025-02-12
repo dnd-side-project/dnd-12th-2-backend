@@ -4,7 +4,7 @@ import ac.dnd.dodal.application.user.repository.UserRepository;
 import ac.dnd.dodal.application.user.usecase.UserCommandUseCase;
 import ac.dnd.dodal.domain.user.enums.UserRole;
 import ac.dnd.dodal.domain.user.model.User;
-import ac.dnd.dodal.ui.user.request.OAuthUserInfoRequestDto;
+import ac.dnd.dodal.ui.auth.request.OAuthUserInfoRequestDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

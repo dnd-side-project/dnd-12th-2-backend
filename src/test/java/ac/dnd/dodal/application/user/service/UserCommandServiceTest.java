@@ -7,7 +7,7 @@ import ac.dnd.dodal.application.user.dto.UserCommandFixture;
 import ac.dnd.dodal.application.user.repository.UserRepository;
 import ac.dnd.dodal.domain.user.enums.UserRole;
 import ac.dnd.dodal.domain.user.model.User;
-import ac.dnd.dodal.ui.user.request.OAuthUserInfoRequestDto;
+import ac.dnd.dodal.ui.auth.request.OAuthUserInfoRequestDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

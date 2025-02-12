@@ -1,7 +1,7 @@
 package ac.dnd.dodal.common.util;
 
 import ac.dnd.dodal.common.constant.Constants;
-import ac.dnd.dodal.ui.user.response.KakaoUserInfoDto;
+import ac.dnd.dodal.ui.auth.response.KakaoUserInfoDto;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import lombok.extern.slf4j.Slf4j;
