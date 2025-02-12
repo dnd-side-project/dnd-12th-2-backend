@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class UserQueryService implements UserQueryUseCase {
 
     private final UserRepository userQueryRepository;
