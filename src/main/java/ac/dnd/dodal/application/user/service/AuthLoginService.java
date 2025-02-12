@@ -48,7 +48,6 @@ public class AuthLoginService {
 
     // 사용자 정보 가져오기
     String id_token = jsonElement.getAsJsonObject().get("id_token").getAsString();
-    String refresh_token = jsonElement.getAsJsonObject().get("refresh_token").getAsString();
     String deviceToken = appleAuthorizationRequestDto.deviceToken();
 
     // id_token 파싱하기
@@ -58,9 +57,6 @@ public class AuthLoginService {
     // 애플의 경우 이메일에는 sub, name에는 email이 들어가 있음
     User user = userQueryUseCase.findByEmail(appleIdTokenParsingDto.sub())
             .orElseGet(() -> registerNewUser(appleIdTokenParsingDto, deviceToken));
-
-    // 애플 전용 리프레시 토큰 저장
-    user.updateAppleRefreshToken(refresh_token);
 
     // 애플 로그인 응답 DTO 생성
     OAuthByAppleUserInfoRequestDto oAuthByAppleUserInfoRequestDto =
