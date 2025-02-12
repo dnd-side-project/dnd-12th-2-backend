@@ -1,4 +1,4 @@
-package ac.dnd.dodal.ui.user.response;
+package ac.dnd.dodal.ui.auth.response;
 
 public record KakaoUserInfoDto(String email) {
   public static KakaoUserInfoDto of(String email) {

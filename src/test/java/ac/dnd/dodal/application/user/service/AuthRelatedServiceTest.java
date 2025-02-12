@@ -7,7 +7,7 @@ import ac.dnd.dodal.common.constant.Constants;
 import ac.dnd.dodal.core.security.util.JwtUtil;
 import ac.dnd.dodal.domain.user.enums.UserRole;
 import ac.dnd.dodal.domain.user.model.User;
-import ac.dnd.dodal.ui.user.response.JwtTokenDto;
+import ac.dnd.dodal.ui.auth.response.JwtTokenDto;
 import io.jsonwebtoken.Claims;
 import java.util.Date;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,4 +1,4 @@
-package ac.dnd.dodal.ui.user.response;
+package ac.dnd.dodal.ui.auth.response;
 
 import ac.dnd.dodal.domain.user.model.User;
 import lombok.AccessLevel;
