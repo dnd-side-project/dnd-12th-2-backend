@@ -6,16 +6,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-@Slf4j
-@Service
-@RequiredArgsConstructor
-@Transactional
 public class AuthService {
 
-
-    public String refineToken(String accessToken) {
-        return accessToken.startsWith(Constants.BEARER_PREFIX)
-                ? accessToken.substring(Constants.BEARER_PREFIX.length())
-                : accessToken;
-    }
+  public String refineToken(String accessToken) {
+    return accessToken.startsWith(Constants.BEARER_PREFIX)
+        ? accessToken.substring(Constants.BEARER_PREFIX.length())
+        : accessToken;
+  }
 }
