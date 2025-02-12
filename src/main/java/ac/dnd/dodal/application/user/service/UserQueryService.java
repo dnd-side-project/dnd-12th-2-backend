@@ -30,11 +30,4 @@ public class UserQueryService implements UserQueryUseCase {
         }
     }
 
-    @Override
-    public void checkDuplicatedNickname(String nickname) {
-        if (userQueryRepository.existsByNickname(nickname)) {
-            throw new UserBadRequestException(UserExceptionCode.DUPLICATED_NICKNAME);
-        }
-    }
-
 }
