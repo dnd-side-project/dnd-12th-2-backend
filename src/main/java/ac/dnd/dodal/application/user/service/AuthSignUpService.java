@@ -26,10 +26,8 @@ public class AuthSignUpService {
 
   public UserInfoResponseDto handleSignUp(OAuthUserInfoRequestDto authSignUpRequestDto) {
     String email = authSignUpRequestDto.email();
-    String nickname = authSignUpRequestDto.nickname();
 
     userQueryUseCase.checkDuplicatedEmail(email);
-    userQueryUseCase.checkDuplicatedNickname(nickname);
 
     User newUser = userCommandUseCase.createUserBySocialSignUp(authSignUpRequestDto);
 

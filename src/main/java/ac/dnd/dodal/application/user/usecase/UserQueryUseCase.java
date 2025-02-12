@@ -1,6 +1,5 @@
 package ac.dnd.dodal.application.user.usecase;
 
-
 import ac.dnd.dodal.domain.user.enums.UserRole;
 import ac.dnd.dodal.domain.user.model.User;
 
@@ -13,8 +12,6 @@ public interface UserQueryUseCase {
     Optional<User> findByEmail(String email);
 
     void checkDuplicatedEmail(String email);
-
-    void checkDuplicatedNickname(String nickname);
 
     User findByIdAndRole(Long id, UserRole userRole);
 }

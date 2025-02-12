@@ -7,7 +7,6 @@ import ac.dnd.dodal.domain.user.enums.UserRole;
 import ac.dnd.dodal.domain.user.exception.UserBadRequestException;
 import ac.dnd.dodal.domain.user.exception.UserNotFoundException;
 import ac.dnd.dodal.domain.user.model.User;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -35,13 +34,6 @@ public class UserQueryService implements UserQueryUseCase {
     public void checkDuplicatedEmail(String email) {
         if (userQueryRepository.existsByEmail(email)) {
             throw new UserBadRequestException(UserExceptionCode.DUPLICATED_EMAIL);
-        }
-    }
-
-    @Override
-    public void checkDuplicatedNickname(String nickname) {
-        if (userQueryRepository.existsByNickname(nickname)) {
-            throw new UserBadRequestException(UserExceptionCode.DUPLICATED_NICKNAME);
         }
     }
 
