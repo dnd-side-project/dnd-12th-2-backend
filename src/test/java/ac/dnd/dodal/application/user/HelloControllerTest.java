@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class HelloControllerTest extends IntegrationTest {
-    
+
     @Autowired
     private MockMvc mockMvc;
 

@@ -1,4 +1,4 @@
-package ac.dnd.dodal.ui.user.response;
+package ac.dnd.dodal.ui.auth.response;
 
 import jakarta.validation.constraints.NotNull;
 
