@@ -21,14 +21,13 @@ import org.springframework.stereotype.Service;
 @Transactional
 public class AuthKakaoLoginService {
 
-    private final AuthService authService;
     private final UserQueryUseCase userQueryUseCase;
     private final JwtUtil jwtUtil;
     private final OAuth2Util oAuth2Util;
 
     // 소셜 로그인
     public Object authSocialLogin(String token) {
-        String accessToken = authService.refineToken(token);
+        String accessToken = AuthService.refineToken(token);
 
         KakaoUserInfoDto kakaoUserInfoDto = getOAuth2UserInfo(accessToken);
 
