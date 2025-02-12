@@ -18,13 +18,15 @@ import ac.dnd.dodal.domain.goal.exception.GoalExceptionCode;
 
 public class AchieveGoalAcceptanceTest extends AcceptanceTest {
 
+    private Long unachievedGoalId = 4L;
+    private Long deletedGoalId = 2L;
     private Long goalId = 1L;
 
     @Test
     @DisplayName("Achieve Goal Test")
     public void achieve_goal() {
         // when
-        Response response = GoalSteps.achieveGoal(authorizationHeader, goalId);
+        Response response = GoalSteps.achieveGoal(authorizationHeader, unachievedGoalId);
         ApiResponse<Long> apiResponse = response.as(new TypeRef<ApiResponse<Long>>() {});
 
         // then 200
@@ -37,28 +39,29 @@ public class AchieveGoalAcceptanceTest extends AcceptanceTest {
         assertThat(response.getBody().jsonPath().getMap("data")).isNull();
     }
 
-    @Test
-    @DisplayName("Achieve Goal Test with Unauthorized User")
-    public void achieve_goal_with_unauthorized_user() {
-        // when
-        Response response = GoalSteps.achieveGoal(authorizationHeader, goalId);
-        ApiResponse<Long> apiResponse = response.as(new TypeRef<ApiResponse<Long>>() {});
+    // Todo: 인증이 추가된 이후 테스트 추가
+    // @Test
+    // @DisplayName("Achieve Goal Test with Unauthorized User")
+    // public void achieve_goal_with_unauthorized_user() {
+    //     // when
+    //     Response response = GoalSteps.achieveGoal(unauthorizedAuthorizationHeader, unachievedGoalId);
+    //     ApiResponse<Long> apiResponse = response.as(new TypeRef<ApiResponse<Long>>() {});
 
-        // then 401
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
-        // COM003
-        assertThat(apiResponse.code()).isEqualTo(CommonResultCode.UNAUTHORIZED.getCode());
-        // Unauthorized
-        assertThat(apiResponse.message()).isEqualTo(CommonResultCode.UNAUTHORIZED.getMessage());
-        // data does not exist
-        assertThat(response.getBody().jsonPath().getMap("data")).isNull();
-    }
+    //     // then 401
+    //     assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+    //     // COM003
+    //     assertThat(apiResponse.code()).isEqualTo(CommonResultCode.UNAUTHORIZED.getCode());
+    //     // Unauthorized
+    //     assertThat(apiResponse.message()).isEqualTo(CommonResultCode.UNAUTHORIZED.getMessage());
+    //     // data does not exist
+    //     assertThat(response.getBody().jsonPath().getMap("data")).isNull();
+    // }
 
     @Test
     @DisplayName("Achieve Goal Test with Deleted Goal")
     public void achieve_goal_with_deleted_goal() {
         // when
-        Response response = GoalSteps.achieveGoal(authorizationHeader, goalId);
+        Response response = GoalSteps.achieveGoal(authorizationHeader, deletedGoalId);
         ApiResponse<Long> apiResponse = response.as(new TypeRef<ApiResponse<Long>>() {});
 
         // then 403

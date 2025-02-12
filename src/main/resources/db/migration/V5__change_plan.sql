@@ -1,0 +1,4 @@
+ALTER TABLE plans DROP COLUMN is_succeed;
+ALTER TABLE plans ADD COLUMN `status` VARCHAR(20) DEFAULT 'NONE';
+
+ALTER TABLE plans ADD CONSTRAINT status_check CHECK (`status` IN ('NONE', 'SUCCESS', 'FAILURE'));
