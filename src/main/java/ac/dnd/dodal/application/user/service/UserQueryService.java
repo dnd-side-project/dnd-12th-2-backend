@@ -31,6 +31,11 @@ public class UserQueryService implements UserQueryUseCase {
     }
 
     @Override
+    public Optional<User> findByEmail(String email) {
+        return userQueryRepository.findByEmail(email);
+    }
+
+    @Override
     public void checkDuplicatedEmail(String email) {
         if (userQueryRepository.existsByEmail(email)) {
             throw new UserBadRequestException(UserExceptionCode.DUPLICATED_EMAIL);
