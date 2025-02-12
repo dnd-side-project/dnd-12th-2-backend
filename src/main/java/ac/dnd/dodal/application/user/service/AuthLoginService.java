@@ -8,12 +8,12 @@ import ac.dnd.dodal.domain.user.enums.UserExceptionCode;
 import ac.dnd.dodal.domain.user.enums.UserRole;
 import ac.dnd.dodal.domain.user.exception.UserNotFoundException;
 import ac.dnd.dodal.domain.user.model.User;
-import ac.dnd.dodal.ui.user.request.AppleAuthorizationRequestDto;
-import ac.dnd.dodal.ui.user.request.OAuthByAppleUserInfoRequestDto;
-import ac.dnd.dodal.ui.user.response.AppleIdTokenParsingDto;
-import ac.dnd.dodal.ui.user.response.JwtTokenDto;
-import ac.dnd.dodal.ui.user.response.KakaoUserInfoDto;
-import ac.dnd.dodal.ui.user.response.UserInfoResponseDto;
+import ac.dnd.dodal.ui.auth.request.AppleAuthorizationRequestDto;
+import ac.dnd.dodal.ui.auth.request.OAuthByAppleUserInfoRequestDto;
+import ac.dnd.dodal.ui.auth.response.AppleIdTokenParsingDto;
+import ac.dnd.dodal.ui.auth.response.JwtTokenDto;
+import ac.dnd.dodal.ui.auth.response.KakaoUserInfoDto;
+import ac.dnd.dodal.ui.auth.response.UserInfoResponseDto;
 import com.google.gson.JsonElement;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,6 @@ import org.springframework.stereotype.Service;
 @Transactional
 public class AuthLoginService {
 
-  private final AuthService authService;
   private final UserQueryUseCase userQueryUseCase;
   private final JwtUtil jwtUtil;
   private final OAuth2Util oAuth2Util;
@@ -34,7 +33,7 @@ public class AuthLoginService {
 
   // 카카오 소셜 로그인
   public Object kakaoAuthSocialLogin(String token) {
-    String accessToken = authService.refineToken(token);
+    String accessToken = AuthService.refineToken(token);
 
     KakaoUserInfoDto kakaoUserInfoDto = getOAuth2UserInfo(accessToken);
 
