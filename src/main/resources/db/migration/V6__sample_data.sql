@@ -131,7 +131,7 @@ VALUES (32, 2, 1, 'history2_goal1_plan6', 'NONE', '{"history2_goal1_plan6_guide6
 INSERT INTO plans (plan_id, history_id, goal_id, title, `status`, guide, start_date, end_date) 
 VALUES (33, 2, 1, 'history2_goal1_plan7', 'SUCCESS', '{"history2_goal1_plan6_guide7"}', '2024-04-11 00:00:00', '2024-04-12 00:00:00');
 INSERT INTO plans (plan_id, history_id, goal_id, title, `status`, guide, start_date, end_date) 
-VALUES (34, 2, 1, 'history2_goal1_plan7', 'SUCCESS', '{"history2_goal1_plan6_guide7"}', '2024-04-12 00:00:00', '2024-04-13 00:00:00');
+VALUES (34, 2, 1, 'history2_goal1_plan7', 'FAILURE', '{"history2_goal1_plan6_guide7"}', '2024-04-12 00:00:00', '2024-04-13 00:00:00');
 
 INSERT INTO plan_feedbacks (plan_id, question, indicator) 
 VALUES (1, 'question1', 'indicator1');
