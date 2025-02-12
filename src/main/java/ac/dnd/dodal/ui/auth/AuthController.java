@@ -6,7 +6,6 @@ import ac.dnd.dodal.common.constant.Constants;
 import ac.dnd.dodal.common.response.ApiResponse;
 import ac.dnd.dodal.ui.auth.request.AppleAuthorizationRequestDto;
 import ac.dnd.dodal.ui.auth.request.OAuthUserInfoRequestDto;
-import ac.dnd.dodal.ui.auth.request.OAuthUserInfoRequestDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
