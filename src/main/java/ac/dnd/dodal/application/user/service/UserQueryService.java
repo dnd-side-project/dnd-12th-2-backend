@@ -24,16 +24,6 @@ public class UserQueryService implements UserQueryUseCase {
     public User findByEmailAndRole(String email, UserRole role) {
         return userQueryRepository.findByEmailAndRole(email, role);
     }
-    
-    @Override
-    public Optional<User> findByEmail(String email) {
-        return userQueryRepository.findByEmail(email);
-    }
-
-    @Override
-    public Optional<User> findByEmail(String email) {
-        return userQueryRepository.findByEmail(email);
-    }
 
     @Override
     public Optional<User> findByEmail(String email) {
