@@ -38,7 +38,7 @@ public class PlanHistory extends BaseEntity {
 
     public void addPlan(Plan plan, Plan previousPlan, Plan latestPlan) {
         validateDeleted();
-        if (previousPlan != null && (
+        if (latestPlan != null && previousPlan != null && (
             !previousPlan.isCompleted() || !previousPlan.equals(latestPlan)
         )) {
             throw new BadRequestException(PlanHistoryExceptionCode.PLAN_CAN_BE_ADDED_ONLY_TO_LAST);
