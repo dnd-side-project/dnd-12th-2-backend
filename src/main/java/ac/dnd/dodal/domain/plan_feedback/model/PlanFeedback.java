@@ -1,5 +1,7 @@
 package ac.dnd.dodal.domain.plan_feedback.model;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
@@ -37,13 +39,23 @@ public class PlanFeedback extends BaseEntity {
 
     @Column(nullable = false)
     private String indicator;
-
-    public PlanFeedback(String question, String indicator) {
-        this.question = question;
-        this.indicator = indicator;
-    }
-
+    
     public void setPlan(Plan plan) {
         this.plan = plan;
+    }
+
+    public PlanFeedback(String question, String indicator) {
+        this(null, null, question, indicator, null, null, null);
+    }
+
+    public PlanFeedback(Long planFeedbackId, Plan plan, String question, String indicator,
+            LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
+        this.planFeedbackId = planFeedbackId;
+        this.plan = plan;
+        this.question = question;
+        this.indicator = indicator;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
     }
 }

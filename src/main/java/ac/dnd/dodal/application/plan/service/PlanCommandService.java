@@ -9,6 +9,7 @@ import java.util.Set;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,15 +19,15 @@ import ac.dnd.dodal.domain.plan.model.Plan;
 import ac.dnd.dodal.application.goal.service.GoalService;
 import ac.dnd.dodal.application.goal.usecase.AddPlanUseCase;
 import ac.dnd.dodal.application.goal.usecase.CreatePlanAndHistoryUseCase;
-import ac.dnd.dodal.application.plan.dto.command.AddSamePlanCommand;
-import ac.dnd.dodal.application.plan.dto.command.AddNewPlanCommand;
-import ac.dnd.dodal.application.plan.dto.command.CreatePlanAndHistoryCommand;
+import ac.dnd.dodal.application.plan.dto.command.*;
+import ac.dnd.dodal.application.plan.usecase.CompletePlanUseCase;
 import ac.dnd.dodal.application.plan_history.service.PlanHistoryService;
 
 @Transactional
 @Service
 @RequiredArgsConstructor
-public class PlanCommandService implements AddPlanUseCase, CreatePlanAndHistoryUseCase {
+public class PlanCommandService implements 
+    AddPlanUseCase, CreatePlanAndHistoryUseCase, CompletePlanUseCase {
 
     private final GoalService goalService;
     private final PlanHistoryService planHistoryService;
@@ -74,6 +75,11 @@ public class PlanCommandService implements AddPlanUseCase, CreatePlanAndHistoryU
         planHistory.addPlan(plan, null, null);
         goal.addPlan(command.userId(), plan);
         planService.save(plan);
+    }
+
+    @Override
+    public Page<Plan> completePlan(CompletePlanCommand command) {
+        return null;
     }
 
     private List<Plan> generateIterationPlans(AddSamePlanCommand command, Plan plan) {

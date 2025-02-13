@@ -21,14 +21,6 @@ import ac.dnd.dodal.ui.plan.fixture.PlanUIFixture;
 
 public class AddPlanToGoalAcceptanceTest extends AcceptanceTest {
 
-    Long goalId = 1L;
-    Long deletedGoalId = 2L;
-    Long achievedGoalId = 3L;
-    Long planHistoryId = 1L;
-    Long lastSuccessPlanIdWithHistory_1 = 17L;
-    Long lastFailurePlanHistoryId = 2L;
-    Long lastFailurePlanIdWithHistory_2 = 34L;
-
     @DisplayName("Create plan")
     @Test
     public void create_plan() {
@@ -58,7 +50,7 @@ public class AddPlanToGoalAcceptanceTest extends AcceptanceTest {
 
         // when
         Response response = AddPlanToGoalSteps.addPlanWhenSuccess(goalId, planHistoryId,
-                lastSuccessPlanIdWithHistory_1, authorizationHeader, request);
+                latestSuccessPlanIdWithHistory_1, authorizationHeader, request);
         ApiResponse<Long> apiResponse = response.as(new TypeRef<ApiResponse<Long>>() {});
 
         // then 200
@@ -79,7 +71,7 @@ public class AddPlanToGoalAcceptanceTest extends AcceptanceTest {
 
         // when
         Response response = AddPlanToGoalSteps.addPlanWhenFailure(goalId, lastFailurePlanHistoryId,
-                lastFailurePlanIdWithHistory_2, authorizationHeader, request);
+                latestFailurePlanIdWithHistory_2, authorizationHeader, request);
         ApiResponse<Long> apiResponse = response.as(new TypeRef<ApiResponse<Long>>() {});
 
         // then 200

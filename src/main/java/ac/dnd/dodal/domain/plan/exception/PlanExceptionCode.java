@@ -20,6 +20,7 @@ public enum PlanExceptionCode implements ResultCode {
     PLAN_ALREADY_COMPLETED("PLN_006", "Plan already completed"),
     PLAN_ALREADY_DELETED("PLN_007", "Plan already deleted"),
     REQUIRED_FEEDBACK("PLN_008", "Feedback is required"),
+    INVALID_PLAN_STATUS("PLN_009", "Invalid plan status: Only success, failure, none are allowed"),
     ;
 
     private final String code;
