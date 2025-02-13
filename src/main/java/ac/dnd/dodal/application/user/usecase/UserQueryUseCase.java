@@ -14,4 +14,6 @@ public interface UserQueryUseCase {
   void checkDuplicatedEmail(String email);
 
   User findByIdAndRole(Long id, UserRole userRole);
+
+  User findById(Long id);
 }
