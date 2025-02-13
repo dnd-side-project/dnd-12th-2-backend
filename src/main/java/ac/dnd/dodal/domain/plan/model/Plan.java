@@ -71,7 +71,7 @@ public class Plan extends BaseEntity {
             throw new ForbiddenException(PlanExceptionCode.PLAN_ALREADY_DELETED);
         }
         if (this.isCompleted()) {
-            throw new BadRequestException(PlanExceptionCode.PLAN_ALREADY_COMPLETED);
+            throw new ForbiddenException(PlanExceptionCode.PLAN_ALREADY_COMPLETED);
         }
         if (this.startDate.isAfter(LocalDateTime.now())) {
             throw new BadRequestException(PlanExceptionCode.PLAN_SUCCEED_AFTER_START_DATE);

@@ -9,19 +9,20 @@ import java.util.Set;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ac.dnd.dodal.domain.goal.model.Goal;
 import ac.dnd.dodal.domain.plan_history.model.PlanHistory;
 import ac.dnd.dodal.domain.plan.model.Plan;
+import ac.dnd.dodal.domain.plan_feedback.model.PlanFeedback;
 import ac.dnd.dodal.application.goal.service.GoalService;
 import ac.dnd.dodal.application.goal.usecase.AddPlanUseCase;
 import ac.dnd.dodal.application.goal.usecase.CreatePlanAndHistoryUseCase;
 import ac.dnd.dodal.application.plan.dto.command.*;
 import ac.dnd.dodal.application.plan.usecase.CompletePlanUseCase;
 import ac.dnd.dodal.application.plan_history.service.PlanHistoryService;
+import ac.dnd.dodal.application.feedback.service.PlanFeedbackService;
 
 @Transactional
 @Service
@@ -32,6 +33,7 @@ public class PlanCommandService implements
     private final GoalService goalService;
     private final PlanHistoryService planHistoryService;
     private final PlanService planService;
+    private final PlanFeedbackService planFeedbackService;
 
     @Override
     public void addSamePlan(AddSamePlanCommand command) {
@@ -78,8 +80,15 @@ public class PlanCommandService implements
     }
 
     @Override
-    public Page<Plan> completePlan(CompletePlanCommand command) {
-        return null;
+    public Plan completePlan(CompletePlanCommand command) {
+        Plan plan = planService.findByIdOrThrow(command.planId());
+        List<PlanFeedback> feedbacks = new ArrayList<>();
+        PlanFeedback feedback = new PlanFeedback(command.question(), command.indicator());
+        feedbacks.add(feedback);
+
+        plan.getGoal().completePlan(command.userId(), command.status(), plan, feedbacks);
+        planFeedbackService.saveAll(feedbacks);
+        return planService.save(plan);
     }
 
     private List<Plan> generateIterationPlans(AddSamePlanCommand command, Plan plan) {
