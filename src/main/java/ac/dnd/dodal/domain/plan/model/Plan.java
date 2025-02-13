@@ -64,6 +64,8 @@ public class Plan extends BaseEntity {
     @Column(nullable = false)
     private LocalDateTime endDate;
 
+    private LocalDateTime completedDate;
+
     public void complete(PlanStatus status, List<PlanFeedback> feedbacks) {
         if (this.deletedAt != null) {
             throw new ForbiddenException(PlanExceptionCode.PLAN_ALREADY_DELETED);
@@ -77,10 +79,14 @@ public class Plan extends BaseEntity {
         if (feedbacks == null || feedbacks.size() == 0) {
             throw new BadRequestException(PlanExceptionCode.REQUIRED_FEEDBACK);
         }
+        if (status == null || status == PlanStatus.NONE) {
+            throw new BadRequestException(PlanExceptionCode.INVALID_PLAN_STATUS);
+        }
 
         this.status = status;
         this.guide = GuidianceService.generateGuide(feedbacks);
         feedbacks.forEach(feedback -> feedback.setPlan(this));
+        setCompletedDate();
     }
 
     public Plan(String title, LocalDateTime startDate, LocalDateTime endDate) {
@@ -94,7 +100,7 @@ public class Plan extends BaseEntity {
 
     public Plan(Long planId, Goal goal, PlanHistory history,
             String title, PlanStatus status, String guide, 
-            LocalDateTime startDate, LocalDateTime endDate,
+            LocalDateTime startDate, LocalDateTime endDate, LocalDateTime completedDate,
             LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
         super(createdAt, updatedAt, deletedAt);
 
@@ -109,6 +115,7 @@ public class Plan extends BaseEntity {
         this.guide = guide;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.completedDate = completedDate;
     }
 
     public void setGoal(Goal goal) {
@@ -124,7 +131,7 @@ public class Plan extends BaseEntity {
     }
 
     public boolean isCompleted() {
-        return this.status != PlanStatus.NONE;
+        return this.status != PlanStatus.NONE || this.completedDate != null;
     }
 
     private void validateTitle(String title) {
@@ -139,6 +146,14 @@ public class Plan extends BaseEntity {
     private void validateDate(LocalDateTime startDate, LocalDateTime endDate) {
         if (startDate.isAfter(endDate)) {
             throw new BadRequestException(PlanExceptionCode.PLAN_START_DATE_AFTER_END_DATE);
+        }
+    }
+
+    private void setCompletedDate() {
+        this.completedDate = LocalDateTime.now();
+
+        if (this.endDate.isBefore(LocalDateTime.now())) {
+            this.completedDate = this.endDate;
         }
     }
 }
