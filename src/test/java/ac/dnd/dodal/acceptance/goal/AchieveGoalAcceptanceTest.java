@@ -18,10 +18,6 @@ import ac.dnd.dodal.domain.goal.exception.GoalExceptionCode;
 
 public class AchieveGoalAcceptanceTest extends AcceptanceTest {
 
-    private Long achievedGoalId = 3L;
-    private Long deletedGoalId = 2L;
-    private Long goalId = 1L;
-
     @Test
     @DisplayName("Achieve Goal Test")
     public void achieve_goal() {
