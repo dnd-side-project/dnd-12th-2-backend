@@ -5,7 +5,7 @@ import ac.dnd.dodal.application.plan.dto.command.AddNewPlanCommand;
 
 public interface AddPlanUseCase {
 
-    Long addSamePlan(AddSamePlanCommand command);
+    void addSamePlan(AddSamePlanCommand command);
 
-    Long addNewPlan(AddNewPlanCommand command);
+    void addNewPlan(AddNewPlanCommand command);
 }

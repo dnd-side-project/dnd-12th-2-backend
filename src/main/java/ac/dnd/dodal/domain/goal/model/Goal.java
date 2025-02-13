@@ -8,9 +8,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.CascadeType;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -48,18 +45,11 @@ public class Goal extends BaseEntity {
     @Column(nullable = false)
     private Boolean isAchieved;
 
-    @OneToMany(mappedBy = "goalId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<PlanHistory> histories;
-
-    @OneToMany(mappedBy = "goal", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Plan> plans;
-
     public void addPlan(Long userId, Plan plan) {
         validateAuthor(userId);
         validateGoal();
 
         plan.setGoal(this);
-        this.plans.add(plan);
     }
 
     public void addHistory(Long userId, PlanHistory history) {
@@ -67,7 +57,6 @@ public class Goal extends BaseEntity {
         validateGoal();
 
         history.setGoal(this);
-        this.histories.add(history);
     }
 
     public void completePlan(
@@ -95,9 +84,6 @@ public class Goal extends BaseEntity {
             throw new ForbiddenException(GoalExceptionCode.GOAL_ALREADY_DELETED);
         }
 
-        if (this.histories != null) {
-            this.histories.forEach(PlanHistory::delete);
-        }
         super.delete();
     }
 

@@ -19,7 +19,7 @@ INSERT INTO user_guides (user_id, type, content)
 VALUES (3, 'TIME', 'time_content3');
 
 INSERT INTO goals (goal_id, user_id, title, is_achieved, created_at, updated_at) 
-VALUES (1, 1, 'user1_goal1', TRUE, '2024-03-27 00:00:00', '2025-01-27 00:00:00');
+VALUES (1, 1, 'user1_goal1', FALSE, '2024-03-27 00:00:00', '2025-01-27 00:00:00');
 INSERT INTO goals (goal_id, user_id, title, is_achieved, created_at, updated_at, deleted_at) 
 VALUES (2, 1, 'user1_goal2', TRUE, '2024-03-27 00:00:00', '2025-01-27 00:00:00', CURRENT_TIMESTAMP);
 INSERT INTO goals (goal_id, user_id, title, is_achieved, created_at, updated_at) 

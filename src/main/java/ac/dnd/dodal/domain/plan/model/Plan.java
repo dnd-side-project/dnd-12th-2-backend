@@ -11,8 +11,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 
@@ -51,9 +49,6 @@ public class Plan extends BaseEntity {
     @JoinColumn(name = "history_id", nullable = false)
     private PlanHistory history;
 
-    @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<PlanFeedback> feedbacks;
-
     @Column(nullable = false)
     private String title;
 
@@ -82,9 +77,10 @@ public class Plan extends BaseEntity {
         if (feedbacks == null || feedbacks.size() == 0) {
             throw new BadRequestException(PlanExceptionCode.REQUIRED_FEEDBACK);
         }
+
         this.status = status;
-        this.feedbacks = feedbacks;
         this.guide = GuidianceService.generateGuide(feedbacks);
+        feedbacks.forEach(feedback -> feedback.setPlan(this));
     }
 
     public Plan(String title, LocalDateTime startDate, LocalDateTime endDate) {

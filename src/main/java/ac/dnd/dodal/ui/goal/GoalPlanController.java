@@ -29,10 +29,10 @@ public class GoalPlanController {
         @UserId Long userId,
         @PathVariable Long goalId,
         @RequestBody CreatePlanRequest request) {
-        Long planHistoryId = createPlanAndHistoryUseCase
-            .createPlanAndHistory(request.toCreatePlanAndHistoryCommand(userId, goalId));
+        createPlanAndHistoryUseCase
+                .createPlanAndHistory(request.toCreatePlanAndHistoryCommand(userId, goalId));
 
-        return ApiResponse.success(planHistoryId);
+        return ApiResponse.success();
     }
 
     @PostMapping("/plan-histories/{planHistoryId}/plans/{planId}/success")
@@ -42,10 +42,10 @@ public class GoalPlanController {
             @PathVariable Long planHistoryId,
             @PathVariable Long planId,
             @RequestBody AddSamePlanRequest request) {
-        Long existingPlanHistoryId = addPlanUseCase
-            .addSamePlan(request.toAddSamePlanCommand(userId, goalId, planHistoryId, planId));
+        addPlanUseCase
+                .addSamePlan(request.toAddSamePlanCommand(userId, goalId, planHistoryId, planId));
 
-        return ApiResponse.success(existingPlanHistoryId);
+        return ApiResponse.success();
     }
 
     @PostMapping("/plan-histories/{planHistoryId}/plans/{planId}/failure")
@@ -55,9 +55,8 @@ public class GoalPlanController {
         @PathVariable Long planHistoryId,
         @PathVariable Long planId,
         @RequestBody AddNewPlanRequest request) {
-        Long existingPlanHistoryId = addPlanUseCase
-            .addNewPlan(request.toAddNewPlanCommand(userId, goalId, planHistoryId, planId));
+        addPlanUseCase.addNewPlan(request.toAddNewPlanCommand(userId, goalId, planHistoryId, planId));
 
-        return ApiResponse.success(existingPlanHistoryId);
+        return ApiResponse.success();
     }
 }

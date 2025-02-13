@@ -4,5 +4,5 @@ import ac.dnd.dodal.application.plan.dto.command.CreatePlanAndHistoryCommand;
 
 public interface CreatePlanAndHistoryUseCase {
 
-    Long createPlanAndHistory(CreatePlanAndHistoryCommand command);
+    void createPlanAndHistory(CreatePlanAndHistoryCommand command);
 }

@@ -22,10 +22,12 @@ import ac.dnd.dodal.ui.plan.fixture.PlanUIFixture;
 public class AddPlanToGoalAcceptanceTest extends AcceptanceTest {
 
     Long goalId = 1L;
+    Long deletedGoalId = 2L;
+    Long achievedGoalId = 3L;
     Long planHistoryId = 1L;
     Long lastSuccessPlanIdWithHistory_1 = 17L;
     Long lastFailurePlanHistoryId = 2L;
-    Long lastFailurePlanIdWithHistory_2 = 36L;
+    Long lastFailurePlanIdWithHistory_2 = 34L;
 
     @DisplayName("Create plan")
     @Test
@@ -45,7 +47,7 @@ public class AddPlanToGoalAcceptanceTest extends AcceptanceTest {
         // Success
         assertThat(apiResponse.message()).isEqualTo(CommonResultCode.SUCCESS.getMessage());
         // Created Plan History Id
-        assertThat(apiResponse.data()).isNotNull();
+        assertThat(apiResponse.data()).isNull();
     }
 
     @DisplayName("Add plan to existing history when success")
@@ -66,7 +68,7 @@ public class AddPlanToGoalAcceptanceTest extends AcceptanceTest {
         // Success
         assertThat(apiResponse.message()).isEqualTo(CommonResultCode.SUCCESS.getMessage());
         // Existing Plan History Id
-        assertThat(apiResponse.data()).isNotNull();
+        assertThat(apiResponse.data()).isNull();
     }
 
     @DisplayName("Add plan to existing history when failure")
@@ -87,6 +89,6 @@ public class AddPlanToGoalAcceptanceTest extends AcceptanceTest {
         // Success
         assertThat(apiResponse.message()).isEqualTo(CommonResultCode.SUCCESS.getMessage());
         // Existing Plan History Id
-        assertThat(apiResponse.data()).isNotNull();
+        assertThat(apiResponse.data()).isNull();
     }
 }
