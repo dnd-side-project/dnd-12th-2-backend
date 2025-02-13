@@ -7,16 +7,15 @@ import ac.dnd.dodal.domain.plan.model.Plan;
 
 public class PlanFeedbackFixture {
 
-    private static final Long PLAN_FEEDBACK_ID = 1L;
     private static final Plan PLAN = PlanFixture.plan();
 
     public static PlanFeedback planFeedback() {
-        return new PlanFeedback(PLAN_FEEDBACK_ID, PLAN, "question", "indicator",
+        return new PlanFeedback(PLAN, "question", "indicator",
                 LocalDateTime.now(), LocalDateTime.now(), null);
     }
 
     public static PlanFeedback deletedPlanFeedback() {
-        return new PlanFeedback(PLAN_FEEDBACK_ID, PLAN, "question", "indicator",
+        return new PlanFeedback(PLAN, "question", "indicator",
                 LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now());
     }
 }
