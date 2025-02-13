@@ -1,22 +1,17 @@
 package ac.dnd.dodal.application.user;
 
+import ac.dnd.dodal.IntegrationTest;
 import ac.dnd.dodal.application.user.repository.UserRepository;
 import ac.dnd.dodal.core.security.util.JwtUtil;
 import ac.dnd.dodal.domain.user.enums.UserRole;
 import ac.dnd.dodal.domain.user.model.User;
-import org.junit.jupiter.api.BeforeEach;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.Optional;
 
@@ -25,11 +20,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-public class HelloControllerTest {
+public class HelloControllerTest extends IntegrationTest {
 
-    private static final Logger log = LoggerFactory.getLogger(HelloControllerTest.class);
     @Autowired
     private MockMvc mockMvc;
 
@@ -43,12 +35,6 @@ public class HelloControllerTest {
     private String refreshToken;
     private User savedUser;
 
-    @BeforeEach
-    void setUp() {
-        userRepository.deleteAll(); // 데이터 초기화
-
-    }
-
     @Test
     @DisplayName("Hello API 호출 성공 - JWT에서 UserId가 정상적으로 추출되고 DB 조회됨")
     void testHelloEndpointWithUserId() throws Exception {
@@ -60,7 +46,6 @@ public class HelloControllerTest {
         savedUser = userRepository.save(user);
         assertThat(savedUser.getRefreshToken()).isNotNull();
         accessToken = "Bearer " + jwtUtil.createToken(savedUser.getId(), savedUser.getRole(), 3600000L);
-
 
         // when: GET 요청 실행
         mockMvc.perform(get("/hello/test")

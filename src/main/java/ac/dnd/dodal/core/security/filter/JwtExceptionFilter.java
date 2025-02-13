@@ -5,18 +5,22 @@ import ac.dnd.dodal.common.response.ApiResponse;
 import ac.dnd.dodal.core.security.enums.SecurityExceptionCode;
 import ac.dnd.dodal.domain.user.enums.UserExceptionCode;
 import ac.dnd.dodal.domain.user.exception.UserBadRequestException;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.springframework.web.filter.OncePerRequestFilter;
+
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import lombok.extern.slf4j.Slf4j;
-import net.minidev.json.JSONValue;
-import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 

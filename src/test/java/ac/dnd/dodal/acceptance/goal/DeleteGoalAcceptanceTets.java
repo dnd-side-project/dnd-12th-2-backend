@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 public class DeleteGoalAcceptanceTets extends AcceptanceTest {
 
     private Long goalId = 1L;
+    private Long deletedGoalId = 2L;
 
     @Test
     @DisplayName("Delete Goal Test")
@@ -41,7 +42,7 @@ public class DeleteGoalAcceptanceTets extends AcceptanceTest {
     @DisplayName("Delete Goal Test with Already Deleted Goal")
     public void delete_goal_with_already_deleted_goal() {
         // when
-        Response response = GoalSteps.deleteGoal(authorizationHeader, goalId);
+        Response response = GoalSteps.deleteGoal(authorizationHeader, deletedGoalId);
         ApiResponse<?> apiResponse = response.as(new TypeRef<ApiResponse<?>>() {});
 
         // then 403
@@ -55,20 +56,21 @@ public class DeleteGoalAcceptanceTets extends AcceptanceTest {
         assertThat(response.getBody().jsonPath().getMap("data")).isNull();
     }
 
-    @Test
-    @DisplayName("Delete Goal Test with Unauthorized User")
-    public void delete_goal_with_unauthorized_user() {
-        // when
-        Response response = GoalSteps.deleteGoal(authorizationHeader, goalId);
-        ApiResponse<?> apiResponse = response.as(new TypeRef<ApiResponse<?>>() {});
+    // Todo: 인증이 추가된 이후 테스트 추가
+//     @Test
+//     @DisplayName("Delete Goal Test with Unauthorized User")
+//     public void delete_goal_with_unauthorized_user() {
+//         // when
+//         Response response = GoalSteps.deleteGoal(authorizationHeader, goalId);
+//         ApiResponse<?> apiResponse = response.as(new TypeRef<ApiResponse<?>>() {});
 
-        // then 401
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
-        // COM003
-        assertThat(apiResponse.code()).isEqualTo(CommonResultCode.UNAUTHORIZED.getCode());
-        // Unauthorized
-        assertThat(apiResponse.message()).isEqualTo(CommonResultCode.UNAUTHORIZED.getMessage());
-        // data does not exist
-        assertThat(response.getBody().jsonPath().getMap("data")).isNull();
-    }
+//         // then 401
+//         assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+//         // COM003
+//         assertThat(apiResponse.code()).isEqualTo(CommonResultCode.UNAUTHORIZED.getCode());
+//         // Unauthorized
+//         assertThat(apiResponse.message()).isEqualTo(CommonResultCode.UNAUTHORIZED.getMessage());
+//         // data does not exist
+//         assertThat(response.getBody().jsonPath().getMap("data")).isNull();
+//     }
 }

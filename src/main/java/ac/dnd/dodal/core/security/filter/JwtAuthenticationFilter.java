@@ -2,24 +2,13 @@ package ac.dnd.dodal.core.security.filter;
 
 import ac.dnd.dodal.common.constant.Constants;
 import ac.dnd.dodal.common.exception.BadRequestException;
-import ac.dnd.dodal.common.response.ApiResponse;
 import ac.dnd.dodal.core.security.JwtAuthenticationToken;
-import ac.dnd.dodal.core.security.enums.SecurityExceptionCode;
 import ac.dnd.dodal.core.security.info.JwtUserInfo;
 import ac.dnd.dodal.core.security.provider.JwtAuthenticationProvider;
 import ac.dnd.dodal.core.security.util.JwtUtil;
-import ac.dnd.dodal.domain.user.enums.UserExceptionCode;
 import ac.dnd.dodal.domain.user.enums.UserRole;
 import ac.dnd.dodal.domain.user.exception.UserBadRequestException;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import net.minidev.json.JSONValue;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,6 +16,17 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 

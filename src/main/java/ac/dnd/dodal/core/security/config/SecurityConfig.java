@@ -1,9 +1,7 @@
 package ac.dnd.dodal.core.security.config;
 
 import ac.dnd.dodal.common.constant.Constants;
-import ac.dnd.dodal.common.response.ApiResponse;
 import ac.dnd.dodal.core.security.JwtAuthEntryPoint;
-import ac.dnd.dodal.core.security.enums.SecurityExceptionCode;
 import ac.dnd.dodal.core.security.filter.CustomLogoutFilter;
 import ac.dnd.dodal.core.security.filter.JwtAuthenticationFilter;
 import ac.dnd.dodal.core.security.filter.JwtExceptionFilter;
@@ -13,10 +11,7 @@ import ac.dnd.dodal.core.security.handler.JwtAccessDeniedHandler;
 import ac.dnd.dodal.core.security.provider.JwtAuthenticationProvider;
 import ac.dnd.dodal.core.security.service.CustomUserDetailsService;
 import ac.dnd.dodal.core.security.util.JwtUtil;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import net.minidev.json.JSONValue;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -25,8 +20,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Configuration
 @RequiredArgsConstructor
