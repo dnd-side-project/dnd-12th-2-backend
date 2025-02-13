@@ -1,4 +1,4 @@
-FROM openjdk:17-jdk-slim AS builder
+FROM openjdk:21-jdk-slim AS builder
 WORKDIR /buildMyApp
 
 ARG JASYPT_ENCRYPTOR_PASSWORD
@@ -23,7 +23,7 @@ COPY ./ ./
 RUN ./gradlew clean build -x test -Pprofile=prod
 
 # 실행 스테이지
-FROM openjdk:17-jdk-slim
+FROM openjdk:21-jdk-slim
 WORKDIR /dodalApp
 COPY --from=builder /buildMyApp/build/libs/*.jar dodalAppExcute.jar
 
