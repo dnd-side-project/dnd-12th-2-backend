@@ -19,6 +19,10 @@ public class GoalService {
         return goalRepository.save(goal);
     }
 
+    public Goal saveAndFlush(Goal goal) {
+        return goalRepository.saveAndFlush(goal);
+    }
+
     public Optional<Goal> findById(Long goalId) {
         return goalRepository.findById(goalId);
     }

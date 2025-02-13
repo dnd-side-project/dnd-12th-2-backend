@@ -40,9 +40,6 @@ public class User extends BaseEntity {
     @Column(name="refresh_token")
     private String refreshToken;
 
-    @Column(name="apple_refresh_token")
-    private String appleRefreshToken;
-
     public User(String nickname, String profileImageUrl, String deviceToken, String email, UserRole role) {
         super(LocalDateTime.now(), LocalDateTime.now(), null);
 
@@ -62,10 +59,6 @@ public class User extends BaseEntity {
         if (nickname != null && !nickname.isEmpty()) {
             this.nickname = nickname;
         }
-    }
-
-    public void updateAppleRefreshToken(String appleRefreshToken) {
-        this.appleRefreshToken = appleRefreshToken;
     }
 
     public void updateUserProfileImageUrl(String profileImageUrl) {

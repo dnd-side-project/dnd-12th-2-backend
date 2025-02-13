@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-
 import ac.dnd.dodal.AcceptanceTest;
 
 public class FlywayTest extends AcceptanceTest {
@@ -29,8 +28,12 @@ public class FlywayTest extends AcceptanceTest {
         System.out.println("Table Names: " + tableNames);
 
         // check flyway applied
-        List<String> flywayVersionColumns = jdbcTemplate.queryForList("SELECT column_name FROM information_schema.columns WHERE table_name = 'dodal_flyway_schema_version'", String.class);
+        List<String> flywayVersionColumns = jdbcTemplate.queryForList(
+                "SELECT column_name FROM information_schema.columns WHERE table_name = 'dodal_flyway_schema_version'",
+                String.class);
+        
         List<Map<String, Object>> flywayVersion =
+                // jdbcTemplate.queryForList("SELECT * FROM dodal_flyway_schema_version"); -> prod db에 적용하고 싶을 때
                 jdbcTemplate.queryForList("SELECT * FROM \"dodal_flyway_schema_version\"");
 
         System.out.println("==dodal_flyway_schema_version==");

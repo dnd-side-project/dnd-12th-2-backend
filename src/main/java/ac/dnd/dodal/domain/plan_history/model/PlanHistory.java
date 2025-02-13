@@ -1,15 +1,14 @@
 package ac.dnd.dodal.domain.plan_history.model;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -33,33 +32,39 @@ public class PlanHistory extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long historyId;
 
-    @Column(nullable = false)
-    private Long goalId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "goal_id", nullable = false)
+    private Goal goal;
 
-    @OneToMany(mappedBy = "history", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Plan> plans;
-
-    // Todo: 추후 plans 전체 조회 성능 개선 필요
-    public void addPlan(Plan plan) {
+    public void addPlan(Plan plan, Plan previousPlan, Plan latestPlan) {
         validateDeleted();
-
-        if (this.plans != null && !this.plans.getLast().isCompleted()) {
+        if (latestPlan != null && previousPlan != null && (
+            !previousPlan.isCompleted() || !previousPlan.equals(latestPlan)
+        )) {
             throw new BadRequestException(PlanHistoryExceptionCode.PLAN_CAN_BE_ADDED_ONLY_TO_LAST);
         }
+
         plan.setHistory(this);
     }
 
     public void setGoal(Goal goal) {
-        this.goalId = goal.getGoalId();
+        this.goal = goal;
     }
 
+    // Todo: 추후 delete 비동기 처리
     public void delete() {
         validateDeleted();
 
-        if (this.plans != null) {
-            this.plans.forEach(Plan::delete);
-        }
         super.delete();
+    }
+
+    public PlanHistory(Long historyId, Goal goal,
+            LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
+        this.historyId = historyId;
+        this.goal = goal;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
     }
 
     private void validateDeleted() {

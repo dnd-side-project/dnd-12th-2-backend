@@ -19,7 +19,7 @@ INSERT INTO user_guides (user_id, type, content)
 VALUES (3, 'TIME', 'time_content3');
 
 INSERT INTO goals (goal_id, user_id, title, is_achieved, created_at, updated_at) 
-VALUES (1, 1, 'user1_goal1', TRUE, '2024-03-27 00:00:00', '2025-01-27 00:00:00');
+VALUES (1, 1, 'user1_goal1', FALSE, '2024-03-27 00:00:00', '2025-01-27 00:00:00');
 INSERT INTO goals (goal_id, user_id, title, is_achieved, created_at, updated_at, deleted_at) 
 VALUES (2, 1, 'user1_goal2', TRUE, '2024-03-27 00:00:00', '2025-01-27 00:00:00', CURRENT_TIMESTAMP);
 INSERT INTO goals (goal_id, user_id, title, is_achieved, created_at, updated_at) 
@@ -41,27 +41,27 @@ VALUES (10, 3, 'user2_goal1');
 INSERT INTO goals (goal_id, user_id, title) 
 VALUES (11, 3, 'user2_goal2');
 
-INSERT INTO plan_histories (history_id, goal_id, guide) 
-VALUES (1, 1, '{"goal1_history1_guide1"}');
-INSERT INTO plan_histories (history_id, goal_id, guide) 
-VALUES (2, 1, '{"goal1_history2_guide2"}');
-INSERT INTO plan_histories (history_id, goal_id, guide) 
-VALUES (3, 1, '{"goal1_history3_guide3"}');
-INSERT INTO plan_histories (history_id, goal_id, guide) 
-VALUES (4, 1, '{"goal1_history4_guide4"}');
-INSERT INTO plan_histories (history_id, goal_id, guide) 
-VALUES (5, 1, '{"goal1_history5_guide5"}');
+INSERT INTO plan_histories (history_id, goal_id) 
+VALUES (1, 1);
+INSERT INTO plan_histories (history_id, goal_id) 
+VALUES (2, 1);
+INSERT INTO plan_histories (history_id, goal_id) 
+VALUES (3, 1);
+INSERT INTO plan_histories (history_id, goal_id) 
+VALUES (4, 1);
+INSERT INTO plan_histories (history_id, goal_id) 
+VALUES (5, 1);
 
-INSERT INTO plan_histories (history_id, goal_id, guide) 
-VALUES (6, 4, '{"goal1_history1_guide1"}');
-INSERT INTO plan_histories (history_id, goal_id, guide) 
-VALUES (7, 4, '{"goal1_history2_guide2"}');
-INSERT INTO plan_histories (history_id, goal_id, guide) 
-VALUES (8, 4, '{"goal1_history3_guide3"}');
-INSERT INTO plan_histories (history_id, goal_id, guide) 
-VALUES (9, 4, '{"goal1_history4_guide4"}');
-INSERT INTO plan_histories (history_id, goal_id, guide) 
-VALUES (10, 4, '{"goal1_history5_guide5"}');
+INSERT INTO plan_histories (history_id, goal_id) 
+VALUES (6, 4);
+INSERT INTO plan_histories (history_id, goal_id) 
+VALUES (7, 4);
+INSERT INTO plan_histories (history_id, goal_id) 
+VALUES (8, 4);
+INSERT INTO plan_histories (history_id, goal_id) 
+VALUES (9, 4);
+INSERT INTO plan_histories (history_id, goal_id) 
+VALUES (10, 4);
 
 INSERT INTO plans (plan_id, history_id, goal_id, title, `status`, guide, start_date, end_date) 
 VALUES (1, 1, 1, 'history1_goal1_plan1', 'FAILURE', '{"history1_goal1_plan1_guide1"}', '2024-03-27 00:00:00', '2024-03-28 00:00:00');
@@ -131,7 +131,7 @@ VALUES (32, 2, 1, 'history2_goal1_plan6', 'NONE', '{"history2_goal1_plan6_guide6
 INSERT INTO plans (plan_id, history_id, goal_id, title, `status`, guide, start_date, end_date) 
 VALUES (33, 2, 1, 'history2_goal1_plan7', 'SUCCESS', '{"history2_goal1_plan6_guide7"}', '2024-04-11 00:00:00', '2024-04-12 00:00:00');
 INSERT INTO plans (plan_id, history_id, goal_id, title, `status`, guide, start_date, end_date) 
-VALUES (34, 2, 1, 'history2_goal1_plan7', 'SUCCESS', '{"history2_goal1_plan6_guide7"}', '2024-04-12 00:00:00', '2024-04-13 00:00:00');
+VALUES (34, 2, 1, 'history2_goal1_plan7', 'FAILURE', '{"history2_goal1_plan6_guide7"}', '2024-04-12 00:00:00', '2024-04-13 00:00:00');
 
 INSERT INTO plan_feedbacks (plan_id, question, indicator) 
 VALUES (1, 'question1', 'indicator1');
