@@ -27,4 +27,4 @@ FROM openjdk:21-jdk-slim
 WORKDIR /dodalApp
 COPY --from=builder /buildMyApp/build/libs/*.jar dodalAppExcute.jar
 
-ENTRYPOINT ["java", "-Duser.timezone=Asia/Seoul", "-jar", "dodalAppExcute.jar"]
+ENTRYPOINT ["java", "-Duser.timezone=Asia/Seoul", "-Dspring.profiles.active=prod", "-jar", "dodalAppExcute.jar"]
