@@ -8,8 +8,8 @@ public record CreateFeedbackRequest(
     String indicator
 ) {
 
-    public CompletePlanCommand toCommand(Long planId, PlanStatus status) {
-        return new CompletePlanCommand(planId, status, question, indicator);
+    public CompletePlanCommand toCommand(Long userId, Long planId, PlanStatus status) {
+        return new CompletePlanCommand(userId, planId, status, question, indicator);
     }
 
     public CreateFeedbackRequest(String question, String indicator) {

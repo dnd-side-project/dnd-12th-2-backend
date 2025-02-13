@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import ac.dnd.dodal.common.annotation.UserId;
 import ac.dnd.dodal.common.response.ApiResponse;
 import ac.dnd.dodal.domain.plan.model.Plan;
 import ac.dnd.dodal.domain.plan.enums.PlanStatus;
@@ -25,11 +26,12 @@ public class PlanController {
 
     @PostMapping("/{planId}/complete")
     public ApiResponse<?> completePlan(
+        @UserId Long userId,
         @PathVariable Long planId,
         @RequestParam String status,
         @RequestBody CreateFeedbackRequest request
     ) {
-        Plan plan = completePlanUseCase.completePlan(request.toCommand(planId, PlanStatus.of(status)));
+        Plan plan = completePlanUseCase.completePlan(request.toCommand(userId, planId, PlanStatus.of(status)));
 
         return ApiResponse.success(PlanElement.of(plan));
     }
