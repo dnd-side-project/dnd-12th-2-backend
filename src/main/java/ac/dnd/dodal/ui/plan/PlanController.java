@@ -2,8 +2,6 @@ package ac.dnd.dodal.ui.plan;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.data.domain.Page;
-
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +14,7 @@ import ac.dnd.dodal.domain.plan.model.Plan;
 import ac.dnd.dodal.domain.plan.enums.PlanStatus;
 import ac.dnd.dodal.application.plan.usecase.CompletePlanUseCase;
 import ac.dnd.dodal.ui.feedback.request.CreateFeedbackRequest;
+import ac.dnd.dodal.ui.plan.response.PlanElement;
 
 @RestController
 @RequestMapping("/api/plans")
@@ -30,8 +29,8 @@ public class PlanController {
         @RequestParam String status,
         @RequestBody CreateFeedbackRequest request
     ) {
-        Page<Plan> plans = completePlanUseCase.completePlan(request.toCommand(planId, PlanStatus.of(status)));
+        Plan plan = completePlanUseCase.completePlan(request.toCommand(planId, PlanStatus.of(status)));
 
-        return ApiResponse.success(plans);
+        return ApiResponse.success(PlanElement.of(plan));
     }
 }

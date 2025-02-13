@@ -19,6 +19,7 @@ import ac.dnd.dodal.common.enums.CommonResultCode;
 import ac.dnd.dodal.ui.feedback.request.CreateFeedbackRequest;
 import ac.dnd.dodal.ui.feedback.fixture.FeedbackUIFixture;
 import ac.dnd.dodal.domain.plan.exception.PlanExceptionCode;
+import ac.dnd.dodal.ui.plan.response.PlanElement;
 
 public class PlanAcceptanceTest extends AcceptanceTest {
 
@@ -44,10 +45,9 @@ public class PlanAcceptanceTest extends AcceptanceTest {
         assertThat(apiResponse.code()).isEqualTo(CommonResultCode.SUCCESS.getCode());
         // Success
         assertThat(apiResponse.message()).isEqualTo(CommonResultCode.SUCCESS.getMessage());
-        // previous feedback list
-        assertThat(apiResponse.data().getContent().size()).isGreaterThan(0);
+        // PlanElement
+        assertThat(apiResponse.data()).isInstanceOf(PlanElement.class);
     }
-    
 
     @Test
     @DisplayName("Complete Plan with Failure Status Test")
@@ -68,8 +68,8 @@ public class PlanAcceptanceTest extends AcceptanceTest {
         assertThat(apiResponse.code()).isEqualTo(CommonResultCode.SUCCESS.getCode());
         // Success
         assertThat(apiResponse.message()).isEqualTo(CommonResultCode.SUCCESS.getMessage());
-        // previous feedback list
-        assertThat(apiResponse.data().getContent().size()).isGreaterThan(0);
+        // PlanElement
+        assertThat(apiResponse.data()).isInstanceOf(PlanElement.class);
     }
 
     @Test
