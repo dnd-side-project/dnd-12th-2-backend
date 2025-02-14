@@ -24,7 +24,7 @@ public class AuthController {
   @PostMapping("/login/kakao")
   public ApiResponse<?> authKakaoSocialLogin(
       @NotNull @RequestHeader(Constants.AUTHORIZATION_HEADER) String accessToken,
-      @NotNull @RequestHeader("deviceToken") String deviceToken) {
+      @NotNull @RequestHeader("Device-Token") String deviceToken) {
     log.info("accessToken : {}", accessToken); // 'bearer ' 제거 필요
     return ApiResponse.success(authLoginService.kakaoAuthSocialLogin(accessToken, deviceToken));
   }
