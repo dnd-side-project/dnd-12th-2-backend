@@ -92,16 +92,7 @@ public class PlanCommandService implements
 
         plan.getGoal().completePlan(command.userId(), command.status(), plan, feedbacks);
 
-        eventPublisher.publishEvent(new PlanCompletedEvent(
-            plan.getGoal().getUserId(),
-            plan.getGoal().getGoalId(),
-            plan.getHistory().getHistoryId(),
-            plan.getPlanId(),
-            plan.getStatus(),
-            feedback.getQuestion(),
-            feedback.getIndicator(),
-            plan.getGuide()
-        ));
+        eventPublisher.publishEvent(PlanCompletedEvent.of(plan, feedback));
         planFeedbackService.saveAll(feedbacks);
         return planService.save(plan);
     }

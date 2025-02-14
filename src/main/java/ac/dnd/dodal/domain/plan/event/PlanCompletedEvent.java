@@ -3,7 +3,9 @@ package ac.dnd.dodal.domain.plan.event;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+import ac.dnd.dodal.domain.plan.model.Plan;
 import ac.dnd.dodal.domain.plan.enums.PlanStatus;
+import ac.dnd.dodal.domain.plan_feedback.model.PlanFeedback;
 
 @Getter
 @EqualsAndHashCode
@@ -17,6 +19,19 @@ public class PlanCompletedEvent {
     private String question;
     private String indicator;
     private String guide;
+
+    public static PlanCompletedEvent of(Plan plan, PlanFeedback feedback) {
+        return new PlanCompletedEvent(
+            plan.getGoal().getUserId(),
+            plan.getGoal().getGoalId(),
+            plan.getHistory().getHistoryId(),
+            plan.getPlanId(),
+            plan.getStatus(),
+            feedback.getQuestion(),
+            feedback.getIndicator(),
+            plan.getGuide()
+        );
+    }
 
     public boolean isSuccess() {
         return status == PlanStatus.SUCCESS;
