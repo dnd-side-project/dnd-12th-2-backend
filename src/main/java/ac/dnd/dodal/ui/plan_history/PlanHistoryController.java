@@ -14,7 +14,7 @@ import ac.dnd.dodal.ui.plan.response.PlanElement;
 import ac.dnd.dodal.application.plan.usecase.GetPlansOfHistoryUseCase;
 
 @RestController
-@RequestMapping("/goals/{goalId}/plan-histories")
+@RequestMapping("/api/goals/{goalId}/plan-histories")
 @RequiredArgsConstructor
 public class PlanHistoryController {
 
