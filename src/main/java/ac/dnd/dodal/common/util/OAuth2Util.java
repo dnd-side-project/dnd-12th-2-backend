@@ -82,7 +82,13 @@ public class OAuth2Util {
     JsonElement element = JsonParser.parseString(response.getBody());
 
     return KakaoUserInfoDto.of(
-        element.getAsJsonObject().getAsJsonObject("kakao_account").get("email").getAsString());
+            element.getAsJsonObject().getAsJsonObject("kakao_account")
+                    .get("email").getAsString(),
+            element.getAsJsonObject().getAsJsonObject("kakao_account")
+                    .getAsJsonObject("profile").get("nickname").getAsString(),
+            element.getAsJsonObject().getAsJsonObject("kakao_account")
+                    .getAsJsonObject("profile").get("profile_image_url").getAsString()
+    );
   }
 
   private String generateClientSecret(){
