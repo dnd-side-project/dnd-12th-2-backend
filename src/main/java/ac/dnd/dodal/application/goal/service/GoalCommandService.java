@@ -27,8 +27,9 @@ public class GoalCommandService
     public Long create(CreateGoalCommand command) {
         Goal goal = CreateGoalCommand.toEntity(command);
 
+        goalService.saveAndFlush(goal);
         eventPublisher.publishEvent(new GoalCreatedEvent(goal.getGoalId()));
-        return goalService.save(goal).getGoalId();
+        return goal.getGoalId();
     }
 
     @Override
