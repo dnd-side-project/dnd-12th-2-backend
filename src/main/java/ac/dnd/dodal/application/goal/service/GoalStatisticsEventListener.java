@@ -16,6 +16,13 @@ public class GoalStatisticsEventListener {
     private final GoalStatisticsService goalStatisticsService;
 
     @EventListener
+    public void handleGoalCreatedEvent(GoalCreatedEvent event) {
+        GoalStatistics goalStatistics = new GoalStatistics(event.getGoalId());
+
+        goalStatisticsService.save(goalStatistics);
+    }
+
+    @EventListener
     public void handlePlanCompletedEvent(PlanCompletedEvent event) {
         GoalStatistics goalStatistics = goalStatisticsService.findByIdOrThrow(event.getGoalId());
 
