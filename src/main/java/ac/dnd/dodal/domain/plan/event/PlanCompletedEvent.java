@@ -1,10 +1,12 @@
 package ac.dnd.dodal.domain.plan.event;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import ac.dnd.dodal.domain.plan.enums.PlanStatus;
 
 @Getter
+@EqualsAndHashCode
 public class PlanCompletedEvent {
 
     private Long userId;
