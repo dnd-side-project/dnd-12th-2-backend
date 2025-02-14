@@ -50,14 +50,16 @@ public class GoalStatisticsEventListenerTest extends IntegrationTest {
     }
 
     @Test
-    @DisplayName("Plan Completed Event Listener Test")
-    void plan_completed_event_listener_test() {
+    @DisplayName("Goal Statistics Plan Completed Event Listener Test")
+    void goal_statistics_plan_completed_event_listener_test() {
         // given
         Plan plan = PlanFixture.successPlan();
         Long goalId = plan.getGoal().getGoalId();
         PlanFeedback feedback = new PlanFeedback(
                 plan, "question", "indicator", null, null, null);
         GoalStatistics previousGoalStatistics = goalStatisticsService.findByIdOrThrow(goalId);
+        int previousSuccessCount = previousGoalStatistics.getSuccessCount();
+        int previousFailureCount = previousGoalStatistics.getFailureCount();
 
         // when
         eventPublisher.publishEvent(PlanCompletedEvent.of(plan, feedback));
@@ -71,8 +73,8 @@ public class GoalStatisticsEventListenerTest extends IntegrationTest {
         // then
         GoalStatistics goalStatistics = goalStatisticsService.findByIdOrThrow(goalId);
         assertThat(goalStatistics.getSuccessCount())
-                .isEqualTo(previousGoalStatistics.getSuccessCount() + 1);
+                .isEqualTo(previousSuccessCount + 1);
         assertThat(goalStatistics.getFailureCount())
-                .isEqualTo(previousGoalStatistics.getFailureCount());
+                .isEqualTo(previousFailureCount);
     }
 }
