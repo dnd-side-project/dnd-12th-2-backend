@@ -7,10 +7,9 @@ import java.util.Map;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
-import ac.dnd.dodal.AcceptanceTest;
 import ac.dnd.dodal.ui.feedback.request.CreateFeedbackRequest;
 
-public class PlanSteps extends AcceptanceTest {
+public class PlanSteps {
     
     private static final String COMPLETE_PLAN_URL = "/api/plans/{planId}/complete?status={status}";
 

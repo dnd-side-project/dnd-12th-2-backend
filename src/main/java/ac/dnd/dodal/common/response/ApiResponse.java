@@ -41,11 +41,11 @@ public record ApiResponse<T>(
         );
     }
 
-    public static <T> ApiResponse<Page<T>> success(Page<T> data) {
+    public static <T> ApiResponse<PageResponse<T>> success(Page<T> data) {
         return new ApiResponse<>(
             CommonResultCode.SUCCESS.getCode(),
             CommonResultCode.SUCCESS.getMessage(),
-            data
+            new PageResponse<>(data)
         );
     }
 
@@ -58,10 +58,23 @@ public record ApiResponse<T>(
     }
 
     public static <T> ApiResponse<T> failure(ResultCode resultCode, String message) {
-        return new ApiResponse<>(
-            resultCode.getCode(),
-            message,
-            null
-        );
+        return new ApiResponse<>(resultCode.getCode(), message, null);
+    }
+
+    public record PageResponse<T>(
+        List<T> content,
+        int page,
+        int size,
+        boolean hasNext
+    ) {
+
+        public PageResponse(Page<T> page) {
+            this(
+                page.getContent(),
+                page.getNumber(),
+                page.getSize(),
+                page.hasNext()
+            );
+        }
     }
 }
