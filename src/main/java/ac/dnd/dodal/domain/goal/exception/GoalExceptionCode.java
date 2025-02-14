@@ -18,6 +18,7 @@ public enum GoalExceptionCode implements ResultCode {
     GOAL_ALREADY_ACHIEVED("GOA_005", "Goal already achieved"),
     GOAL_ALREADY_DELETED("GOA_006", "Goal already deleted"),
     ACHIEVED_GOAL("GOA_007", "Wrong Access: Achieved goal"),
+    GOAL_STATISTICS_NOT_FOUND("GOA_008", "Goal statistics not found"),
     ;
 
     private final String code;
