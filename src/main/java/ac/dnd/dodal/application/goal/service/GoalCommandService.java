@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.context.ApplicationEventPublisher;
 
 import ac.dnd.dodal.domain.goal.model.Goal;
+import ac.dnd.dodal.domain.goal.event.GoalCreatedEvent;
 import ac.dnd.dodal.application.goal.dto.command.*;
 import ac.dnd.dodal.application.goal.usecase.CreateGoalUseCase;
 import ac.dnd.dodal.application.goal.usecase.AchieveGoalUseCase;
@@ -19,10 +21,13 @@ public class GoalCommandService
 
     private final GoalService goalService;
 
+    private final ApplicationEventPublisher eventPublisher;
+
     @Override
     public Long create(CreateGoalCommand command) {
         Goal goal = CreateGoalCommand.toEntity(command);
 
+        eventPublisher.publishEvent(new GoalCreatedEvent(goal.getGoalId()));
         return goalService.save(goal).getGoalId();
     }
 
