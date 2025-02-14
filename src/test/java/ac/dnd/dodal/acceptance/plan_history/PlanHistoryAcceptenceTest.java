@@ -22,8 +22,8 @@ import ac.dnd.dodal.ui.plan.response.PlanElement;
 public class PlanHistoryAcceptenceTest extends AcceptanceTest {
 
     @Test
-    @DisplayName("get plan histories with pagination")
-    public void get_plan_histories() {
+    @DisplayName("get plans of history with pagination")
+    public void get_plans_of_history() {
         Response response = GetPlansOfHistoryStep
             .getPlansOfHistory(authorizationHeader, goalId, planHistoryId);
         ApiResponse<Page<PlanElement>> apiResponse =
