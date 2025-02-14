@@ -17,7 +17,7 @@ public class HistoryStatisticsEventListenter {
     @EventListener
     public void handlePlanCompletedEvent(PlanCompletedEvent event) {
         HistoryStatistics historyStatistics =
-            historyStatisticsService.findByIdOrThrow(event.getPlanId());
+            historyStatisticsService.findByIdOrThrow(event.getHistoryId());
 
         historyStatistics.incrementCount(event.getStatus());
         historyStatisticsService.save(historyStatistics);
