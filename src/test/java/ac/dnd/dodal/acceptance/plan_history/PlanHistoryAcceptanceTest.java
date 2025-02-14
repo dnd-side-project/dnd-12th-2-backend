@@ -19,7 +19,7 @@ import ac.dnd.dodal.common.enums.CommonResultCode;
 import ac.dnd.dodal.ui.plan.response.PlanElement;
 
 @Slf4j
-public class PlanHistoryAcceptenceTest extends AcceptanceTest {
+public class PlanHistoryAcceptanceTest extends AcceptanceTest {
 
     @Test
     @DisplayName("get plans of history with pagination")
