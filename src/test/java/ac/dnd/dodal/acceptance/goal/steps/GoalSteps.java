@@ -7,10 +7,9 @@ import static io.restassured.RestAssured.*;
 import io.restassured.response.Response;
 import io.restassured.http.ContentType;
 
-import ac.dnd.dodal.AcceptanceTest;
 import ac.dnd.dodal.ui.goal.request.CreateGoalRequest;
 
-public class GoalSteps extends AcceptanceTest {
+public class GoalSteps {
 
     private static final String BASE_URL = "/api/goals";
 
