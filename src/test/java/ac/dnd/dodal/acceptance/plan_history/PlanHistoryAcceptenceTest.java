@@ -1,0 +1,42 @@
+package ac.dnd.dodal.acceptance.plan_history;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import lombok.extern.slf4j.Slf4j;
+
+import io.restassured.response.Response;
+import io.restassured.common.mapper.TypeRef;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import ac.dnd.dodal.AcceptanceTest;
+import ac.dnd.dodal.acceptance.plan_history.steps.GetPlansOfHistoryStep;
+import ac.dnd.dodal.common.response.ApiResponse;
+import ac.dnd.dodal.common.enums.CommonResultCode;
+import ac.dnd.dodal.ui.plan.response.PlanElement;
+
+@Slf4j
+public class PlanHistoryAcceptenceTest extends AcceptanceTest {
+
+    @Test
+    @DisplayName("get plan histories with pagination")
+    public void get_plan_histories() {
+        Response response = GetPlansOfHistoryStep
+            .getPlansOfHistory(authorizationHeader, goalId, planHistoryId);
+        ApiResponse<Page<PlanElement>> apiResponse =
+                response.as(new TypeRef<ApiResponse<Page<PlanElement>>>() {});
+
+        log.info("apiResponse: {}", apiResponse);
+        // then 200
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        // COM001
+        assertThat(apiResponse.code()).isEqualTo(CommonResultCode.SUCCESS.getCode());
+        // Success
+        assertThat(apiResponse.message()).isEqualTo(CommonResultCode.SUCCESS.getMessage());
+        // size
+        assertThat(apiResponse.data().getContent().size()).isGreaterThan(0);
+    }
+}
