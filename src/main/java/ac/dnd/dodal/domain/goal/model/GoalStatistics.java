@@ -1,16 +1,18 @@
 package ac.dnd.dodal.domain.goal.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.EqualsAndHashCode;
 import ac.dnd.dodal.domain.plan.enums.PlanStatus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 
-@Entity
-@Table(name = "goal_statistics")
+@Entity(name = "goal_statistics")
+@Table
 @Getter
 @EqualsAndHashCode
+@NoArgsConstructor
 public class GoalStatistics {
 
     @Id
