@@ -24,14 +24,14 @@ public class AuthService {
   private final JwtUtil jwtUtil;
   private final UserQueryUseCase userQueryUseCase;
 
-  public static String refineToken(String accessToken) {
+  public String refineToken(String accessToken) {
     return accessToken.startsWith(Constants.BEARER_PREFIX)
         ? accessToken.substring(Constants.BEARER_PREFIX.length())
         : accessToken;
   }
 
   public UserInfoResponseDto refresh(String token) {
-    String refreshToken = refineToken(token);
+    String refreshToken = this.refineToken(token);
 
     Long userId = jwtUtil.getUserIdFromToken(refreshToken);
     User user = userQueryUseCase.findById(userId);
