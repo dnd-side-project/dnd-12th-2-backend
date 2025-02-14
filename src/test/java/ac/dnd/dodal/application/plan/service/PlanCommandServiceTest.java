@@ -19,6 +19,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.springframework.context.ApplicationEventPublisher;
 
 import ac.dnd.dodal.common.exception.BadRequestException;
 import ac.dnd.dodal.common.exception.ForbiddenException;
@@ -29,6 +30,7 @@ import ac.dnd.dodal.domain.plan.enums.PlanStatus;
 import ac.dnd.dodal.domain.plan.exception.PlanExceptionCode;
 import ac.dnd.dodal.domain.plan.model.Plan;
 import ac.dnd.dodal.domain.plan.PlanFixture;
+import ac.dnd.dodal.domain.plan.event.PlanCompletedEvent;
 import ac.dnd.dodal.domain.plan_history.model.PlanHistory;
 import ac.dnd.dodal.domain.plan_history.PlanHistoryFixture;
 import ac.dnd.dodal.domain.plan_history.exception.PlanHistoryExceptionCode;
@@ -53,6 +55,9 @@ public class PlanCommandServiceTest {
 
     @Mock
     private PlanFeedbackService planFeedbackService;
+
+    @Mock
+    private ApplicationEventPublisher eventPublisher;
 
     @InjectMocks
     private PlanCommandService planCommandService;
@@ -218,6 +223,7 @@ public class PlanCommandServiceTest {
         // then
         verify(planFeedbackService).saveAll(anyList());
         verify(planService).save(any(Plan.class));
+        verify(eventPublisher).publishEvent(any(PlanCompletedEvent.class));
         assertThat(savedPlan.getStatus()).isEqualTo(PlanStatus.SUCCESS);
     }
 
@@ -237,6 +243,7 @@ public class PlanCommandServiceTest {
         // then
         verify(planFeedbackService).saveAll(anyList());
         verify(planService).save(any(Plan.class));
+        verify(eventPublisher).publishEvent(any(PlanCompletedEvent.class));
         assertThat(savedPlan.getStatus()).isEqualTo(PlanStatus.FAILURE);
     }
     
