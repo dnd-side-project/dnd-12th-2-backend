@@ -22,19 +22,17 @@ import java.util.List;
 public class Answer extends BaseEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "answer_id", nullable = false)
+    private Long answerId;
+
+    @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "question_id", nullable = false)
     private Question question;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long answerId;
-
     @Column(nullable = false)
     private AnswerContent content;
-
-    @OneToMany(mappedBy = "answer")
-    private List<UserAnswer> userAnswers;
 
     public Answer(Question question, AnswerContent content) {
         super(LocalDateTime.now(), LocalDateTime.now(), null);
