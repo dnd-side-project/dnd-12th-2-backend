@@ -4,8 +4,8 @@ CREATE TABLE IF NOT EXISTS goal_statistics (
     failure_count INT NOT NULL DEFAULT 0,
 
     PRIMARY KEY (goal_id),
-    FOREIGN KEY (goal_id) REFERENCES goals(id),
-    CONSTRAINT valid_count CHECK (success_count >= 0 AND failure_count >= 0)
+    FOREIGN KEY (goal_id) REFERENCES goals(goal_id),
+    CONSTRAINT valid_goal_statistics_count CHECK (success_count >= 0 AND failure_count >= 0)
 );
 
 CREATE TABLE IF NOT EXISTS history_statistics (
@@ -14,6 +14,6 @@ CREATE TABLE IF NOT EXISTS history_statistics (
     failure_count INT NOT NULL DEFAULT 0,
 
     PRIMARY KEY (history_id),
-    FOREIGN KEY (history_id) REFERENCES histories(id),
-    CONSTRAINT valid_count CHECK (success_count >= 0 AND failure_count >= 0)
+    FOREIGN KEY (history_id) REFERENCES plan_histories(history_id),
+    CONSTRAINT valid_history_statistics_count CHECK (success_count >= 0 AND failure_count >= 0)
 );
