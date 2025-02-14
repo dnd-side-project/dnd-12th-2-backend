@@ -33,6 +33,8 @@ public class refreshAccessTokenAcceptanceTest extends AcceptanceTest {
     assertThat(apiResponse.message()).isEqualTo(CommonResultCode.SUCCESS.getMessage());
     // data
     assertThat(response.getBody().jsonPath().getMap("data").get("email")).isEqualTo(userEmail);
+    assertThat(jwtTokenDto.accessToken()).isNotNull();
+    assertThat(jwtTokenDto.refreshToken()).isNotNull();
   }
 
   @Test
