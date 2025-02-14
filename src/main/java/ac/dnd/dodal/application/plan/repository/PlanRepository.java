@@ -5,12 +5,14 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import ac.dnd.dodal.domain.plan.model.Plan;
 import ac.dnd.dodal.ui.plan.response.PlanElement;
 
+@Repository
 public interface PlanRepository extends JpaRepository<Plan, Long> {
 
     @Query("SELECT p FROM plans p WHERE p.history.historyId = :historyId "
@@ -27,8 +29,7 @@ public interface PlanRepository extends JpaRepository<Plan, Long> {
             + "AND history.deletedAt IS NULL "
             + "AND history.goal.goalId = :goalId "
             + "AND history.goal.deletedAt IS NULL "
-            + "AND history.goal.user.userId = :userId "
-            + "AND history.goal.user.deletedAt IS NULL")
+            + "AND history.goal.userId = :userId")
     boolean isExistByUserIdAndGoalIdAndHistoryId(
         @Param("userId") Long userId,
         @Param("goalId") Long goalId,
