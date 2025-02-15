@@ -5,6 +5,7 @@ import ac.dnd.dodal.application.user.service.AuthService;
 import ac.dnd.dodal.common.constant.Constants;
 import ac.dnd.dodal.common.response.ApiResponse;
 import ac.dnd.dodal.ui.auth.request.AppleAuthorizationRequestDto;
+import ac.dnd.dodal.ui.auth.request.KakaoAuthorizationRequestDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -23,10 +24,8 @@ public class AuthController {
   // 카카오 소셜 로그인
   @PostMapping("/login/kakao")
   public ApiResponse<?> authKakaoSocialLogin(
-      @NotNull @RequestHeader(Constants.AUTHORIZATION_HEADER) String accessToken,
-      @NotNull @RequestHeader("Device-Token") String deviceToken) {
-    log.info("accessToken : {}", accessToken); // 'bearer ' 제거 필요
-    return ApiResponse.success(authLoginService.kakaoAuthSocialLogin(accessToken, deviceToken));
+          @RequestBody @Valid KakaoAuthorizationRequestDto kakaoAuthorizationRequestDto) {
+    return ApiResponse.success(authLoginService.kakaoAuthSocialLogin(kakaoAuthorizationRequestDto));
   }
 
   // 애플 소셜 로그인

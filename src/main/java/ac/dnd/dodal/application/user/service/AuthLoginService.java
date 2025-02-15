@@ -9,6 +9,7 @@ import ac.dnd.dodal.domain.user.enums.UserRole;
 import ac.dnd.dodal.domain.user.exception.UserNotFoundException;
 import ac.dnd.dodal.domain.user.model.User;
 import ac.dnd.dodal.ui.auth.request.AppleAuthorizationRequestDto;
+import ac.dnd.dodal.ui.auth.request.KakaoAuthorizationRequestDto;
 import ac.dnd.dodal.ui.auth.request.OAuthByAppleUserInfoRequestDto;
 import ac.dnd.dodal.ui.auth.response.AppleIdTokenParsingDto;
 import ac.dnd.dodal.ui.auth.response.JwtTokenDto;
@@ -33,12 +34,12 @@ public class AuthLoginService {
   private final UserRepository userRepository;
 
   // 카카오 소셜 로그인
-  public Object kakaoAuthSocialLogin(String token, String deviceToken) {
-    String accessToken = authService.refineToken(token);
+  public Object kakaoAuthSocialLogin(KakaoAuthorizationRequestDto kakaoAuthorizationRequestDto) {
+    String accessToken = authService.refineToken(kakaoAuthorizationRequestDto.code());
 
     KakaoUserInfoDto kakaoUserInfoDto = getOAuth2UserInfo(accessToken);
 
-    return processKakaoUserLogin(kakaoUserInfoDto, deviceToken);
+    return processKakaoUserLogin(kakaoUserInfoDto, kakaoAuthorizationRequestDto.deviceToken());
   }
 
   // 애플 소셜 로그인
