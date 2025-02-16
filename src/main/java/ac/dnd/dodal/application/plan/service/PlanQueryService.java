@@ -58,6 +58,38 @@ public class PlanQueryService implements
     //     return planRepository.findAllWithPreviousHistoryByGoalIdAndDate(
     //         query.goalId(), query.date().atStartOfDay());
     // }
+
+    // Todo: 로직 개선 필요. 너무 비효율적이야.
+    @Override
+    public List<DailyAchievementRateElement> getWeeklyAchievementRateOfGoal(
+            GetWeeklyAchievementRateOfGoalQuery query) {
+        if (!isExistByUserIdAndGoalId(query.userId(), query.goalId())) {
+            throw new ForbiddenException();
+        }
+
+        LocalDate startDate = query.date();
+        LocalDate endDate = startDate.plusDays(7);
+
+        List<PlanElement> plans = planRepository.findAllByGoalIdAndDate(query.goalId(),
+                startDate.atStartOfDay(), endDate.atStartOfDay());
+        List<DailyAchievementRateElement> dailyAchievementRateElements = new ArrayList<>();
+
+        for (int i = 0; i < 7; i++) {
+            LocalDate date = startDate.plusDays(i);
+            int successCount = 0;
+            int totalCount = 0;
+            for (PlanElement plan : plans) {
+                if (isPlanForDate(plan, date)) {
+                    successCount++;
+                }
+                totalCount++;
+            }
+            dailyAchievementRateElements.add(new DailyAchievementRateElement(date, successCount, totalCount));
+        }
+
+        return dailyAchievementRateElements;
+    }
+
     private boolean isPlanForDate(PlanElement plan, LocalDate date) {
         LocalDateTime startDateTime = date.atStartOfDay();
         LocalDateTime endDateTime = date.atStartOfDay().plusDays(1);
