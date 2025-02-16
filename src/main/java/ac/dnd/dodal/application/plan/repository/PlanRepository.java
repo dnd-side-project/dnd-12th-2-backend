@@ -29,11 +29,13 @@ public interface PlanRepository extends JpaRepository<Plan, Long> {
 
     @Query("SELECT p FROM plans p WHERE p.goal.goalId = :goalId "
             + "AND p.deletedAt IS NULL "
-            + "AND p.startDate <= :date "
-            + "AND p.endDate >= :date "
+            + "AND ((p.startDate <= :endDate AND p.startDate >= :startDate) "
+            + "OR (p.endDate <= :endDate AND p.endDate >= :startDate)) "
             + "AND p.goal.deletedAt IS NULL")
     List<PlanElement> findAllByGoalIdAndDate(
-        @Param("goalId") Long goalId, @Param("date") LocalDateTime date);
+        @Param("goalId") Long goalId,
+        @Param("startDate") LocalDateTime startDate,
+        @Param("endDate") LocalDateTime endDate);
 
 //     @Query("SELECT p1, MAX(p2), p1.history.historyId FROM plans p1 "
 //             + "LEFT JOIN plans p2 ON p1.history.historyId = p2.history.historyId "
