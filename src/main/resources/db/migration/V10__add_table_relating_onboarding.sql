@@ -13,9 +13,9 @@ CREATE TABLE IF NOT EXISTS questions
 
 CREATE TABLE IF NOT EXISTS answers
 (
-    question_id BIGINT      NOT NULL,
     answer_id   BIGINT      NOT NULL AUTO_INCREMENT,
-    content     VARCHAR(50) NOT NULL,
+    question_id BIGINT      NOT NULL,
+    answer_content     VARCHAR(50) NOT NULL,
 
     created_at  TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at  TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -54,7 +54,7 @@ VALUES
     (2, 'PREFERENCE_SET_PLAN', 2, '2025-02-13 00:00:00', '2025-02-13 00:00:00'),
     (3, 'DIFFICULTY_SET_PLAN', 3, '2025-02-13 00:00:00', '2025-02-13 00:00:00');
 
-INSERT INTO answers (question_id, answer_id, content, created_at, updated_at)
+INSERT INTO answers (question_id, answer_id, answer_content, created_at, updated_at)
 VALUES
 (1, 1, 'INTEREST_GOAL_1', '2025-02-13 00:00:00', '2025-02-13 00:00:00'),
 (1, 2, 'INTEREST_GOAL_2',  '2025-02-13 00:00:00', '2025-02-13 00:00:00'),

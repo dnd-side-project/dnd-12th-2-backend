@@ -18,11 +18,11 @@ public class Question extends BaseEntity {
     @Column(name = "question_id", nullable = false)
     private Long id;
 
-    @Column(name = "content", nullable = false)
+    @Column(name = "question_content", nullable = false)
     @Enumerated(EnumType.STRING)
     private QuestionContent questionContent;
 
-    @Column(name="order", columnDefinition = "question order")
+    @Column(name="order_number", columnDefinition = "question order")
     private int order;
 
     public Question(QuestionContent questionContent, int order) {
