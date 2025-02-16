@@ -1,8 +1,7 @@
-package ac.dnd.dodal.domain.user_onboarding.model;
+package ac.dnd.dodal.domain.user.model;
 
 import ac.dnd.dodal.common.model.BaseEntity;
 import ac.dnd.dodal.domain.onboarding.model.Answer;
-import ac.dnd.dodal.domain.user.model.User;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
