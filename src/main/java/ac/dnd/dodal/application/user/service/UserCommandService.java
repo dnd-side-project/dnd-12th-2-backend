@@ -1,12 +1,14 @@
 package ac.dnd.dodal.application.user.service;
 
 import ac.dnd.dodal.application.onboarding.repository.AnswerRepository;
+import ac.dnd.dodal.application.onboarding.repository.QuestionRepository;
 import ac.dnd.dodal.application.user.repository.UserAnswerRepository;
 import ac.dnd.dodal.application.user.repository.UserRepository;
 import ac.dnd.dodal.application.user.usecase.CreateUserAnswerUseCase;
 import ac.dnd.dodal.application.user.usecase.UserCommandUseCase;
-import ac.dnd.dodal.domain.onboarding.exception.AnswerExceptionCode;
-import ac.dnd.dodal.domain.onboarding.exception.AnswerNotFoundException;
+import ac.dnd.dodal.domain.onboarding.exception.OnBoardingBadRequestException;
+import ac.dnd.dodal.domain.onboarding.exception.OnBoardingExceptionCode;
+import ac.dnd.dodal.domain.onboarding.exception.OnBoardingNotFoundException;
 import ac.dnd.dodal.domain.onboarding.model.Answer;
 import ac.dnd.dodal.domain.user.enums.UserExceptionCode;
 import ac.dnd.dodal.domain.user.enums.UserRole;
@@ -33,6 +35,7 @@ public class UserCommandService implements UserCommandUseCase, CreateUserAnswerU
     private final UserRepository userCommandRepository;
     private final UserAnswerRepository userAnswerRepository;
     private final AnswerRepository answerRepository;
+    private final QuestionRepository questionRepository;
 
     @Override
     public User createUserBySocialSignUp(OAuthUserInfoRequestDto authSignUpRequestDto) {
@@ -49,6 +52,13 @@ public class UserCommandService implements UserCommandUseCase, CreateUserAnswerU
 
     @Override
     public void createUserAnswer(Long userId, CreateUserAnswerRequestDto createUserAnswerRequestDtoList) {
+        // 들어온 데이터의 수가 전체 질문의 수와 일치하는 지 확인
+        // 온보딩이 도중에 종료되었을 경우, 다시 처음부터 시작할 수 있도록 유도
+        if (createUserAnswerRequestDtoList.data().size() != questionRepository.countAllQuestions()) {
+            throw new OnBoardingBadRequestException(OnBoardingExceptionCode.INVALID_ANSWER_COUNT,
+                    "The number of answers does not match the total number of questions.");
+        }
+
         // 사용자 조회
         User user = userCommandRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(UserExceptionCode.NOT_FOUND_USER));
@@ -81,7 +91,7 @@ public class UserCommandService implements UserCommandUseCase, CreateUserAnswerU
             String key = dto.questionId() + "_" + dto.answerId();
             Answer answer = answerMap.get(key);
             if (answer == null) {
-                throw new AnswerNotFoundException(AnswerExceptionCode.NOT_FOUND_ANSWER,
+                throw new OnBoardingNotFoundException(OnBoardingExceptionCode.NOT_FOUND_ANSWER,
                         "Answer (" + dto.answerId() + ") for question (" + dto.questionId() + ") does not exist.");
             }
 

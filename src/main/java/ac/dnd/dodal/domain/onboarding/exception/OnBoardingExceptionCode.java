@@ -6,9 +6,10 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum AnswerExceptionCode implements ResultCode {
+public enum OnBoardingExceptionCode implements ResultCode {
 
     NOT_FOUND_ANSWER("ANS001", "Answer not found"),
+    INVALID_ANSWER_COUNT("ANS002", "The number of answers does not match the total number of questions."),
     ;
 
     private final String code;
