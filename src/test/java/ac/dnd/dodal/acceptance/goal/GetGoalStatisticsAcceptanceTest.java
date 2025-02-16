@@ -18,7 +18,7 @@ import ac.dnd.dodal.acceptance.goal.steps.GoalStatisticsSteps;
 import ac.dnd.dodal.common.response.ApiResponse;
 import ac.dnd.dodal.ui.goal.response.DailyAchievementRateElement;
 
-public class GetGaolStatisticsAcceptanceTest extends AcceptanceTest {
+public class GetGoalStatisticsAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("Get weekly achievement rate of goal")
     @Test
