@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ac.dnd.dodal.common.response.ApiResponse;
 import ac.dnd.dodal.common.annotation.UserId;
+import ac.dnd.dodal.application.goal.dto.query.GetGoalSuccessRateQuery;
 import ac.dnd.dodal.application.plan.usecase.GetWeeklyAchievementRateOfGoalUseCase;
+import ac.dnd.dodal.application.goal.usecase.GetGoalSuccessRateUseCase;
 import ac.dnd.dodal.application.plan.dto.query.GetWeeklyAchievementRateOfGoalQuery;
 
 @RestController
@@ -21,8 +23,20 @@ import ac.dnd.dodal.application.plan.dto.query.GetWeeklyAchievementRateOfGoalQue
 public class GoalStatisticsController {
 
     private final GetWeeklyAchievementRateOfGoalUseCase getWeeklyAchievementRateOfGoalUseCase;
+    private final GetGoalSuccessRateUseCase getGoalSuccessRateUseCase;
 
-    @GetMapping
+    @GetMapping()
+    public ApiResponse<?> getGoalSuccessRate(
+        @UserId Long userId,
+        @PathVariable Long goalId
+    ) {
+        GetGoalSuccessRateQuery query = new GetGoalSuccessRateQuery(userId, goalId);
+
+        return ApiResponse.success(
+            getGoalSuccessRateUseCase.getGoalSuccessRate(query));
+    }
+
+    @GetMapping("/weekly")
     public ApiResponse<?> getWeeklyAchievementRateOfGoal(
         @UserId Long userId,
         @PathVariable Long goalId,
