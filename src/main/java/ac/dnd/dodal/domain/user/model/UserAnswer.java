@@ -23,20 +23,24 @@ public class UserAnswer extends BaseEntity {
   @Column(name = "user_answer_id", nullable = false)
   private Long id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumns({
-    @JoinColumn(name = "question_id", referencedColumnName = "question_id"),
-    @JoinColumn(name = "answer_id", referencedColumnName = "answer_id")
-  })
-  private Answer answer;
+  @Column(name = "question_content", nullable = false)
+  private String questionContent;
+
+  @Column(name = "answer_content", nullable = false)
+  private String answerContent;
+
+  @Column(name = "version", nullable = false)
+  private int version;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id", nullable = false)
   private User user;
 
-  public UserAnswer(Answer answer, User user) {
+  public UserAnswer(String questionContent, String answerContent, User user, int version) {
     super(LocalDateTime.now(), LocalDateTime.now(), null);
-    this.answer = answer;
+    this.questionContent = questionContent;
+    this.answerContent = answerContent;
     this.user = user;
+    this.version = version;
   }
 }
