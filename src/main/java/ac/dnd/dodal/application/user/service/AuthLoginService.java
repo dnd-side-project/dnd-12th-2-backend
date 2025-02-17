@@ -27,13 +27,14 @@ import org.springframework.stereotype.Service;
 public class AuthLoginService {
 
   private final UserQueryUseCase userQueryUseCase;
+  private final AuthService authService;
   private final JwtUtil jwtUtil;
   private final OAuth2Util oAuth2Util;
   private final UserRepository userRepository;
 
   // 카카오 소셜 로그인
   public Object kakaoAuthSocialLogin(String token) {
-    String accessToken = AuthService.refineToken(token);
+    String accessToken = authService.refineToken(token);
 
     KakaoUserInfoDto kakaoUserInfoDto = getOAuth2UserInfo(accessToken);
 

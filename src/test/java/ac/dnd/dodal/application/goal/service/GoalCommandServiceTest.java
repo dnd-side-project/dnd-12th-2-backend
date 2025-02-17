@@ -1,7 +1,9 @@
 package ac.dnd.dodal.application.goal.service;
 
 import static org.mockito.Mockito.when;
+
 import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.verify;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -15,23 +17,27 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import org.springframework.stereotype.Service;
+import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.context.ApplicationEventPublisher;
 
 import ac.dnd.dodal.common.exception.BadRequestException;
 import ac.dnd.dodal.common.exception.ForbiddenException;
 import ac.dnd.dodal.common.exception.UnauthorizedException;
 import ac.dnd.dodal.domain.goal.GoalFixture;
+import ac.dnd.dodal.domain.goal.event.GoalCreatedEvent;
 import ac.dnd.dodal.domain.goal.exception.GoalExceptionCode;
 import ac.dnd.dodal.domain.goal.model.Goal;
 import ac.dnd.dodal.application.goal.dto.command.*;
 import ac.dnd.dodal.application.goal.dto.GoalCommandFixture;
 
-@Service
 @ExtendWith(MockitoExtension.class)
 public class GoalCommandServiceTest {
 
     @Mock
     GoalService goalService;
+
+    @Mock
+    ApplicationEventPublisher eventPublisher;
 
     @InjectMocks
     GoalCommandService goalCommandService;
@@ -62,14 +68,18 @@ public class GoalCommandServiceTest {
     void create_goal_success() {
         // given
         CreateGoalCommand command = GoalCommandFixture.createGoalCommand(userId, title);
-        Goal goalToSave = CreateGoalCommand.toEntity(command);
-        when(goalService.save(goalToSave)).thenReturn(goal);
+        when(goalService.saveAndFlush(any(Goal.class))).thenAnswer(invocation -> {
+            Goal goal = invocation.getArgument(0);
+            ReflectionTestUtils.setField(goal, "goalId", goalId);
+            return goal;
+        });
 
         // when
         Long savedGoalId = goalCommandService.create(command);
 
         // then
-        verify(goalService).save(goalToSave);
+        verify(goalService).saveAndFlush(any(Goal.class));
+        verify(eventPublisher).publishEvent(new GoalCreatedEvent(goalId));
         assertThat(savedGoalId).isEqualTo(goalId);
     }
 

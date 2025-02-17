@@ -43,4 +43,10 @@ public class UserQueryService implements UserQueryUseCase {
                 .orElseThrow(() -> new UserNotFoundException(UserExceptionCode.NOT_FOUND_USER));
     }
 
+    @Override
+    public User findById(Long id) {
+        return userQueryRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(UserExceptionCode.NOT_FOUND_USER));
+    }
+
 }
