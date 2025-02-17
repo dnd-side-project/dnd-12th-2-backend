@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import ac.dnd.dodal.common.annotation.UserId;
 import ac.dnd.dodal.common.response.ApiResponse;
+import ac.dnd.dodal.application.plan.usecase.AddPlanUseCase;
+import ac.dnd.dodal.application.plan.usecase.CreatePlanAndHistoryUseCase;
 import ac.dnd.dodal.ui.plan.request.AddNewPlanRequest;
 import ac.dnd.dodal.ui.plan.request.AddSamePlanRequest;
 import ac.dnd.dodal.ui.plan.request.CreatePlanRequest;
-import ac.dnd.dodal.application.goal.usecase.AddPlanUseCase;
-import ac.dnd.dodal.application.goal.usecase.CreatePlanAndHistoryUseCase;
 
 @RequiredArgsConstructor
 @RestController
