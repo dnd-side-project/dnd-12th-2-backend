@@ -9,6 +9,7 @@ import ac.dnd.dodal.domain.user.enums.UserRole;
 import ac.dnd.dodal.domain.user.exception.UserNotFoundException;
 import ac.dnd.dodal.domain.user.model.User;
 import ac.dnd.dodal.ui.auth.request.AppleAuthorizationRequestDto;
+import ac.dnd.dodal.ui.auth.request.KakaoAuthorizationRequestDto;
 import ac.dnd.dodal.ui.auth.request.OAuthByAppleUserInfoRequestDto;
 import ac.dnd.dodal.ui.auth.response.AppleIdTokenParsingDto;
 import ac.dnd.dodal.ui.auth.response.JwtTokenDto;
@@ -33,12 +34,12 @@ public class AuthLoginService {
   private final UserRepository userRepository;
 
   // 카카오 소셜 로그인
-  public Object kakaoAuthSocialLogin(String token) {
-    String accessToken = authService.refineToken(token);
+  public Object kakaoAuthSocialLogin(KakaoAuthorizationRequestDto kakaoAuthorizationRequestDto) {
+    String accessToken = authService.refineToken(kakaoAuthorizationRequestDto.code());
 
     KakaoUserInfoDto kakaoUserInfoDto = getOAuth2UserInfo(accessToken);
 
-    return processKakaoUserLogin(kakaoUserInfoDto);
+    return processKakaoUserLogin(kakaoUserInfoDto, kakaoAuthorizationRequestDto.deviceToken());
   }
 
   // 애플 소셜 로그인
@@ -57,7 +58,7 @@ public class AuthLoginService {
 
     // 애플의 경우 이메일에는 sub, name에는 email이 들어가 있음
     User user = userQueryUseCase.findByEmail(appleIdTokenParsingDto.sub())
-            .orElseGet(() -> registerNewUser(appleIdTokenParsingDto, deviceToken));
+            .orElseGet(() -> registerNewAppleUser(appleIdTokenParsingDto, deviceToken));
 
     // 애플 로그인 응답 DTO 생성
     OAuthByAppleUserInfoRequestDto oAuthByAppleUserInfoRequestDto =
@@ -82,10 +83,12 @@ public class AuthLoginService {
   }
 
   // 카카오 로그인 프로세스
-  private Object processKakaoUserLogin(KakaoUserInfoDto kakaoUserInfo) {
+  private Object processKakaoUserLogin(KakaoUserInfoDto kakaoUserInfo, String deviceToken) {
     User user = userQueryUseCase.findByEmailAndRole(kakaoUserInfo.email(), UserRole.USER);
     if (user == null) {
-      throw new UserNotFoundException(UserExceptionCode.NOT_FOUND_USER, "사용자를 찾을 수 없습니다.");
+      // 새로운 사용자 등록
+      User newUser = registerNewKakaoUser(kakaoUserInfo, deviceToken);
+      return handleExistingUserLogin(newUser);
     }
     return handleExistingUserLogin(user);
   }
@@ -106,8 +109,14 @@ public class AuthLoginService {
     return UserInfoResponseDto.fromUserEntity(user, jwtTokenDto);
   }
 
-  private User registerNewUser(AppleIdTokenParsingDto appleIdTokenParsingDto, String deviceToken) {
+  private User registerNewAppleUser(AppleIdTokenParsingDto appleIdTokenParsingDto, String deviceToken) {
     User newUser = new User(appleIdTokenParsingDto.email(), null, deviceToken, appleIdTokenParsingDto.sub(), UserRole.USER);
+    return userRepository.save(newUser);
+  }
+
+  private User registerNewKakaoUser(KakaoUserInfoDto kakaoUserInfo, String deviceToken) {
+    User newUser =
+        new User(kakaoUserInfo.nickname(), kakaoUserInfo.profileImageUrl(), deviceToken, kakaoUserInfo.email(), UserRole.USER);
     return userRepository.save(newUser);
   }
 }

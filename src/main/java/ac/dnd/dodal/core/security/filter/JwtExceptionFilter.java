@@ -38,38 +38,38 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
             e.printStackTrace();
             log.error("FilterException throw SecurityException Exception : {}", e.getMessage());
             setErrorResponse(response, SecurityExceptionCode.ACCESS_DENIED_ERROR);
-
-            filterChain.doFilter(request, response);
+            
+            return;
         } catch (MalformedJwtException e) {
             e.printStackTrace();
             log.error("FilterException throw MalformedJwtException Exception : {}", e.getMessage());
             setErrorResponse(response, SecurityExceptionCode.TOKEN_MALFORMED_ERROR);
 
-            filterChain.doFilter(request, response);
+            return;
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
             log.error("FilterException throw IllegalArgumentException Exception : {}", e.getMessage());
             setErrorResponse(response, SecurityExceptionCode.TOKEN_TYPE_ERROR);
 
-            filterChain.doFilter(request, response);
+            return;
         } catch (ExpiredJwtException e) {
             e.printStackTrace();
             log.error("FilterException throw ExpiredJwtException Exception : {}", e.getMessage());
             setErrorResponse(response, SecurityExceptionCode.EXPIRED_TOKEN_ERROR);
 
-            filterChain.doFilter(request, response);
+            return;
         } catch (UnsupportedJwtException e) {
             e.printStackTrace();
             log.error("FilterException throw UnsupportedJwtException Exception : {}", e.getMessage());
             setErrorResponse(response, SecurityExceptionCode.TOKEN_UNSUPPORTED_ERROR);
 
-            filterChain.doFilter(request, response);
+            return;
         } catch (JwtException e) {
             e.printStackTrace();
             log.error("FilterException throw JwtException Exception : {}", e.getMessage());
             setErrorResponse(response, SecurityExceptionCode.TOKEN_UNKNOWN_ERROR);
 
-            filterChain.doFilter(request, response);
+            return;
         } catch (Exception e) {
             // request에 저장된 예외 정보를 가져옴
             Object exception = request.getAttribute("exception");
@@ -84,7 +84,7 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
                 setErrorResponse(response, UserExceptionCode.NOT_FOUND_USER);
             }
 
-            filterChain.doFilter(request, response);
+            return;
         }
     }
 
