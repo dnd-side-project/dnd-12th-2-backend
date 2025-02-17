@@ -1,6 +1,7 @@
 package ac.dnd.dodal.domain.onboarding.model;
 
 import ac.dnd.dodal.common.model.BaseEntity;
+import ac.dnd.dodal.common.util.AnswerContentConverter;
 import ac.dnd.dodal.domain.onboarding.enums.AnswerContent;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
@@ -30,7 +31,7 @@ public class Answer extends BaseEntity {
     private Question question;
 
     @Column(name = "answer_content", nullable = false)
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = AnswerContentConverter.class)
     private AnswerContent content;
 
     public Answer(Question question, AnswerContent content) {

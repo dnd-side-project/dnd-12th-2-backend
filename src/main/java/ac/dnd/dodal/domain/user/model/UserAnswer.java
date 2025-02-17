@@ -1,6 +1,8 @@
 package ac.dnd.dodal.domain.user.model;
 
 import ac.dnd.dodal.common.model.BaseEntity;
+import ac.dnd.dodal.common.util.AnswerContentConverter;
+import ac.dnd.dodal.domain.onboarding.enums.AnswerContent;
 import ac.dnd.dodal.domain.onboarding.model.Answer;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
@@ -27,7 +29,8 @@ public class UserAnswer extends BaseEntity {
   private String questionContent;
 
   @Column(name = "answer_content", nullable = false)
-  private String answerContent;
+  @Convert(converter = AnswerContentConverter.class)
+  private AnswerContent answerContent;
 
   @Column(name = "version", nullable = false)
   private int version;
@@ -36,7 +39,7 @@ public class UserAnswer extends BaseEntity {
   @JoinColumn(name = "user_id", nullable = false)
   private User user;
 
-  public UserAnswer(String questionContent, String answerContent, User user, int version) {
+  public UserAnswer(String questionContent, AnswerContent answerContent, User user, int version) {
     super(LocalDateTime.now(), LocalDateTime.now(), null);
     this.questionContent = questionContent;
     this.answerContent = answerContent;
