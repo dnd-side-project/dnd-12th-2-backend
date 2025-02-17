@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS goal_statistics (
-    goal_id INT NOT NULL,
+    goal_id BIGINT NOT NULL,
     success_count INT NOT NULL DEFAULT 0,
     failure_count INT NOT NULL DEFAULT 0,
 
@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS goal_statistics (
 );
 
 CREATE TABLE IF NOT EXISTS history_statistics (
-    history_id INT NOT NULL,
+    history_id BIGINT NOT NULL,
     success_count INT NOT NULL DEFAULT 0,
     failure_count INT NOT NULL DEFAULT 0,
 
