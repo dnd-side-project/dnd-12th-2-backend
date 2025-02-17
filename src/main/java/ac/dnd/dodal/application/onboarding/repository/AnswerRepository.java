@@ -12,10 +12,10 @@ import java.util.Optional;
 @Repository
 public interface AnswerRepository extends JpaRepository<Answer, Long> {
 
-    @Query("SELECT a FROM Answer a WHERE a.question.id IN :questionIds")
+    @Query("SELECT a FROM Answer a WHERE a.question.id IN :questionIds AND a.deletedAt IS NULL")
     List<Answer> findAllByQuestionId(
             @Param("questionIds") List<Long> questionIds);
 
-    @Query("SELECT a FROM Answer a WHERE a.question.id = :questionId AND a.answerId = :answerId")
-    Optional<Answer> findByQuestionQuestionIdAndAnswerId(Long questionId, Long answerId);
+    @Query("SELECT a FROM Answer a WHERE a.question.id = :questionId AND a.answerId = :answerId AND a.deletedAt IS NULL")
+    Optional<Answer> findByQuestionIdAndAnswerId(Long questionId, Long answerId);
 }

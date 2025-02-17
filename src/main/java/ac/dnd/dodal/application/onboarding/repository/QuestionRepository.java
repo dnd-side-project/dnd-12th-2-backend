@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface QuestionRepository extends JpaRepository<Question, Long> {
 
-    @Query("SELECT COUNT(q) FROM Question q")
+    @Query("SELECT COUNT(q) FROM Question q WHERE q.deletedAt IS NULL")
     Long countAllQuestions();
 }
