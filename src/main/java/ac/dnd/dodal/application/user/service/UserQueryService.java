@@ -1,24 +1,32 @@
 package ac.dnd.dodal.application.user.service;
 
+import ac.dnd.dodal.application.user.repository.UserAnswerRepository;
 import ac.dnd.dodal.application.user.repository.UserRepository;
+import ac.dnd.dodal.application.user.usecase.CheckIsDoneUserAnswerUseCase;
 import ac.dnd.dodal.application.user.usecase.UserQueryUseCase;
+import ac.dnd.dodal.domain.onboarding.exception.OnBoardingExceptionCode;
+import ac.dnd.dodal.domain.onboarding.exception.OnBoardingNotFoundException;
 import ac.dnd.dodal.domain.user.enums.UserExceptionCode;
 import ac.dnd.dodal.domain.user.enums.UserRole;
 import ac.dnd.dodal.domain.user.exception.UserBadRequestException;
 import ac.dnd.dodal.domain.user.exception.UserNotFoundException;
 import ac.dnd.dodal.domain.user.model.User;
+import ac.dnd.dodal.domain.user.model.UserAnswer;
+import ac.dnd.dodal.ui.user.response.GetUserAnswerResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserQueryService implements UserQueryUseCase {
+public class UserQueryService implements UserQueryUseCase, CheckIsDoneUserAnswerUseCase {
 
     private final UserRepository userQueryRepository;
+    private final UserAnswerRepository userAnswerRepository;
 
     @Override
     public User findByEmailAndRole(String email, UserRole role) {
@@ -49,4 +57,18 @@ public class UserQueryService implements UserQueryUseCase {
                 .orElseThrow(() -> new UserNotFoundException(UserExceptionCode.NOT_FOUND_USER));
     }
 
+    @Override
+    public GetUserAnswerResponseDto checkIsDoneUserAnswer(Long userId) {
+
+        User user = userQueryRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(UserExceptionCode.NOT_FOUND_USER));
+
+        List<UserAnswer> userAnswers =  userAnswerRepository.findAllByUserId(user);
+
+        if (userAnswers.isEmpty() || userAnswers == null) {
+            throw new OnBoardingNotFoundException(OnBoardingExceptionCode.NOT_FOUND_USER_ONBOARDING_RESULT);
+        }
+
+        return GetUserAnswerResponseDto.fromUserAnswers(userAnswers);
+    }
 }
