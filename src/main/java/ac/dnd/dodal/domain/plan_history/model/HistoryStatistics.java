@@ -5,13 +5,11 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 
 import ac.dnd.dodal.domain.plan.enums.PlanStatus;
 
 @Entity(name = "history_statistics")
-@Table
 @Getter
 @EqualsAndHashCode
 @NoArgsConstructor
