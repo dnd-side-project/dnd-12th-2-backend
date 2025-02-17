@@ -18,13 +18,12 @@ import ac.dnd.dodal.domain.user.model.UserAnswer;
 import ac.dnd.dodal.ui.auth.request.OAuthUserInfoRequestDto;
 import ac.dnd.dodal.ui.user.request.CreateUserAnswerRequestDto;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
@@ -94,7 +93,11 @@ public class UserCommandService implements UserCommandUseCase, CreateUserAnswerU
                         "Answer (" + dto.answerId() + ") for question (" + dto.questionId() + ") does not exist.");
             }
 
-            userAnswerRepository.save(new UserAnswer(answer, user));
+            userAnswerRepository.save(new UserAnswer(
+                    answer.getQuestion().getQuestionContentEnum().getMainContent(),
+                    answer.getAnswerContentEnum(),
+                    user,
+                    1));
         }
     }
 }

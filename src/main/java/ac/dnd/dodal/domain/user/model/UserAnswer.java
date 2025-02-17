@@ -1,16 +1,13 @@
 package ac.dnd.dodal.domain.user.model;
 
 import ac.dnd.dodal.common.model.BaseEntity;
-import ac.dnd.dodal.common.util.AnswerContentConverter;
 import ac.dnd.dodal.domain.onboarding.enums.AnswerContent;
-import ac.dnd.dodal.domain.onboarding.model.Answer;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -29,8 +26,7 @@ public class UserAnswer extends BaseEntity {
   private String questionContent;
 
   @Column(name = "answer_content", nullable = false)
-  @Convert(converter = AnswerContentConverter.class)
-  private AnswerContent answerContent;
+  private String answerContent;
 
   @Column(name = "version", nullable = false)
   private int version;
@@ -42,7 +38,7 @@ public class UserAnswer extends BaseEntity {
   public UserAnswer(String questionContent, AnswerContent answerContent, User user, int version) {
     super(LocalDateTime.now(), LocalDateTime.now(), null);
     this.questionContent = questionContent;
-    this.answerContent = answerContent;
+    this.answerContent = answerContent.getContent();
     this.user = user;
     this.version = version;
   }

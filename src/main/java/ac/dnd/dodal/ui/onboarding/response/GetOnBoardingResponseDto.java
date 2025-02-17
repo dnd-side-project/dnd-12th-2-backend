@@ -15,8 +15,8 @@ public record GetOnBoardingResponseDto(
     public static GetOnBoardingResponseDto of(Question question, List<Answer> answers) {
         return new GetOnBoardingResponseDto(
                 question.getId(),
-                question.getQuestionContent().getMainContent(),
-                question.getQuestionContent().getSubContent(),
+                question.getQuestionContentEnum().getMainContent(),
+                question.getQuestionContentEnum().getSubContent(),
                 question.getOrder(),
                 answers.stream().map(AnswerResponseDto::of).toList());
     }

@@ -8,6 +8,6 @@ public record AnswerResponseDto(
 ) {
 
     public static AnswerResponseDto of(Answer answer) {
-        return new AnswerResponseDto(answer.getAnswerId(), answer.getContent().getContent());
+        return new AnswerResponseDto(answer.getAnswerId(), answer.getAnswerContentEnum().getContent());
     }
 }
