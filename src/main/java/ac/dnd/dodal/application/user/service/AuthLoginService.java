@@ -44,35 +44,32 @@ public class AuthLoginService {
 
   // 애플 소셜 로그인
   public Object appleAuthSocialLogin(AppleAuthorizationRequestDto appleAuthorizationRequestDto) {
-    // 토큰 검증
-    JsonElement jsonElement =
-        oAuth2Util.verifyAuthorizationCode(appleAuthorizationRequestDto.code());
+//    // 토큰 검증
+//    JsonElement jsonElement =
+//        oAuth2Util.verifyAuthorizationCode(appleAuthorizationRequestDto.code());
 
     // 사용자 정보 가져오기
-    String id_token = jsonElement.getAsJsonObject().get("id_token").getAsString();
+    String id_token = appleAuthorizationRequestDto.code();
     String deviceToken = appleAuthorizationRequestDto.deviceToken();
 
     // id_token 파싱하기
     AppleIdTokenParsingDto appleIdTokenParsingDto =
         oAuth2Util.decodePayload(id_token, AppleIdTokenParsingDto.class);
 
-    // 애플의 경우 이메일에는 sub, name에는 email이 들어가 있음
-    User user = userQueryUseCase.findByEmail(appleIdTokenParsingDto.sub())
-            .orElseGet(() -> registerNewAppleUser(appleIdTokenParsingDto, deviceToken));
-
     // 애플 로그인 응답 DTO 생성
     OAuthByAppleUserInfoRequestDto oAuthByAppleUserInfoRequestDto =
         new OAuthByAppleUserInfoRequestDto(
-            appleIdTokenParsingDto.sub(), user.getEmail(), user.getNickname(), user.getId());
+            appleIdTokenParsingDto.sub(), appleIdTokenParsingDto.email(), appleIdTokenParsingDto.email(), appleAuthorizationRequestDto.deviceToken());
 
     return processAppleUserLogin(oAuthByAppleUserInfoRequestDto);
   }
 
   // 애플 로그인 프로세스
   public Object processAppleUserLogin(OAuthByAppleUserInfoRequestDto oAuth2AppleUserInfo) {
-    User user = userQueryUseCase.findByIdAndRole(oAuth2AppleUserInfo.userId(), UserRole.USER);
+    User user = userQueryUseCase.findByEmailAndRole(oAuth2AppleUserInfo.appleId(), UserRole.USER);
     if (user == null) {
-      throw new UserNotFoundException(UserExceptionCode.NOT_FOUND_USER);
+      User newUser = registerNewAppleUser(oAuth2AppleUserInfo);
+      return handleExistingUserLogin(newUser);
     }
     return handleExistingUserLogin(user);
   }
@@ -109,8 +106,8 @@ public class AuthLoginService {
     return UserInfoResponseDto.fromUserEntity(user, jwtTokenDto);
   }
 
-  private User registerNewAppleUser(AppleIdTokenParsingDto appleIdTokenParsingDto, String deviceToken) {
-    User newUser = new User(appleIdTokenParsingDto.email(), null, deviceToken, appleIdTokenParsingDto.sub(), UserRole.USER);
+  private User registerNewAppleUser(OAuthByAppleUserInfoRequestDto appleIdTokenParsingDto) {
+    User newUser = new User(appleIdTokenParsingDto.email(), null, appleIdTokenParsingDto.deviceToken(), appleIdTokenParsingDto.appleId(), UserRole.USER);
     return userRepository.save(newUser);
   }
 
