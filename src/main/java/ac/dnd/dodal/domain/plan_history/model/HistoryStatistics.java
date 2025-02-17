@@ -20,6 +20,9 @@ public class HistoryStatistics {
 
     private int successCount;
     private int failureCount;
+    private int totalCount;
+
+    private String recentCompletedPlanTitle;
 
     public void incrementCount(PlanStatus status) {
         if (status == PlanStatus.SUCCESS) {
@@ -27,6 +30,7 @@ public class HistoryStatistics {
         } else {
             this.failureCount++;
         }
+        this.totalCount++;
     }
 
     public void decrementCount(PlanStatus status) {
@@ -35,14 +39,21 @@ public class HistoryStatistics {
         } else {
             this.failureCount--;
         }
-        if (successCount < 0 || failureCount < 0) {
+        this.totalCount--;
+        if (successCount < 0 || failureCount < 0 || totalCount < 0) {
             throw new IllegalArgumentException("Count cannot be negative");
         }
+    }
+
+    public void setRecentCompletedPlanTitle(String title) {
+        this.recentCompletedPlanTitle = title;
     }
 
     public void reset() {
         this.successCount = 0;
         this.failureCount = 0;
+        this.totalCount = 0;
+        this.recentCompletedPlanTitle = null;
     }
 
     public void update(int successCount, int failureCount) {
@@ -51,6 +62,7 @@ public class HistoryStatistics {
         }
         this.successCount = successCount;
         this.failureCount = failureCount;
+        this.totalCount = successCount + failureCount;
     }
 }
 

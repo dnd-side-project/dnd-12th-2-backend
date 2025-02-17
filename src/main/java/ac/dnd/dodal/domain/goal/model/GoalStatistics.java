@@ -27,6 +27,7 @@ public class GoalStatistics {
 
     private int successCount;
     private int failureCount;
+    private int totalCount;
 
     public void incrementCount(PlanStatus status) {
         if (status == PlanStatus.SUCCESS) {
@@ -34,6 +35,7 @@ public class GoalStatistics {
         } else {
             this.failureCount++;
         }
+        this.totalCount++;
     }
 
     public void decrementCount(PlanStatus status) {
@@ -42,7 +44,8 @@ public class GoalStatistics {
         } else {
             this.failureCount--;
         }
-        if (this.successCount < 0 || this.failureCount < 0) {
+        this.totalCount--;
+        if (this.successCount < 0 || this.failureCount < 0 || this.totalCount < 0) {
             throw new IllegalArgumentException("Count cannot be negative");
         }
     }
@@ -50,6 +53,7 @@ public class GoalStatistics {
     public void reset() {
         this.successCount = 0;
         this.failureCount = 0;
+        this.totalCount = 0;
     }
 
     public void update(int successCount, int failureCount) {
@@ -58,6 +62,7 @@ public class GoalStatistics {
         }
         this.successCount = successCount;
         this.failureCount = failureCount;
+        this.totalCount = successCount + failureCount;
     }
 
     public GoalStatistics(Goal goal) {
@@ -74,5 +79,6 @@ public class GoalStatistics {
         this.goal = goal;
         this.successCount = successCount;
         this.failureCount = failureCount;
+        this.totalCount = successCount + failureCount;
     }
 }
