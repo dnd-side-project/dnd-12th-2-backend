@@ -66,8 +66,7 @@ public class UserCommandService implements UserCommandUseCase, CreateUserAnswerU
         // 사용자의 답변이 존재하는지 확인
         List<UserAnswer> existUserAnswer = userAnswerRepository.findAllByUserId(user);
         if (existUserAnswer != null && !existUserAnswer.isEmpty()) {
-            log.info("existUserAnswer: {}", existUserAnswer);
-            userAnswerRepository.deleteAll();
+            throw new OnBoardingBadRequestException(OnBoardingExceptionCode.ALREADY_ANSWERED);
         }
 
         // 필요한 모든 questionId를 추출
