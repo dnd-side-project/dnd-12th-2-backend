@@ -7,5 +7,4 @@ import ac.dnd.dodal.domain.goal.model.GoalStatistics;
 
 @Repository
 public interface GoalStatisticsRepository extends JpaRepository<GoalStatistics, Long> {
-
 }

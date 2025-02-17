@@ -17,7 +17,7 @@ public class GoalStatisticsEventListener {
 
     @EventListener
     public void handleGoalCreatedEvent(GoalCreatedEvent event) {
-        GoalStatistics goalStatistics = new GoalStatistics(event.getGoalId());
+        GoalStatistics goalStatistics = new GoalStatistics(event.getGoal());
 
         goalStatisticsService.save(goalStatistics);
     }

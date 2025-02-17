@@ -28,7 +28,7 @@ public class GoalCommandService
         Goal goal = CreateGoalCommand.toEntity(command);
 
         goalService.saveAndFlush(goal);
-        eventPublisher.publishEvent(new GoalCreatedEvent(goal.getGoalId()));
+        eventPublisher.publishEvent(new GoalCreatedEvent(goal));
         return goal.getGoalId();
     }
 
@@ -40,6 +40,7 @@ public class GoalCommandService
         goalService.save(goal);
     }
 
+    // Todo: Goal delete event 발행
     @Override
     public void delete(DeleteGoalCommand command) {
         Goal goal = goalService.findByIdOrThrow(command.goalId());

@@ -3,16 +3,18 @@ package ac.dnd.dodal.domain.goal.event;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+import ac.dnd.dodal.domain.goal.model.Goal;
+
 @Getter
 @EqualsAndHashCode
 public class GoalCreatedEvent {
 
-    private Long goalId;
+    private Goal goal;
 
-    public GoalCreatedEvent(Long goalId) {
-        if (goalId == null) {
-            throw new IllegalArgumentException("GoalCreatedEvent: goalId is null");
+    public GoalCreatedEvent(Goal goal) {
+        if (goal == null) {
+            throw new IllegalArgumentException("GoalCreatedEvent: goal is null");
         }
-        this.goalId = goalId;
+        this.goal = goal;
     }
 }

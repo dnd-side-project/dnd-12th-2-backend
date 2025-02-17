@@ -79,7 +79,7 @@ public class GoalCommandServiceTest {
 
         // then
         verify(goalService).saveAndFlush(any(Goal.class));
-        verify(eventPublisher).publishEvent(new GoalCreatedEvent(goalId));
+        verify(eventPublisher).publishEvent(any(GoalCreatedEvent.class));
         assertThat(savedGoalId).isEqualTo(goalId);
     }
 
