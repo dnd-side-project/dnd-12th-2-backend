@@ -19,7 +19,7 @@ public class OnBoardingController {
 
     private final GetQuestionsAndAnswersUseCase getQuestionsAndAnswersUseCase;
 
-    @GetMapping("")
+    @GetMapping
     public ApiResponse<List<GetOnBoardingResponseDto>> getOnboardingQuestionAndAnswer(){
         return ApiResponse.success(getQuestionsAndAnswersUseCase.getQuestionsAndAnswers());
     }
