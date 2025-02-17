@@ -9,6 +9,7 @@ import ac.dnd.dodal.domain.user.enums.UserRole;
 import ac.dnd.dodal.domain.user.exception.UserNotFoundException;
 import ac.dnd.dodal.domain.user.model.User;
 import ac.dnd.dodal.ui.auth.request.AppleAuthorizationRequestDto;
+import ac.dnd.dodal.ui.auth.request.KakaoAuthorizationRequestDto;
 import ac.dnd.dodal.ui.auth.request.OAuthByAppleUserInfoRequestDto;
 import ac.dnd.dodal.ui.auth.response.AppleIdTokenParsingDto;
 import ac.dnd.dodal.ui.auth.response.JwtTokenDto;
@@ -27,50 +28,48 @@ import org.springframework.stereotype.Service;
 public class AuthLoginService {
 
   private final UserQueryUseCase userQueryUseCase;
+  private final AuthService authService;
   private final JwtUtil jwtUtil;
   private final OAuth2Util oAuth2Util;
   private final UserRepository userRepository;
 
   // 카카오 소셜 로그인
-  public Object kakaoAuthSocialLogin(String token) {
-    String accessToken = AuthService.refineToken(token);
+  public Object kakaoAuthSocialLogin(KakaoAuthorizationRequestDto kakaoAuthorizationRequestDto) {
+    String accessToken = authService.refineToken(kakaoAuthorizationRequestDto.code());
 
     KakaoUserInfoDto kakaoUserInfoDto = getOAuth2UserInfo(accessToken);
 
-    return processKakaoUserLogin(kakaoUserInfoDto);
+    return processKakaoUserLogin(kakaoUserInfoDto, kakaoAuthorizationRequestDto.deviceToken());
   }
 
   // 애플 소셜 로그인
   public Object appleAuthSocialLogin(AppleAuthorizationRequestDto appleAuthorizationRequestDto) {
-    // 토큰 검증
-    JsonElement jsonElement =
-        oAuth2Util.verifyAuthorizationCode(appleAuthorizationRequestDto.code());
+//    // 토큰 검증
+//    JsonElement jsonElement =
+//        oAuth2Util.verifyAuthorizationCode(appleAuthorizationRequestDto.code());
 
     // 사용자 정보 가져오기
-    String id_token = jsonElement.getAsJsonObject().get("id_token").getAsString();
+    String id_token = appleAuthorizationRequestDto.code();
     String deviceToken = appleAuthorizationRequestDto.deviceToken();
 
     // id_token 파싱하기
     AppleIdTokenParsingDto appleIdTokenParsingDto =
         oAuth2Util.decodePayload(id_token, AppleIdTokenParsingDto.class);
 
-    // 애플의 경우 이메일에는 sub, name에는 email이 들어가 있음
-    User user = userQueryUseCase.findByEmail(appleIdTokenParsingDto.sub())
-            .orElseGet(() -> registerNewUser(appleIdTokenParsingDto, deviceToken));
-
     // 애플 로그인 응답 DTO 생성
     OAuthByAppleUserInfoRequestDto oAuthByAppleUserInfoRequestDto =
         new OAuthByAppleUserInfoRequestDto(
-            appleIdTokenParsingDto.sub(), user.getEmail(), user.getNickname(), user.getId());
+            appleIdTokenParsingDto.sub(), appleIdTokenParsingDto.email(), appleIdTokenParsingDto.email(), appleAuthorizationRequestDto.deviceToken());
 
     return processAppleUserLogin(oAuthByAppleUserInfoRequestDto);
   }
 
   // 애플 로그인 프로세스
   public Object processAppleUserLogin(OAuthByAppleUserInfoRequestDto oAuth2AppleUserInfo) {
-    User user = userQueryUseCase.findByIdAndRole(oAuth2AppleUserInfo.userId(), UserRole.USER);
+    User user = userQueryUseCase.findByEmailAndRole(oAuth2AppleUserInfo.appleId(), UserRole.USER);
     if (user == null) {
-      throw new UserNotFoundException(UserExceptionCode.NOT_FOUND_USER);
+      User newUser = registerNewAppleUser(oAuth2AppleUserInfo);
+      return handleExistingUserLogin(newUser);
     }
     return handleExistingUserLogin(user);
   }
@@ -81,10 +80,12 @@ public class AuthLoginService {
   }
 
   // 카카오 로그인 프로세스
-  private Object processKakaoUserLogin(KakaoUserInfoDto kakaoUserInfo) {
+  private Object processKakaoUserLogin(KakaoUserInfoDto kakaoUserInfo, String deviceToken) {
     User user = userQueryUseCase.findByEmailAndRole(kakaoUserInfo.email(), UserRole.USER);
     if (user == null) {
-      throw new UserNotFoundException(UserExceptionCode.NOT_FOUND_USER, "사용자를 찾을 수 없습니다.");
+      // 새로운 사용자 등록
+      User newUser = registerNewKakaoUser(kakaoUserInfo, deviceToken);
+      return handleExistingUserLogin(newUser);
     }
     return handleExistingUserLogin(user);
   }
@@ -105,8 +106,14 @@ public class AuthLoginService {
     return UserInfoResponseDto.fromUserEntity(user, jwtTokenDto);
   }
 
-  private User registerNewUser(AppleIdTokenParsingDto appleIdTokenParsingDto, String deviceToken) {
-    User newUser = new User(appleIdTokenParsingDto.email(), null, deviceToken, appleIdTokenParsingDto.sub(), UserRole.USER);
+  private User registerNewAppleUser(OAuthByAppleUserInfoRequestDto appleIdTokenParsingDto) {
+    User newUser = new User(appleIdTokenParsingDto.email(), null, appleIdTokenParsingDto.deviceToken(), appleIdTokenParsingDto.appleId(), UserRole.USER);
+    return userRepository.save(newUser);
+  }
+
+  private User registerNewKakaoUser(KakaoUserInfoDto kakaoUserInfo, String deviceToken) {
+    User newUser =
+        new User(kakaoUserInfo.nickname(), kakaoUserInfo.profileImageUrl(), deviceToken, kakaoUserInfo.email(), UserRole.USER);
     return userRepository.save(newUser);
   }
 }

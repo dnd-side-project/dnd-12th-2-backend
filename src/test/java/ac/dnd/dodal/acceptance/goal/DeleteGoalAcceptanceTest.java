@@ -16,9 +16,9 @@ import ac.dnd.dodal.domain.goal.exception.GoalExceptionCode;
 
 import org.springframework.http.HttpStatus;
 
-public class DeleteGoalAcceptanceTets extends AcceptanceTest {
+public class DeleteGoalAcceptanceTest extends AcceptanceTest {
 
-    private Long goalId = 1L;
+    private Long goalId = 5L;
     private Long deletedGoalId = 2L;
 
     @Test

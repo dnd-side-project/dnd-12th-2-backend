@@ -9,7 +9,7 @@ public class UIFixture {
     }
 
     public static Map<String, Object> createRefreshAuthorizationHeader(String refreshToken) {
-        return Map.of("refreshToken", "Bearer " + refreshToken);
+        return Map.of("Authorization", "Bearer " + refreshToken);
     }
 
     public static Map<String, Object> createUnauthorizedHeader() {

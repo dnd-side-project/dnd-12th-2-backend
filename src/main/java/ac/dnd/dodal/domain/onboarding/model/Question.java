@@ -1,6 +1,7 @@
 package ac.dnd.dodal.domain.onboarding.model;
 
 import ac.dnd.dodal.common.model.BaseEntity;
+import ac.dnd.dodal.common.util.QuestionContentConverter;
 import ac.dnd.dodal.domain.onboarding.enums.QuestionContent;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -19,7 +20,7 @@ public class Question extends BaseEntity {
     private Long id;
 
     @Column(name = "question_content", nullable = false)
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = QuestionContentConverter.class)
     private QuestionContent questionContent;
 
     @Column(name="order_number", columnDefinition = "question order")

@@ -11,16 +11,18 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.context.ApplicationEventPublisher;
 
 import ac.dnd.dodal.domain.goal.model.Goal;
 import ac.dnd.dodal.domain.plan_history.model.PlanHistory;
 import ac.dnd.dodal.domain.plan.model.Plan;
+import ac.dnd.dodal.domain.plan.event.PlanCompletedEvent;
 import ac.dnd.dodal.domain.plan_feedback.model.PlanFeedback;
 import ac.dnd.dodal.application.goal.service.GoalService;
-import ac.dnd.dodal.application.goal.usecase.AddPlanUseCase;
-import ac.dnd.dodal.application.goal.usecase.CreatePlanAndHistoryUseCase;
 import ac.dnd.dodal.application.plan.dto.command.*;
+import ac.dnd.dodal.application.plan.usecase.AddPlanUseCase;
 import ac.dnd.dodal.application.plan.usecase.CompletePlanUseCase;
+import ac.dnd.dodal.application.plan.usecase.CreatePlanAndHistoryUseCase;
 import ac.dnd.dodal.application.plan_history.service.PlanHistoryService;
 import ac.dnd.dodal.application.feedback.service.PlanFeedbackService;
 
@@ -34,6 +36,8 @@ public class PlanCommandService implements
     private final PlanHistoryService planHistoryService;
     private final PlanService planService;
     private final PlanFeedbackService planFeedbackService;
+
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     public void addSamePlan(AddSamePlanCommand command) {
@@ -87,6 +91,8 @@ public class PlanCommandService implements
         feedbacks.add(feedback);
 
         plan.getGoal().completePlan(command.userId(), command.status(), plan, feedbacks);
+
+        eventPublisher.publishEvent(PlanCompletedEvent.of(plan, feedback));
         planFeedbackService.saveAll(feedbacks);
         return planService.save(plan);
     }

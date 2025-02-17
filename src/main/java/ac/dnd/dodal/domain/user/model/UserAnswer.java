@@ -1,6 +1,8 @@
 package ac.dnd.dodal.domain.user.model;
 
 import ac.dnd.dodal.common.model.BaseEntity;
+import ac.dnd.dodal.common.util.AnswerContentConverter;
+import ac.dnd.dodal.domain.onboarding.enums.AnswerContent;
 import ac.dnd.dodal.domain.onboarding.model.Answer;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
@@ -23,20 +25,25 @@ public class UserAnswer extends BaseEntity {
   @Column(name = "user_answer_id", nullable = false)
   private Long id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumns({
-    @JoinColumn(name = "question_id", referencedColumnName = "question_id"),
-    @JoinColumn(name = "answer_id", referencedColumnName = "answer_id")
-  })
-  private Answer answer;
+  @Column(name = "question_content", nullable = false)
+  private String questionContent;
+
+  @Column(name = "answer_content", nullable = false)
+  @Convert(converter = AnswerContentConverter.class)
+  private AnswerContent answerContent;
+
+  @Column(name = "version", nullable = false)
+  private int version;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id", nullable = false)
   private User user;
 
-  public UserAnswer(Answer answer, User user) {
+  public UserAnswer(String questionContent, AnswerContent answerContent, User user, int version) {
     super(LocalDateTime.now(), LocalDateTime.now(), null);
-    this.answer = answer;
+    this.questionContent = questionContent;
+    this.answerContent = answerContent;
     this.user = user;
+    this.version = version;
   }
 }

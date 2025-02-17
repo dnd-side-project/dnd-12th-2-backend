@@ -17,6 +17,7 @@ public abstract class AcceptanceTest {
     protected static final int port = 9999;
 
     protected static final Long userId = 1L;
+    protected static final String userEmail = "test1@test.com";
     protected static final String accessToken = "eyJhbGciOiJIUzUxMiJ9.eyJ1aWQiOjEsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzM5MzA4OTc1LCJleHAiOjE3NDAxODc4NTl9.7nH4G9T2PW9AI7JTCm7RteiechdLWsoeWanh4kX-Yt6UQ4qQVhohXlpA7DYR9fZZwjiyn7GLN73m1LXsNT1Djw";
     protected static final String refreshToken =
             "eyJhbGciOiJIUzUxMiJ9.eyJ1aWQiOjEsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzM5MzA4OTc1LCJleHAiOjE3NDAxODc4NTl9.7nH4G9T2PW9AI7JTCm7RteiechdLWsoeWanh4kX-Yt6UQ4qQVhohXlpA7DYR9fZZwjiyn7GLN73m1LXsNT1Djw";
