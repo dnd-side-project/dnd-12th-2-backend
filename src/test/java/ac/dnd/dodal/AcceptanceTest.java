@@ -1,8 +1,13 @@
 package ac.dnd.dodal;
 
+import java.time.LocalDate;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.restassured.RestAssured;
+
 import org.junit.jupiter.api.BeforeAll;
 
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,6 +18,8 @@ import ac.dnd.dodal.ui.fixture.UIFixture;
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public abstract class AcceptanceTest {
+
+    protected static final Logger log = LoggerFactory.getLogger(AcceptanceTest.class);
 
     protected static final int port = 9999;
 
@@ -35,6 +42,8 @@ public abstract class AcceptanceTest {
     protected static final Long planHistoryId = 1L;
     protected static final Long lastSuccessPlanHistoryId = 1L;
     protected static final Long lastFailurePlanHistoryId = 2L;
+
+    protected static final LocalDate date = LocalDate.of(2024, 4, 1);
 
     protected static final Map<String, Object> authorizationHeader
         = UIFixture.createAuthorizationHeader(accessToken);

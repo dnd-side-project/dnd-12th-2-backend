@@ -9,6 +9,8 @@ public record PlanElement(
     String title,
     String status,
     String guide,
+    LocalDateTime startDate,
+    LocalDateTime endDate,
     LocalDateTime completedDate
 ) {
 
@@ -18,6 +20,8 @@ public record PlanElement(
             plan.getTitle(),
             plan.getStatus().getValue(),
             plan.getGuide(),
+            plan.getStartDate(),
+            plan.getEndDate(),
             plan.getCompletedDate()
         );
     }

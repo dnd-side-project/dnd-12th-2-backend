@@ -3,13 +3,15 @@ package ac.dnd.dodal.domain.goal.model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.EqualsAndHashCode;
-import ac.dnd.dodal.domain.plan.enums.PlanStatus;
+
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.MapsId;
+import ac.dnd.dodal.domain.plan.enums.PlanStatus;
 
 @Entity(name = "goal_statistics")
-@Table
 @Getter
 @EqualsAndHashCode
 @NoArgsConstructor
@@ -18,8 +20,14 @@ public class GoalStatistics {
     @Id
     private Long goalId;
 
+    @MapsId
+    @OneToOne
+    @JoinColumn(name = "goal_id", referencedColumnName = "goal_id")
+    private Goal goal;
+
     private int successCount;
     private int failureCount;
+    private int totalCount;
 
     public void incrementCount(PlanStatus status) {
         if (status == PlanStatus.SUCCESS) {
@@ -27,6 +35,7 @@ public class GoalStatistics {
         } else {
             this.failureCount++;
         }
+        this.totalCount++;
     }
 
     public void decrementCount(PlanStatus status) {
@@ -35,7 +44,8 @@ public class GoalStatistics {
         } else {
             this.failureCount--;
         }
-        if (this.successCount < 0 || this.failureCount < 0) {
+        this.totalCount--;
+        if (this.successCount < 0 || this.failureCount < 0 || this.totalCount < 0) {
             throw new IllegalArgumentException("Count cannot be negative");
         }
     }
@@ -43,6 +53,7 @@ public class GoalStatistics {
     public void reset() {
         this.successCount = 0;
         this.failureCount = 0;
+        this.totalCount = 0;
     }
 
     public void update(int successCount, int failureCount) {
@@ -51,21 +62,23 @@ public class GoalStatistics {
         }
         this.successCount = successCount;
         this.failureCount = failureCount;
+        this.totalCount = successCount + failureCount;
     }
 
-    public GoalStatistics(Long goalId) {
-        this(goalId, 0, 0);
+    public GoalStatistics(Goal goal) {
+        this(goal, 0, 0);
     }
 
-    public GoalStatistics(Long goalId, int successCount, int failureCount) {
-        if (goalId == null) {
-            throw new IllegalArgumentException("Goal ID is null");
+    public GoalStatistics(Goal goal, int successCount, int failureCount) {
+        if (goal == null) {
+            throw new IllegalArgumentException("Goal is null");
         }
         if (successCount < 0 || failureCount < 0) {
             throw new IllegalArgumentException("Count cannot be negative");
         }
-        this.goalId = goalId;
+        this.goal = goal;
         this.successCount = successCount;
         this.failureCount = failureCount;
+        this.totalCount = successCount + failureCount;
     }
 }

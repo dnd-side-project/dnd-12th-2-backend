@@ -33,11 +33,11 @@ public class GoalStatisticsEventListenerTest extends IntegrationTest {
     @DisplayName("Goal Created Event Listener Test")
     void goal_created_event_listener_test() {
         // given
-        Goal goal = GoalFixture.goal();
+        Goal goal = goalService.saveAndFlush(GoalFixture.goal());
         Long goalId = goal.getGoalId();
 
         // when
-        eventPublisher.publishEvent(new GoalCreatedEvent(goalId));
+        eventPublisher.publishEvent(new GoalCreatedEvent(goal));
 
         try {
             Thread.sleep(1000);
@@ -46,7 +46,7 @@ public class GoalStatisticsEventListenerTest extends IntegrationTest {
         }
 
         GoalStatistics goalStatistics = goalStatisticsService.findByIdOrThrow(goalId);
-        assertThat(goalStatistics.getGoalId()).isEqualTo(goalId);
+        assertThat(goalStatistics.getGoal().getGoalId()).isEqualTo(goalId);
     }
 
     @Test

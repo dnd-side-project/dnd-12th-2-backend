@@ -12,6 +12,4 @@ public interface UserAnswerRepository extends JpaRepository<UserAnswer, Long> {
 
     @Query("SELECT ua FROM UserAnswer ua WHERE ua.user = :user")
     List<UserAnswer> findAllByUserId(User user);
-
-    boolean existsByUserId(User user);
 }

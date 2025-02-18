@@ -5,14 +5,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import ac.dnd.dodal.IntegrationTest;
 import ac.dnd.dodal.domain.user.enums.UserRole;
 
 public class JwtUtilTest extends IntegrationTest {
-
-    @Autowired
-    JwtUtil jwtUtil;
 
     Long userId = 1L;
     String email = "test1@test.com";
