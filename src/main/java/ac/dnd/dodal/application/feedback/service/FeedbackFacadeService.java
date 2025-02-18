@@ -21,6 +21,7 @@ public class FeedbackFacadeService implements GetFeedbackQuestionAndIndicatorUse
     private final FeedbackQuestionService feedbackQuestionService;
     private final DefaultFeedbackIndicatorService defaultFeedbackIndicatorService;
 
+    // TODO: userID와 함께 기타 지표까지 조회하는 로직 추가
     @Override
     public FeedbackQuestionAndIndicatorsResponse 
             getFeedbackQuestionAndIndicators(FeedbackType type) {
