@@ -35,11 +35,11 @@ import ac.dnd.dodal.domain.plan_history.model.PlanHistory;
 import ac.dnd.dodal.domain.plan_history.PlanHistoryFixture;
 import ac.dnd.dodal.domain.plan_history.exception.PlanHistoryExceptionCode;
 import ac.dnd.dodal.application.plan.dto.command.*;
+import ac.dnd.dodal.application.plan_feedback.service.PlanFeedbackService;
 import ac.dnd.dodal.application.plan.dto.CompletePlanCommandFixture;
 import ac.dnd.dodal.application.goal.dto.AddPlanCommandFixture;
 import ac.dnd.dodal.application.goal.service.GoalService;
 import ac.dnd.dodal.application.plan_history.service.PlanHistoryService;
-import ac.dnd.dodal.application.feedback.service.PlanFeedbackService;
 
 @ExtendWith(MockitoExtension.class)
 public class PlanCommandServiceTest {
