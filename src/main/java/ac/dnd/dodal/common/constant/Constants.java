@@ -33,7 +33,10 @@ public class Constants {
             "/api/auth/login/kakao",
             "/api/auth/login/naver",
             "/api/auth/login/google",
-            "/api/auth/login/apple"
+            "/api/auth/login/apple",
+            // 모니터링 
+            "/actuator/**"
+
     );
 
     public static final String CONTENT_TYPE = "Content-Type";

@@ -55,13 +55,12 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script: |            
-            cd /home/ubuntu 
-            sudo docker pull 5hseok/dodal-server:0.0.1
+            cd /home/ubuntu
             
-            sudo docker stop dodal-server || true
-            sudo docker rm dodal-server || true
+            export JASYPT_ENCRYPTOR_PASSWORD=${{ secrets.JASYPT_KEY }}
             
-            sudo docker run -d --name dodal-server \
-            -p 8080:8080 \
-            -e JASYPT_ENCRYPTOR_PASSWORD=${{ secrets.JASYPT_KEY }} \
-            5hseok/dodal-server:0.0.1
+            sudo docker-compose pull
+
+            sudo docker-compose down || true
+            
+            sudo -E docker-compose up -d
