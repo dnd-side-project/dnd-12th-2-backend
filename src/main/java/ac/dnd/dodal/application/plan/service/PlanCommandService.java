@@ -23,8 +23,8 @@ import ac.dnd.dodal.application.plan.dto.command.*;
 import ac.dnd.dodal.application.plan.usecase.AddPlanUseCase;
 import ac.dnd.dodal.application.plan.usecase.CompletePlanUseCase;
 import ac.dnd.dodal.application.plan.usecase.CreatePlanAndHistoryUseCase;
+import ac.dnd.dodal.application.plan_feedback.service.PlanFeedbackService;
 import ac.dnd.dodal.application.plan_history.service.PlanHistoryService;
-import ac.dnd.dodal.application.feedback.service.PlanFeedbackService;
 
 @Transactional
 @Service

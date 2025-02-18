@@ -1,12 +1,11 @@
-package ac.dnd.dodal.application.feedback.service;
+package ac.dnd.dodal.application.plan_feedback.service;
 
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
-
-import ac.dnd.dodal.application.feedback.repository.PlanFeedbackRepository;
+import ac.dnd.dodal.application.plan_feedback.repository.PlanFeedbackRepository;
 import ac.dnd.dodal.domain.plan_feedback.model.PlanFeedback;
 
 @Service

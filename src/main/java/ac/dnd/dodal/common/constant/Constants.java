@@ -1,6 +1,5 @@
 package ac.dnd.dodal.common.constant;
 
-import java.net.URI;
 import java.util.List;
 
 public class Constants {
@@ -35,8 +34,9 @@ public class Constants {
             "/api/auth/login/google",
             "/api/auth/login/apple",
             // 모니터링 
-            "/actuator/**"
-
+            "/actuator/**",
+            // 피드백 데이터 조회
+            "/api/feedbacks"
     );
 
     public static final String CONTENT_TYPE = "Content-Type";

@@ -1,4 +1,4 @@
-package ac.dnd.dodal.application.feedback.repository;
+package ac.dnd.dodal.application.plan_feedback.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
