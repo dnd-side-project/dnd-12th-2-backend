@@ -24,6 +24,8 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
 
 @Configuration
 @RequiredArgsConstructor
