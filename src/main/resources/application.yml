@@ -45,4 +45,5 @@ management:
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: health, info, prometheus, metrics
+        exclude: env, configprops, beans, mappings, heapdump, threaddump, loggers, caches, scheduledtasks, flyway
