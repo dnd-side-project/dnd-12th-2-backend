@@ -2,6 +2,7 @@ package ac.dnd.dodal.domain.guide.model;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import jakarta.persistence.Entity;
@@ -16,6 +17,7 @@ import ac.dnd.dodal.domain.guide.enums.GuideType;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Entity(name = "user_guides")
+@NoArgsConstructor
 public class UserGuide extends BaseEntity {
 
     @Id
