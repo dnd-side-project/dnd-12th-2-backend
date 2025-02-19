@@ -43,7 +43,6 @@ import ac.dnd.dodal.application.plan.dto.CompletePlanCommandFixture;
 import ac.dnd.dodal.application.goal.dto.AddPlanCommandFixture;
 import ac.dnd.dodal.application.goal.service.GoalService;
 import ac.dnd.dodal.application.plan_history.service.PlanHistoryService;
-import ac.dnd.dodal.application.feedback.service.PlanFeedbackService;
 import ac.dnd.dodal.application.user_guide.service.UserGuideService;
 
 @ExtendWith(MockitoExtension.class)
