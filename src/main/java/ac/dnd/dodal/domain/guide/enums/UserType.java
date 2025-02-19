@@ -42,10 +42,12 @@ public enum UserType {
     private final String value;
     private final List<List<AnswerContent>> settingPlanAnswers;
 
-    public static UserType get(AnswerContent preferenceSetPlan, AnswerContent difficultySetPlan) {
-        if (!AnswerContent.isPreferenceSetPlan(preferenceSetPlan) 
-            || !AnswerContent.isDifficultySetPlan(difficultySetPlan)) {
-            throw new IllegalArgumentException("Invalid preference set plan or difficulty set plan");
+    public static UserType getByPreferenceAndDifficultySetPlan
+    (AnswerContent preferenceSetPlan, AnswerContent difficultySetPlan) {
+        if (!AnswerContent.isPreferenceSetPlan(preferenceSetPlan)
+                || !AnswerContent.isDifficultySetPlan(difficultySetPlan)) {
+            throw new IllegalArgumentException(
+                    "Invalid preference set plan or difficulty set plan");
         }
 
         List<AnswerContent> settingPlanAnswer = List.of(preferenceSetPlan, difficultySetPlan);
@@ -53,8 +55,15 @@ public enum UserType {
         return Arrays.stream(UserType.values())
             .filter(userType -> userType.getSettingPlanAnswers().contains(settingPlanAnswer))
             .findFirst()
-            .orElseThrow(() -> 
-                new IllegalArgumentException("Invalid preference set plan or difficulty set plan")
-            );
+                .orElseThrow(() -> new IllegalArgumentException(
+                    "Invalid preference set plan or difficulty set plan"));
+    }
+
+    public static UserType of(String value) {
+        return Arrays.stream(UserType.values())
+            .filter(userType -> userType.getValue().equals(value))
+            .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(
+                    "Invalid user type"));
     }
 }
