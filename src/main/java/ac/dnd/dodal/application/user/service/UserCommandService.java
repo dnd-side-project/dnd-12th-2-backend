@@ -1,14 +1,22 @@
 package ac.dnd.dodal.application.user.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.context.ApplicationEventPublisher;
+
 import ac.dnd.dodal.application.onboarding.repository.AnswerRepository;
 import ac.dnd.dodal.application.onboarding.repository.QuestionRepository;
 import ac.dnd.dodal.application.user.repository.UserAnswerRepository;
 import ac.dnd.dodal.application.user.repository.UserRepository;
 import ac.dnd.dodal.application.user.usecase.CreateUserAnswerUseCase;
 import ac.dnd.dodal.application.user.usecase.UserCommandUseCase;
+import ac.dnd.dodal.common.exception.ForbiddenException;
 import ac.dnd.dodal.domain.onboarding.exception.OnBoardingBadRequestException;
 import ac.dnd.dodal.domain.onboarding.exception.OnBoardingExceptionCode;
 import ac.dnd.dodal.domain.onboarding.exception.OnBoardingNotFoundException;
+import ac.dnd.dodal.domain.onboarding.event.OnboardingProceededEvent;
 import ac.dnd.dodal.domain.onboarding.model.Answer;
 import ac.dnd.dodal.domain.user.enums.UserExceptionCode;
 import ac.dnd.dodal.domain.user.enums.UserRole;
@@ -18,8 +26,6 @@ import ac.dnd.dodal.domain.user.model.UserAnswer;
 import ac.dnd.dodal.ui.auth.request.OAuthUserInfoRequestDto;
 import ac.dnd.dodal.ui.user.request.CreateUserAnswerRequestDto;
 import jakarta.transaction.Transactional;
-import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +41,8 @@ public class UserCommandService implements UserCommandUseCase, CreateUserAnswerU
     private final UserAnswerRepository userAnswerRepository;
     private final AnswerRepository answerRepository;
     private final QuestionRepository questionRepository;
+
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     public User createUserBySocialSignUp(OAuthUserInfoRequestDto authSignUpRequestDto) {
@@ -61,6 +69,9 @@ public class UserCommandService implements UserCommandUseCase, CreateUserAnswerU
         // 사용자 조회
         User user = userCommandRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(UserExceptionCode.NOT_FOUND_USER));
+        if (user.getDeletedAt() != null) {
+            throw new ForbiddenException(UserExceptionCode.DELETED_USER);
+        }
 
         // 사용자의 답변이 존재하는지 확인
         List<UserAnswer> existUserAnswer = userAnswerRepository.findAllByUserId(user);
@@ -85,19 +96,24 @@ public class UserCommandService implements UserCommandUseCase, CreateUserAnswerU
                 ));
 
         // Map에서 Answer를 찾아 UserAnswer 생성 및 저장
-        for (CreateUserAnswerRequestDto.UserAnswerData dto : createUserAnswerRequestDtoList.data()) {
+        List<UserAnswer> userAnswers = new ArrayList<>();
+        for (CreateUserAnswerRequestDto.UserAnswerData dto : createUserAnswerRequestDtoList
+                .data()) {
             String key = dto.questionId() + "_" + dto.answerId();
             Answer answer = answerMap.get(key);
             if (answer == null) {
+                System.out.println("createUserAnswer answer = " + answer);
                 throw new OnBoardingNotFoundException(OnBoardingExceptionCode.NOT_FOUND_ANSWER,
-                        "Answer (" + dto.answerId() + ") for question (" + dto.questionId() + ") does not exist.");
+                        "Answer (" + dto.answerId() + ") for question (" + dto.questionId()
+                                + ") does not exist.");
             }
 
-            userAnswerRepository.save(new UserAnswer(
-                    answer.getQuestion().getQuestionContentEnum().getMainContent(),
-                    answer.getAnswerContentEnum(),
-                    user,
-                    1));
+            UserAnswer userAnswer = userAnswerRepository.save(
+                    new UserAnswer(answer.getQuestion().getQuestionContentEnum().getMainContent(),
+                            answer.getAnswerContentEnum(), user, 1));
+            userAnswers.add(userAnswer);
         }
+
+        eventPublisher.publishEvent(new OnboardingProceededEvent(user.getId(), userAnswers));
     }
 }
