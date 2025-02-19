@@ -1,6 +1,7 @@
 package ac.dnd.dodal.application.onboarding.repository;
 
 import ac.dnd.dodal.domain.onboarding.model.Answer;
+import ac.dnd.dodal.domain.onboarding.model.AnswerId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface AnswerRepository extends JpaRepository<Answer, Long> {
+public interface AnswerRepository extends JpaRepository<Answer, AnswerId> {
 
     @Query("SELECT a FROM Answer a WHERE a.question.id IN :questionIds AND a.deletedAt IS NULL")
     List<Answer> findAllByQuestionId(
