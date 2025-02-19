@@ -1,5 +1,7 @@
 package ac.dnd.dodal.domain.onboarding.enums;
 
+import java.util.Arrays;
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -22,6 +24,13 @@ public enum AnswerContent {
     ;
 
     private final String content;
+
+    public static AnswerContent of(String content) {
+        return Arrays.stream(AnswerContent.values())
+            .filter(answerContent -> answerContent.getContent().equals(content))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException("Invalid answer content: " + content));
+    }
 
     public static boolean isInterestGoal(AnswerContent answerContent) {
       return INTEREST_GOAL_1.equals(answerContent)
