@@ -29,7 +29,7 @@ public class CreateUserAnswerAcceptanceTest extends AcceptanceTest {
         ));
 
         // when
-        Response response = UserSteps.addUserAnswer(authorizationHeader, request);
+        Response response = UserSteps.addUserAnswer(authorizationHeader2, request);
         ApiResponse<?> apiResponse =
                 response.as(new TypeRef<ApiResponse<?>>() {});
         // then
