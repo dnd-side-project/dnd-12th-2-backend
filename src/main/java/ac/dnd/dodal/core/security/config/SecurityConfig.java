@@ -51,7 +51,6 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers(new NegatedRequestMatcher(new AntPathRequestMatcher("/api/**"))).permitAll()
                                 .requestMatchers(Constants.NO_NEED_AUTH_URLS.toArray(String[]::new)).permitAll()
                                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                                 .anyRequest().authenticated())
