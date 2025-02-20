@@ -41,4 +41,12 @@ public class UserGuide extends BaseEntity {
         this.type = type;
         this.content = content;
     }
+
+    public void update(String content) {
+        if (content == null || content.isEmpty()) {
+            throw new IllegalArgumentException(
+                UserGuideExceptionCode.GUIDE_CANNOT_BE_NULL.getMessage());
+        }
+        this.content = content;
+    }
 }
