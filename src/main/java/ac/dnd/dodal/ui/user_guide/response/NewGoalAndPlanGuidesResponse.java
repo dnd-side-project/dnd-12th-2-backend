@@ -17,6 +17,6 @@ public record NewGoalAndPlanGuidesResponse(
 
         String tip = "Tip ";
         return new NewGoalAndPlanGuidesResponse(
-            tip + newGoalGuide.getType().getValue(), tip + newPlanGuide.getType().getValue());
+            tip + newGoalGuide.getContent(), tip + newPlanGuide.getContent());
     }
 }
