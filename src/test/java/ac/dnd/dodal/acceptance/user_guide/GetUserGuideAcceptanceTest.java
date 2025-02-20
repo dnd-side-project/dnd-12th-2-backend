@@ -14,6 +14,7 @@ import ac.dnd.dodal.acceptance.user_guide.steps.GetUserGuideStep;
 import ac.dnd.dodal.common.response.ApiResponse;
 import ac.dnd.dodal.common.enums.CommonResultCode;
 import ac.dnd.dodal.ui.user_guide.response.UserGuideResponse;
+import ac.dnd.dodal.ui.user_guide.response.NewGoalAndPlanGuidesResponse;
 
 public class GetUserGuideAcceptanceTest extends AcceptanceTest {
 
@@ -59,9 +60,28 @@ public class GetUserGuideAcceptanceTest extends AcceptanceTest {
     @DisplayName("Get Update Plan User Guide Test")
     void get_update_plan_user_guide() {
         Response response = GetUserGuideStep.getUserGuide(authorizationHeader, "update-plan");
-        ApiResponse<UserGuideResponse> apiResponse 
-            = response.as(new TypeRef<ApiResponse<UserGuideResponse>>() {});
-        
+        ApiResponse<UserGuideResponse> apiResponse =
+                response.as(new TypeRef<ApiResponse<UserGuideResponse>>() {});
+
+        log.info("response: {}", response.asString());
+        log.info("apiResponse: {}", apiResponse);
+        // then 200 응답
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        // COM000
+        assertThat(apiResponse.code()).isEqualTo(CommonResultCode.SUCCESS.getCode());
+        // Success
+        assertThat(apiResponse.message()).isEqualTo(CommonResultCode.SUCCESS.getMessage());
+        // Data exists
+        assertThat(apiResponse.data()).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Get New Goal and Plan User Guides Test")
+    void get_new_goal_and_plan_user_guides() {
+        Response response = GetUserGuideStep.getNewGoalAndPlanGuides(authorizationHeader);
+        ApiResponse<NewGoalAndPlanGuidesResponse> apiResponse =
+                response.as(new TypeRef<ApiResponse<NewGoalAndPlanGuidesResponse>>() {});
+
         log.info("response: {}", response.asString());
         log.info("apiResponse: {}", apiResponse);
         // then 200 응답
