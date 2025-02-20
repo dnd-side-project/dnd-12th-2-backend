@@ -11,6 +11,7 @@ public enum UserGuideExceptionCode implements ResultCode {
 
     USER_GUIDE_NOT_FOUND("USG001", "UserGuide not found"),
     FAIL_TO_GENERATE_USER_GUIDE("USG002", "Fail to generate user guide"),
+    GUIDE_CANNOT_BE_NULL("USG003", "Guide cannot be null"),
     ;
 
     private final String code;
