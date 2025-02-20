@@ -8,6 +8,8 @@ public record UserGuideResponse(
 ) {
 
     public static UserGuideResponse of(UserGuide userGuide) {
-        return new UserGuideResponse(userGuide.getType().getValue(), userGuide.getContent());
+        String tip = "Tip ";
+        return new UserGuideResponse(
+            tip + userGuide.getType().getValue(), tip +userGuide.getContent());
     }
 }
