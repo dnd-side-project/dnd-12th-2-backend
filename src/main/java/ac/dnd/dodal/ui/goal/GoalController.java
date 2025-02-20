@@ -25,6 +25,7 @@ import ac.dnd.dodal.ui.goal.response.GoalStatisticsResponse;
 @RequiredArgsConstructor
 public class GoalController {
 
+    private final CreateGoalAndPlanUseCase createGoalAndPlanUseCase;
     private final CreateGoalUseCase createGoalUseCase;
     private final AchieveGoalUseCase achieveGoalUseCase;
     private final DeleteGoalUseCase deleteGoalUseCase;
@@ -39,22 +40,28 @@ public class GoalController {
         return ApiResponse.success(goalId);
     }
 
+    @PostMapping("/with-plan")
+    public ApiResponse<Long> createGoalAndPlan(@UserId Long userId,
+            @RequestBody CreateGoalAndPlanRequest request) {
+        CreateGoalAndPlanCommand command = request.toCreateGoalAndPlanCommand(userId);
+        Long goalId = createGoalAndPlanUseCase.createGoalAndPlan(command);
+
+        return ApiResponse.success(goalId);
+    }
+
     @GetMapping
     public ApiResponse<List<GoalStatisticsResponse>> getUnAchievedGoals(@UserId Long userId) {
-        List<GoalStatisticsResponse> goalStatisticsResponses 
-            = getGoalUseCase.getUnAchievedGoals(userId);
+        List<GoalStatisticsResponse> goalStatisticsResponses = getGoalUseCase.getUnAchievedGoals(userId);
 
         return ApiResponse.success(goalStatisticsResponses);
     }
 
     @GetMapping("achieve")
     public ApiResponse<List<GoalStatisticsResponse>> getAchievedGoals(@UserId Long userId) {
-        List<GoalStatisticsResponse> goalStatisticsResponses 
-            = getGoalUseCase.getAchievedGoals(userId);
+        List<GoalStatisticsResponse> goalStatisticsResponses = getGoalUseCase.getAchievedGoals(userId);
 
         return ApiResponse.success(goalStatisticsResponses);
     }
-    
 
     @PatchMapping("/{goalId}/achieve")
     public ApiResponse<Void> achieveGoal(@UserId Long userId, @PathVariable Long goalId) {
