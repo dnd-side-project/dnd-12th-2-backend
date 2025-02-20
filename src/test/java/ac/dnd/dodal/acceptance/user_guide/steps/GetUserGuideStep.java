@@ -21,4 +21,13 @@ public class GetUserGuideStep {
             .response();
     }
     
+    public static Response getNewGoalAndPlanGuides(Map<String, Object> header) {
+        return given().log().all()
+                .headers(header)
+            .when()
+                .get(BASE_URL + "/new")
+            .then().log().all()
+                .extract()
+            .response();
+    }
 }

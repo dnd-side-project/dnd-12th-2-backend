@@ -12,6 +12,7 @@ import ac.dnd.dodal.domain.guide.model.UserGuide;
 import ac.dnd.dodal.domain.guide.exception.UserGuideExceptionCode;
 import ac.dnd.dodal.application.user_guide.usecase.GetUserGuideUseCase;
 import ac.dnd.dodal.ui.user_guide.response.UserGuideResponse;
+import ac.dnd.dodal.ui.user_guide.response.NewGoalAndPlanGuidesResponse;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +28,17 @@ public class UserGuideFacadeService implements GetUserGuideUseCase {
             return new UserGuideResponse(guideType.getValue(), null);
         }
 
-        return UserGuideResponse.of(userGuide.orElseThrow(() 
-            -> new NotFoundException(UserGuideExceptionCode.USER_GUIDE_NOT_FOUND)));
+        return UserGuideResponse.of(userGuide.orElseThrow(
+                () -> new NotFoundException(UserGuideExceptionCode.USER_GUIDE_NOT_FOUND)));
+    }
+
+    @Override
+    public NewGoalAndPlanGuidesResponse getNewGoalAndPlanGuides(Long userId) {
+        UserGuide newGoalGuide = userGuideService.findByUserIdAndType(userId, GuideType.NEW_GOAL)
+            .orElseThrow(() -> new NotFoundException(UserGuideExceptionCode.USER_GUIDE_NOT_FOUND));
+        UserGuide newPlanGuide = userGuideService.findByUserIdAndType(userId, GuideType.NEW_PLAN)
+            .orElseThrow(() -> new NotFoundException(UserGuideExceptionCode.USER_GUIDE_NOT_FOUND));
+
+        return NewGoalAndPlanGuidesResponse.of(newGoalGuide, newPlanGuide);
     }
 }
