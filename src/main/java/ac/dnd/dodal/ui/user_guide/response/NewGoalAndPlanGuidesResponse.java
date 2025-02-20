@@ -10,11 +10,13 @@ public record NewGoalAndPlanGuidesResponse(
 
     public static NewGoalAndPlanGuidesResponse of(UserGuide newGoalGuide, UserGuide newPlanGuide) {
         if (newGoalGuide.getType() != GuideType.NEW_GOAL 
-        || newPlanGuide.getType() != GuideType.NEW_PLAN) {
-            throw new IllegalArgumentException(
-                "Invalid guide type: " + newGoalGuide.getType() + ", " + newPlanGuide.getType());
+                || newPlanGuide.getType() != GuideType.NEW_PLAN) {
+            throw new IllegalArgumentException("Invalid guide type: " + newGoalGuide.getType()
+                    + ", " + newPlanGuide.getType());
         }
 
-        return new NewGoalAndPlanGuidesResponse(newGoalGuide.getContent(), newPlanGuide.getContent());
+        String tip = "Tip ";
+        return new NewGoalAndPlanGuidesResponse(
+            tip + newGoalGuide.getType().getValue(), tip + newPlanGuide.getType().getValue());
     }
 }
