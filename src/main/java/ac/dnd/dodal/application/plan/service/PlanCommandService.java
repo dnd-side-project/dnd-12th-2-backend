@@ -17,6 +17,7 @@ import ac.dnd.dodal.domain.goal.model.Goal;
 import ac.dnd.dodal.domain.guide.enums.GuideType;
 import ac.dnd.dodal.domain.guide.enums.UserType;
 import ac.dnd.dodal.domain.guide.model.UserGuide;
+import ac.dnd.dodal.domain.guide.util.GuidianceGenerator;
 import ac.dnd.dodal.domain.plan_history.model.PlanHistory;
 import ac.dnd.dodal.domain.plan.model.Plan;
 import ac.dnd.dodal.domain.plan.event.PlanCompletedEvent;
@@ -97,12 +98,14 @@ public class PlanCommandService implements
         UserGuide userTypeGuide = userGuideService
                 .findByUserIdAndTypeOrThrow(command.userId(), GuideType.USER_TYPE);
         UserType userType = UserType.of(userTypeGuide.getContent());
+        String guide = GuidianceGenerator.generateUpdatePlanGuide(userType, feedback.getIndicator());
 
         plan.getGoal().completePlan(
-            command.userId(), userType, command.status(), plan, feedbacks);
+            command.userId(), command.status(), plan, feedbacks, guide);
 
         eventPublisher.publishEvent(PlanCompletedEvent.of(plan, feedback));
         planFeedbackService.saveAll(feedbacks);
+        userGuideService.updateUpdatePlanGuide(command.userId(), guide);
         return planService.save(plan);
     }
 
