@@ -34,7 +34,6 @@ public class UserGuideEventListener {
         userGuides.add(newGoalGuide);
         userGuides.add(newPlanGuide);
         userGuides.add(updatePlanGuide);
-        userGuides.add(updatePlanGuide);
         userGuideService.saveAll(userGuides);
     }
 }
