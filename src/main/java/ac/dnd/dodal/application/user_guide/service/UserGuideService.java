@@ -1,7 +1,7 @@
 package ac.dnd.dodal.application.user_guide.service;
 
 import java.util.List;
-
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -28,6 +28,10 @@ public class UserGuideService {
 
     public List<UserGuide> findAllByUserId(Long userId) {
         return userGuideRepository.findAllByUserId(userId);
+    }
+
+    public Optional<UserGuide> findByUserIdAndType(Long userId, GuideType type) {
+        return userGuideRepository.findByUserIdAndType(userId, type);
     }
 
     public UserGuide findByUserIdAndTypeOrThrow(Long userId, GuideType type) {
