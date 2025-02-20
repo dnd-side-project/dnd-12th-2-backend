@@ -12,6 +12,7 @@ import ac.dnd.dodal.common.response.ApiResponse;
 import ac.dnd.dodal.domain.guide.enums.GuideType;
 import ac.dnd.dodal.application.user_guide.usecase.GetUserGuideUseCase;
 import ac.dnd.dodal.ui.user_guide.response.UserGuideResponse;
+import ac.dnd.dodal.ui.user_guide.response.NewGoalAndPlanGuidesResponse;
 
 @RestController
 @RequestMapping("/api/user-guides")
@@ -27,5 +28,10 @@ public class UserGuideController {
         GuideType guideType = GuideType.of(type);
 
         return ApiResponse.success(getUserGuideUseCase.getUserGuide(userId, guideType));
+    }
+
+    @GetMapping("/new")
+    public ApiResponse<NewGoalAndPlanGuidesResponse> getNewGoalAndPlanGuides(@UserId Long userId) {
+        return ApiResponse.success(getUserGuideUseCase.getNewGoalAndPlanGuides(userId));
     }
 }
