@@ -25,6 +25,9 @@ import ac.dnd.dodal.common.exception.BadRequestException;
 import ac.dnd.dodal.common.exception.ForbiddenException;
 import ac.dnd.dodal.domain.goal.exception.GoalExceptionCode;
 import ac.dnd.dodal.domain.goal.model.Goal;
+import ac.dnd.dodal.domain.guide.enums.GuideType;
+import ac.dnd.dodal.domain.guide.enums.UserType;
+import ac.dnd.dodal.domain.guide.model.UserGuide;
 import ac.dnd.dodal.domain.goal.GoalFixture;
 import ac.dnd.dodal.domain.plan.enums.PlanStatus;
 import ac.dnd.dodal.domain.plan.exception.PlanExceptionCode;
@@ -40,6 +43,7 @@ import ac.dnd.dodal.application.plan.dto.CompletePlanCommandFixture;
 import ac.dnd.dodal.application.goal.dto.AddPlanCommandFixture;
 import ac.dnd.dodal.application.goal.service.GoalService;
 import ac.dnd.dodal.application.plan_history.service.PlanHistoryService;
+import ac.dnd.dodal.application.user_guide.service.UserGuideService;
 
 @ExtendWith(MockitoExtension.class)
 public class PlanCommandServiceTest {
@@ -55,6 +59,9 @@ public class PlanCommandServiceTest {
 
     @Mock
     private PlanFeedbackService planFeedbackService;
+
+    @Mock
+    private UserGuideService userGuideService;
 
     @Mock
     private ApplicationEventPublisher eventPublisher;
@@ -212,10 +219,14 @@ public class PlanCommandServiceTest {
     public void complete_success_plan_success() {
         // given
         CompletePlanCommand command = CompletePlanCommandFixture.successPlanCommand();
+        UserGuide userType = new UserGuide
+            (userId, GuideType.USER_TYPE, UserType.GOAL_ORIENTED.getValue());
         uncompletedPlan.setGoal(goal);
         uncompletedPlan.setHistory(planHistory);
         when(planService.findByIdOrThrow(command.planId())).thenReturn(uncompletedPlan);
         when(planService.save(any(Plan.class))).thenReturn(uncompletedPlan);
+        when(userGuideService.findByUserIdAndTypeOrThrow(userId, GuideType.USER_TYPE))
+            .thenReturn(userType);
 
         // when
         Plan savedPlan = planCommandService.completePlan(command);
@@ -232,10 +243,14 @@ public class PlanCommandServiceTest {
     public void complete_failure_plan_success() {
         // given
         CompletePlanCommand command = CompletePlanCommandFixture.failurePlanCommand();
+        UserGuide userType = new UserGuide
+            (userId, GuideType.USER_TYPE, UserType.GOAL_ORIENTED.getValue());
         uncompletedPlan.setGoal(goal);
         uncompletedPlan.setHistory(planHistory);
         when(planService.findByIdOrThrow(command.planId())).thenReturn(uncompletedPlan);
         when(planService.save(any(Plan.class))).thenReturn(uncompletedPlan);
+        when(userGuideService.findByUserIdAndTypeOrThrow(userId, GuideType.USER_TYPE))
+            .thenReturn(userType);
 
         // when
         Plan savedPlan = planCommandService.completePlan(command);
@@ -251,10 +266,14 @@ public class PlanCommandServiceTest {
     public void complete_failure_plan_failure_by_achieved_goal() {
         // given
         CompletePlanCommand command = CompletePlanCommandFixture.failurePlanCommand();
+        UserGuide userType = new UserGuide
+            (userId, GuideType.USER_TYPE, UserType.GOAL_ORIENTED.getValue());
         uncompletedPlan.setGoal(GoalFixture.achievedGoal());
         uncompletedPlan.setHistory(planHistory);
         when(planService.findByIdOrThrow(command.planId())).thenReturn(uncompletedPlan);
         when(planService.save(any(Plan.class))).thenReturn(uncompletedPlan);
+        when(userGuideService.findByUserIdAndTypeOrThrow(userId, GuideType.USER_TYPE))
+            .thenReturn(userType);
 
         // when & then
         assertThatThrownBy(() -> planCommandService.completePlan(command))
@@ -266,10 +285,14 @@ public class PlanCommandServiceTest {
     public void complete_failure_plan_failure_by_deleted_goal() {
         // given
         CompletePlanCommand command = CompletePlanCommandFixture.failurePlanCommand();
+        UserGuide userType = new UserGuide
+            (userId, GuideType.USER_TYPE, UserType.GOAL_ORIENTED.getValue());
         uncompletedPlan.setGoal(GoalFixture.deletedGoal());
         uncompletedPlan.setHistory(planHistory);
         when(planService.findByIdOrThrow(command.planId())).thenReturn(uncompletedPlan);
         when(planService.save(any(Plan.class))).thenReturn(uncompletedPlan);
+        when(userGuideService.findByUserIdAndTypeOrThrow(userId, GuideType.USER_TYPE))
+            .thenReturn(userType);
 
         // when & then
         assertThatThrownBy(() -> planCommandService.completePlan(command))
@@ -281,9 +304,13 @@ public class PlanCommandServiceTest {
     public void complete_failure_plan_failure_by_already_completed_plan() {
         // given
         CompletePlanCommand command = CompletePlanCommandFixture.failurePlanCommand();
+        UserGuide userType = new UserGuide
+            (userId, GuideType.USER_TYPE, UserType.GOAL_ORIENTED.getValue());
         uncompletedPlan.setGoal(goal);
         uncompletedPlan.setHistory(planHistory);
         when(planService.findByIdOrThrow(command.planId())).thenReturn(successPlan);
+        when(userGuideService.findByUserIdAndTypeOrThrow(userId, GuideType.USER_TYPE))
+            .thenReturn(userType);
 
         // when & then
         assertThatThrownBy(() -> planCommandService.completePlan(command))
@@ -295,9 +322,13 @@ public class PlanCommandServiceTest {
     public void complete_failure_plan_failure_by_already_deleted_plan() {
         // given
         CompletePlanCommand command = CompletePlanCommandFixture.failurePlanCommand();
+        UserGuide userType = new UserGuide
+            (userId, GuideType.USER_TYPE, UserType.GOAL_ORIENTED.getValue());
         uncompletedPlan.setGoal(goal);
         uncompletedPlan.setHistory(planHistory);
         when(planService.findByIdOrThrow(command.planId())).thenReturn(deletedPlan);
+        when(userGuideService.findByUserIdAndTypeOrThrow(userId, GuideType.USER_TYPE))
+            .thenReturn(userType);
 
         // when & then
         assertThatThrownBy(() -> planCommandService.completePlan(command))
@@ -309,9 +340,13 @@ public class PlanCommandServiceTest {
     public void complete_failure_plan_failure_by_plan_not_started() {
         // given
         CompletePlanCommand command = CompletePlanCommandFixture.failurePlanCommand();
+        UserGuide userType = new UserGuide
+            (userId, GuideType.USER_TYPE, UserType.GOAL_ORIENTED.getValue());
         uncompletedPlan.setGoal(goal);
         uncompletedPlan.setHistory(planHistory);
         when(planService.findByIdOrThrow(command.planId())).thenReturn(notStartedPlan);
+        when(userGuideService.findByUserIdAndTypeOrThrow(userId, GuideType.USER_TYPE))
+            .thenReturn(userType);
 
         // when & then
         assertThatThrownBy(() -> planCommandService.completePlan(command))

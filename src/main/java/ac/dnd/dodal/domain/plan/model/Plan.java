@@ -28,7 +28,8 @@ import ac.dnd.dodal.domain.plan.enums.PlanStatus;
 import ac.dnd.dodal.domain.plan_history.model.PlanHistory;
 import ac.dnd.dodal.domain.plan_feedback.model.PlanFeedback;
 import ac.dnd.dodal.domain.goal.model.Goal;
-import ac.dnd.dodal.domain.guide.service.GuidianceService;
+import ac.dnd.dodal.domain.guide.util.GuidianceGenerator;
+import ac.dnd.dodal.domain.guide.enums.UserType;
 
 @Entity(name = "plans")
 @Getter
@@ -66,7 +67,7 @@ public class Plan extends BaseEntity {
 
     private LocalDateTime completedDate;
 
-    public void complete(PlanStatus status, List<PlanFeedback> feedbacks) {
+    public void complete(PlanStatus status, List<PlanFeedback> feedbacks, UserType userType) {
         if (this.deletedAt != null) {
             throw new ForbiddenException(PlanExceptionCode.PLAN_ALREADY_DELETED);
         }
@@ -84,7 +85,8 @@ public class Plan extends BaseEntity {
         }
 
         this.status = status;
-        this.guide = GuidianceService.generateGuide(feedbacks);
+        this.guide = GuidianceGenerator
+            .generateUpdatePlanGuide(userType, feedbacks.get(0).getIndicator());
         feedbacks.forEach(feedback -> feedback.setPlan(this));
         setCompletedDate();
     }

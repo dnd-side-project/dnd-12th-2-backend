@@ -14,6 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.context.ApplicationEventPublisher;
 
 import ac.dnd.dodal.domain.goal.model.Goal;
+import ac.dnd.dodal.domain.guide.enums.GuideType;
+import ac.dnd.dodal.domain.guide.enums.UserType;
+import ac.dnd.dodal.domain.guide.model.UserGuide;
 import ac.dnd.dodal.domain.plan_history.model.PlanHistory;
 import ac.dnd.dodal.domain.plan.model.Plan;
 import ac.dnd.dodal.domain.plan.event.PlanCompletedEvent;
@@ -25,6 +28,7 @@ import ac.dnd.dodal.application.plan.usecase.CompletePlanUseCase;
 import ac.dnd.dodal.application.plan.usecase.CreatePlanAndHistoryUseCase;
 import ac.dnd.dodal.application.plan_feedback.service.PlanFeedbackService;
 import ac.dnd.dodal.application.plan_history.service.PlanHistoryService;
+import ac.dnd.dodal.application.user_guide.service.UserGuideService;
 
 @Transactional
 @Service
@@ -36,6 +40,7 @@ public class PlanCommandService implements
     private final PlanHistoryService planHistoryService;
     private final PlanService planService;
     private final PlanFeedbackService planFeedbackService;
+    private final UserGuideService userGuideService;
 
     private final ApplicationEventPublisher eventPublisher;
 
@@ -89,8 +94,12 @@ public class PlanCommandService implements
         List<PlanFeedback> feedbacks = new ArrayList<>();
         PlanFeedback feedback = new PlanFeedback(command.question(), command.indicator());
         feedbacks.add(feedback);
+        UserGuide userTypeGuide = userGuideService
+                .findByUserIdAndTypeOrThrow(command.userId(), GuideType.USER_TYPE);
+        UserType userType = UserType.of(userTypeGuide.getContent());
 
-        plan.getGoal().completePlan(command.userId(), command.status(), plan, feedbacks);
+        plan.getGoal().completePlan(
+            command.userId(), userType, command.status(), plan, feedbacks);
 
         eventPublisher.publishEvent(PlanCompletedEvent.of(plan, feedback));
         planFeedbackService.saveAll(feedbacks);
