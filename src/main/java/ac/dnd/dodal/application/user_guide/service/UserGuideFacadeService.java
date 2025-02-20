@@ -24,7 +24,7 @@ public class UserGuideFacadeService implements GetUserGuideUseCase {
         Optional<UserGuide> userGuide = userGuideService.findByUserIdAndType(userId, guideType);
 
         if (!userGuide.isPresent() && guideType == GuideType.UPDATE_PLAN) {
-            return new UserGuideResponse(guideType, null);
+            return new UserGuideResponse(guideType.getValue(), null);
         }
 
         return UserGuideResponse.of(userGuide.orElseThrow(() 
