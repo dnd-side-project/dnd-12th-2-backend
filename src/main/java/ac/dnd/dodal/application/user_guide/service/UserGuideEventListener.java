@@ -28,10 +28,12 @@ public class UserGuideEventListener {
                 GuidianceGenerator.generateNewGoalGuide(event.getUserAnswers()));
         UserGuide newPlanGuide = new UserGuide(event.getUserId(), GuideType.NEW_PLAN,
                 GuidianceGenerator.generateNewPlanGuide(event.getUserAnswers()));
-
+        UserGuide updatePlanGuide = new UserGuide(event.getUserId(), GuideType.UPDATE_PLAN,
+                "피드백을 제출해주세요! 적합한 가이드를 제공해드립니다.");
         userGuides.add(userType);
         userGuides.add(newGoalGuide);
         userGuides.add(newPlanGuide);
+        userGuides.add(updatePlanGuide);
         userGuideService.saveAll(userGuides);
     }
 }

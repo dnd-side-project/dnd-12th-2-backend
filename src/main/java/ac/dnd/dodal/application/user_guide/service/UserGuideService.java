@@ -5,6 +5,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import ac.dnd.dodal.common.exception.NotFoundException;
 import ac.dnd.dodal.domain.guide.enums.GuideType;
@@ -35,10 +36,19 @@ public class UserGuideService {
     }
 
     public UserGuide findByUserIdAndTypeOrThrow(Long userId, GuideType type) {
-        return userGuideRepository.findByUserIdAndType(userId, type)
-            .orElseThrow(() -> new NotFoundException(UserGuideExceptionCode.USER_GUIDE_NOT_FOUND));
+        return userGuideRepository.findByUserIdAndType(userId, type).orElseThrow(
+                () -> new NotFoundException(UserGuideExceptionCode.USER_GUIDE_NOT_FOUND));
     }
 
+    @Transactional
+    public void updateUpdatePlanGuide(Long userId, String content) {
+        UserGuide userGuide = findByUserIdAndTypeOrThrow(userId, GuideType.UPDATE_PLAN);
+
+        userGuide.update(content);
+        userGuideRepository.save(userGuide);
+    }
+
+    @Transactional
     public void delete(Long userId, GuideType type) {
         UserGuide userGuide = findByUserIdAndTypeOrThrow(userId, type);
 
@@ -50,6 +60,7 @@ public class UserGuideService {
         userGuideRepository.save(userGuide);
     }
 
+    @Transactional
     public void deleteAll(Long userId) {
         List<UserGuide> userGuides = findAllByUserId(userId);
 

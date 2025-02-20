@@ -24,7 +24,6 @@ import ac.dnd.dodal.domain.plan_history.model.PlanHistory;
 import ac.dnd.dodal.domain.plan.model.Plan;
 import ac.dnd.dodal.domain.plan_feedback.model.PlanFeedback;
 import ac.dnd.dodal.domain.plan.enums.PlanStatus;
-import ac.dnd.dodal.domain.guide.enums.UserType;
 
 @Entity(name = "goals")
 @Getter
@@ -61,11 +60,11 @@ public class Goal extends BaseEntity {
     }
 
     public void completePlan(
-        Long userId, UserType userType, PlanStatus status, Plan plan, List<PlanFeedback> feedbacks) {
+        Long userId, PlanStatus status, Plan plan, List<PlanFeedback> feedbacks, String guide) {
         validateAuthor(userId);
         validateGoal();
 
-        plan.complete(status, feedbacks, userType);
+        plan.complete(status, feedbacks, guide);
     }
 
     public void achieve(Long userId) {
