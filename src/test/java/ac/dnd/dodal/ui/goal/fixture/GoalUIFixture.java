@@ -1,8 +1,16 @@
 package ac.dnd.dodal.ui.goal.fixture;
 
+import java.time.LocalDateTime;
+
 import ac.dnd.dodal.ui.goal.request.CreateGoalRequest;
+import ac.dnd.dodal.ui.goal.request.CreateGoalAndPlanRequest;
 
 public class GoalUIFixture {
+
+    public static CreateGoalAndPlanRequest createGoalAndPlanRequest() {
+        return new CreateGoalAndPlanRequest(
+            "test goal", "test plan", LocalDateTime.now(), LocalDateTime.now().plusDays(1));
+    }
 
     public static CreateGoalRequest createGoalRequest(String title) {
         return new CreateGoalRequest(title);
