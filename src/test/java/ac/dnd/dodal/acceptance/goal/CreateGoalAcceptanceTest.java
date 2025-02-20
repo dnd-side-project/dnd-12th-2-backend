@@ -16,9 +16,31 @@ import ac.dnd.dodal.AcceptanceTest;
 import ac.dnd.dodal.acceptance.goal.steps.GoalSteps;
 import ac.dnd.dodal.domain.goal.exception.GoalExceptionCode;
 import ac.dnd.dodal.ui.goal.request.CreateGoalRequest;
+import ac.dnd.dodal.ui.goal.request.CreateGoalAndPlanRequest;
 import ac.dnd.dodal.ui.goal.fixture.GoalUIFixture;
 
 public class CreateGoalAcceptanceTest extends AcceptanceTest {
+
+    @Test
+    @DisplayName("Create Goal and Plan Test with Valid Title")
+    public void create_goal_and_plan() {
+        // given
+        CreateGoalAndPlanRequest request = GoalUIFixture.createGoalAndPlanRequest();
+
+        // when
+        Response response = GoalSteps.createGoalAndPlan(authorizationHeader, request);
+        ApiResponse<Long> apiResponse = response.as(new TypeRef<ApiResponse<Long>>() {});
+
+        log.info("apiResponse: {}", apiResponse);
+        // then 200
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
+        // COM001
+        assertThat(apiResponse.code()).isEqualTo(CommonResultCode.SUCCESS.getCode());
+        // Success
+        assertThat(apiResponse.message()).isEqualTo(CommonResultCode.SUCCESS.getMessage());
+        // Created Goal Id
+        assertThat(apiResponse.data()).isNotNull();
+    }
 
     @Test
     @DisplayName("Create Goal Test with Valid Title")
