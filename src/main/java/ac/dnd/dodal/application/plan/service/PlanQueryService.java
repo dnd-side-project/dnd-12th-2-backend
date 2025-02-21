@@ -87,9 +87,11 @@ public class PlanQueryService implements
             int totalCount = 0;
             for (PlanModel plan : plans) {
                 if (isPlanForDate(plan, date)) {
-                    successCount++;
+                    totalCount++;
+                    if (plan.getCompletedDate() != null) {
+                        successCount++;
+                    }
                 }
-                totalCount++;
             }
             dailyAchievementRateElements.add(new DailyAchievementRateElement(date, successCount, totalCount));
         }
