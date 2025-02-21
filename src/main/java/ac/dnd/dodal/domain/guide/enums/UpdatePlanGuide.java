@@ -11,7 +11,7 @@ public enum UpdatePlanGuide {
 
     // SUCCESS
     REORGANIZE_PRIORITIES("가장 중요한 목표부터 다시 정리해볼까요?",
-        UserType.GOAL_ORIENTED, "우선순위를 재조정해요."),
+        UserType.GOAL_ORIENTED, "우선 순위를 재조정해요."),
     SIMPLIFY_CORE_STEPS("핵심 단계만 남기고 단순화해보세요.",
         UserType.GOAL_ORIENTED, "시간 단축을 시도해볼래요."),
     ALIGN_GOAL_AND_PLAN("목표와 계획이 잘 맞는지 살펴보세요.",
@@ -21,8 +21,8 @@ public enum UpdatePlanGuide {
     LEARN_FROM_PAST("지금까지의 방식에서 배울 점을 찾아보세요.", 
         UserType.GOAL_ORIENTED, "스스로 패턴을 분석해봐요."),
 
-    ADJUST_PRIORITIES("지금 상황에 맞게 우선순위를 조정해볼까요?",
-        UserType.FLEXIBLE_EXECUTION, "우선순위를 재조정해요."),
+    ADJUST_PRIORITIES("지금 상황에 맞게 우선 순위를 조정해볼까요?",
+        UserType.FLEXIBLE_EXECUTION, "우선 순위를 재조정해요."),
     TRY_TIME_SAVING_METHODS("시간을 줄일 방법을 가볍게 시도해보세요.",
         UserType.FLEXIBLE_EXECUTION, "시간 단축을 시도해볼래요."),
     ADJUST_WHILE_EXECUTING("계획보다는 실행하면서 조정해보세요.",
@@ -33,7 +33,7 @@ public enum UpdatePlanGuide {
         UserType.FLEXIBLE_EXECUTION, "스스로 패턴을 분석해봐요."),
 
     REORGANIZE_CHECKLIST("체크리스트를 다시 정리해볼까요?",
-        UserType.CHECKLIST_BASED, "우선순위를 재조정해요."),
+        UserType.CHECKLIST_BASED, "우선 순위를 재조정해요."),
     REMOVE_UNNECESSARY_STEPS("불필요한 단계를 줄여볼까요?",
         UserType.CHECKLIST_BASED, "시간 단축을 시도해볼래요."),
     FINE_TUNE_PLAN("계획을 더 세밀하게 조정해볼까요?",
@@ -44,7 +44,7 @@ public enum UpdatePlanGuide {
         UserType.CHECKLIST_BASED, "스스로 패턴을 분석해봐요."),
 
     RECONSIDER_MAIN_GOALS("중요한 목표부터 다시 생각해볼까요?",
-        UserType.PREFERRING_A_BIG_DIRECTION, "우선순위를 재조정해요."),
+        UserType.PREFERRING_A_BIG_DIRECTION, "우선 순위를 재조정해요."),
     BALANCE_BIG_PICTURE_AND_TIME("큰 그림을 유지하며 시간을 조정해보세요.",
         UserType.PREFERRING_A_BIG_DIRECTION, "시간 단축을 시도해볼래요."),
     VERIFY_GOAL_ALIGNMENT("목표와 맞는 계획인지 다시 확인해보세요.",
@@ -55,7 +55,7 @@ public enum UpdatePlanGuide {
         UserType.PREFERRING_A_BIG_DIRECTION, "스스로 패턴을 분석해봐요."),
 
     START_WITH_EASY_TASKS_SUCCESS("쉬운 것부터 시작해볼까요?",
-        UserType.LACK_OF_MOTIVATION_TO_EXECUTE, "우선순위를 재조정해요."),
+        UserType.LACK_OF_MOTIVATION_TO_EXECUTE, "우선 순위를 재조정해요."),
     QUICKLY_COMPLETE_SMALL_GOALS("작은 목표부터 빠르게 해보세요.",
         UserType.LACK_OF_MOTIVATION_TO_EXECUTE, "시간 단축을 시도해볼래요."),
     ADJUST_FOR_MANAGEABILITY("너무 어렵지 않게 계획을 조정해보세요.",
@@ -71,7 +71,7 @@ public enum UpdatePlanGuide {
     BREAK_DOWN_GOALS("목표를 더 구체적인 단계로 나눠볼까요?",
         UserType.GOAL_ORIENTED, "구체적인 계획을 설정해요."),
     CHECK_PROGRESS_PERIODICALLY("중간중간 진행을 체크해보세요.",
-        UserType.GOAL_ORIENTED, "진행 상황을 수시로 확인해요."),
+        UserType.GOAL_ORIENTED, "진행상황을 수시로 확인해요."),
     ALLOCATE_TIME_FOR_IMPORTANT_GOALS("중요한 목표를 위해 시간을 먼저 확보해보세요.",
         UserType.GOAL_ORIENTED, "계획 실행 시간을 좀 더 확보해요."),
     CREATE_FOCUSED_ENVIRONMENT("더 집중할 수 있는 환경을 만들어볼까요?",

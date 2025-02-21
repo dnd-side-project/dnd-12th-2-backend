@@ -24,6 +24,7 @@ public class GuidianceGenerator {
 
             return userType.getValue();
         } catch (IllegalArgumentException e) {
+            e.printStackTrace();
             throw new InternalServerErrorException(
                 UserGuideExceptionCode.FAIL_TO_GENERATE_USER_GUIDE, e);
         }
@@ -35,6 +36,7 @@ public class GuidianceGenerator {
             NewGoalGuide newGoalGuide = NewGoalGuide.getByInterestGoal(interestGoal);
             return newGoalGuide.getGuide();
         } catch (IllegalArgumentException e) {
+            e.printStackTrace();
             throw new InternalServerErrorException
                 (UserGuideExceptionCode.FAIL_TO_GENERATE_USER_GUIDE, e);
         }
@@ -49,6 +51,7 @@ public class GuidianceGenerator {
                 preferenceSetPlan, difficultySetPlan);
             return newPlanGuide.getGuide();
         } catch (IllegalArgumentException e) {
+            e.printStackTrace();
             throw new InternalServerErrorException(
                 UserGuideExceptionCode.FAIL_TO_GENERATE_USER_GUIDE, e);
         }
@@ -61,6 +64,7 @@ public class GuidianceGenerator {
 
                 return updatePlanGuide.getGuide();
         } catch (IllegalArgumentException e) {
+            e.printStackTrace();
             throw new InternalServerErrorException(
                 UserGuideExceptionCode.FAIL_TO_GENERATE_USER_GUIDE, e);
         }

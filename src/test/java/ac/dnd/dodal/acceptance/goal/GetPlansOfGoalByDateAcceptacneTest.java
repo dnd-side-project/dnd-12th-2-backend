@@ -15,8 +15,7 @@ import org.springframework.http.HttpStatus;
 import ac.dnd.dodal.AcceptanceTest;
 import ac.dnd.dodal.common.response.ApiResponse;
 import ac.dnd.dodal.common.enums.CommonResultCode;
-import ac.dnd.dodal.ui.plan.response.PlanElement;
-// import ac.dnd.dodal.ui.plan.response.PlanWithHistoryElement;
+import ac.dnd.dodal.ui.plan.response.PlanWithHistoryElement;
 import ac.dnd.dodal.acceptance.goal.steps.GetPlansOfGoalByDateSteps;
 
 public class GetPlansOfGoalByDateAcceptacneTest extends AcceptanceTest {    
@@ -27,12 +26,10 @@ public class GetPlansOfGoalByDateAcceptacneTest extends AcceptanceTest {
         // when
         Response response = GetPlansOfGoalByDateSteps
                 .getPlansOfGoalByDate(authorizationHeader, goalId, date);
-        // ApiResponse<List<PlanWithHistoryElement>> apiResponse =
-            // response.as(new TypeRef<ApiResponse<List<PlanWithHistoryElement>>>() {});
+        ApiResponse<List<PlanWithHistoryElement>> apiResponse =
+            response.as(new TypeRef<ApiResponse<List<PlanWithHistoryElement>>>() {});
 
-        ApiResponse<List<PlanElement>> apiResponse =
-                response.as(new TypeRef<ApiResponse<List<PlanElement>>>() {});
-
+        log.info("response: {}", response.asString());
         log.info("apiResponse: {}", apiResponse);
         // then 200
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());

@@ -10,10 +10,9 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
+import ac.dnd.dodal.application.plan.dto.PlanModel;
 import ac.dnd.dodal.domain.plan.model.Plan;
 import ac.dnd.dodal.ui.plan.response.PlanElement;
-// import ac.dnd.dodal.ui.plan.response.PlanWithHistoryElement;
 
 @Repository
 public interface PlanRepository extends JpaRepository<Plan, Long> {
@@ -27,41 +26,26 @@ public interface PlanRepository extends JpaRepository<Plan, Long> {
             + "ORDER BY p.completedDate DESC")
     Page<PlanElement> findAllByHistoryId(@Param("historyId") Long historyId, Pageable pageable);
 
-    @Query("SELECT p FROM plans p WHERE p.goal.goalId = :goalId "
+    @Query("SELECT new ac.dnd.dodal.application.plan.dto.PlanModel("
+            + "p.planId, "
+            + "p.history.historyId, "
+            + "p.goal.goalId, "
+            + "p.title, "
+            + "p.status, "
+            + "p.guide, "
+            + "p.startDate, "
+            + "p.endDate, "
+            + "p.completedDate) "
+            + "FROM plans p "
+            + "WHERE p.goal.goalId = :goalId "
             + "AND p.deletedAt IS NULL "
             + "AND ((p.startDate <= :endDate AND p.startDate >= :startDate) "
             + "OR (p.endDate <= :endDate AND p.endDate >= :startDate)) "
             + "AND p.goal.deletedAt IS NULL")
-    List<PlanElement> findAllByGoalIdAndDate(
+    List<PlanModel> findAllByGoalIdAndDate(
         @Param("goalId") Long goalId,
         @Param("startDate") LocalDateTime startDate,
         @Param("endDate") LocalDateTime endDate);
-
-//     @Query("SELECT p1, MAX(p2), p1.history.historyId FROM plans p1 "
-//             + "LEFT JOIN plans p2 ON p1.history.historyId = p2.history.historyId "
-//             + "WHERE p1.goal.goalId = :goalId "
-//             + "AND p1.deletedAt IS NULL AND p2.deletedAt IS NULL "
-//             + "AND p1.startDate <= :date "
-//             + "AND p1.endDate >= :date "
-//             + "AND p1.startDate > p2.startDate"
-//             + "GROUP BY p1.history.historyId ")
-//     List<PlanElement> findAllWithPreviousHistoryByGoalIdAndDate(
-//                     @Param("goalId") Long goalId, @Param("date") LocalDateTime date);
-
-//     @Query("SELECT new ac.dnd.dodal.ui.plan.response.PlanWithHistoryElement(p1.history.historyId, p2) FROM plans p1 "
-//             + "LEFT JOIN (SELECT p2.history.historyId, MAX(p2.startDate) AS latestStartDate "
-//             + "            FROM plans p2 "
-//             + "            WHERE p2.deletedAt IS NULL "
-//             + "            AND p2.startDate <= p1.startDate "
-//             + "            GROUP BY p2.history.historyId) AS latestP2 "
-//             + "ON p1.history.historyId = latestP2.historyId "
-//             + "LEFT JOIN plans p2 ON p2.history.historyId = latestP2.historyId "
-//             + "WHERE p1.goal.goalId = :goalId "
-//             + "AND p1.deletedAt IS NULL "
-//             + "AND p1.startDate <= :date "
-//             + "AND p1.endDate >= :date")
-//     List<PlanWithHistoryElement> findAllWithPreviousHistoryByGoalIdAndDate(
-//         @Param("goalId") Long goalId, @Param("date") LocalDateTime date);
 
     @Query("SELECT COUNT(history) > 0 FROM plan_histories history "
             + "WHERE history.historyId = :historyId "
