@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import ac.dnd.dodal.common.exception.ForbiddenException;
+import ac.dnd.dodal.domain.plan.enums.PlanStatus;
 import ac.dnd.dodal.application.plan.repository.PlanRepository;
 import ac.dnd.dodal.application.plan.usecase.GetPlansOfHistoryUseCase;
 import ac.dnd.dodal.application.plan.usecase.GetPlansOfGoalByDateUseCase;
@@ -84,15 +85,20 @@ public class PlanQueryService implements
             LocalDate date = startDate.plusDays(i);
             int successCount = 0;
             int totalCount = 0;
+            int failureCount = 0;
             for (PlanModel plan : plans) {
                 if (isPlanForDate(plan, date)) {
                     totalCount++;
-                    if (plan.getCompletedDate() != null) {
+                    if (plan.getStatus() == PlanStatus.SUCCESS) {
                         successCount++;
+                    }
+                    if (plan.getStatus() == PlanStatus.FAILURE) {
+                        failureCount++;
                     }
                 }
             }
-            dailyAchievementRateElements.add(new DailyAchievementRateElement(date, successCount, totalCount));
+            dailyAchievementRateElements.add(new DailyAchievementRateElement(
+                date, failureCount, successCount, totalCount));
         }
 
         return dailyAchievementRateElements;
