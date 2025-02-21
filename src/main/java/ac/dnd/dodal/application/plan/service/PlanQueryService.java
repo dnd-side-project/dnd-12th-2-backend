@@ -58,7 +58,8 @@ public class PlanQueryService implements
         for (Long historyId : historyIds) {
             List<PlanElement> plansByHistoryId =
                     plans.stream().filter(plan -> plan.getHistoryId().equals(historyId)
-                        && plan.getCompletedDate() != null)
+                        // && plan.getCompletedDate() != null)
+                    )
                             .map(PlanModel::toPlanElement)
                             .collect(Collectors.toList());
             planWithHistoryElements.add(new PlanWithHistoryElement(historyId, plansByHistoryId));
@@ -111,6 +112,8 @@ public class PlanQueryService implements
         return (plan.getStartDate().isBefore(endDateTime) &&
                 plan.getEndDate().isAfter(startDateTime)) ||
                 (plan.getStartDate().isBefore(endDateTime) &&
-                plan.getEndDate().isEqual(startDateTime));
+                plan.getEndDate().isAfter(startDateTime)) ||
+                plan.getStartDate().isEqual(startDateTime) ||
+                plan.getEndDate().isEqual(startDateTime);
     }
 }
