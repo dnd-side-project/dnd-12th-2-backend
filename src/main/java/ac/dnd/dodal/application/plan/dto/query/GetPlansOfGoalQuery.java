@@ -5,7 +5,8 @@ import java.time.LocalDate;
 public record GetPlansOfGoalQuery(
     Long userId,
     Long goalId,
-    LocalDate date
+    LocalDate date,
+    int range
 ) {
     
 }

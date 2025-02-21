@@ -13,6 +13,22 @@ public class GetPlansOfGoalByDateSteps {
     private static final String BASE_URL = "/api/goals/{goalId}/plans";
 
     public static Response getPlansOfGoalByDate(
+            Map<String, Object> header, Long goalId, LocalDate date, int range) {
+        String url = BASE_URL.replace("{goalId}", goalId.toString());
+        String dateString = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+        return given().log().all()
+                .headers(header)
+                .queryParam("date", dateString)
+                .queryParam("range", range)
+            .when()
+                .get(url)
+            .then().log().all()
+                .extract()
+            .response();
+    }
+
+    public static Response getWeeklyPlansOfGoalByDate(
             Map<String, Object> header, Long goalId, LocalDate date) {
         String url = BASE_URL.replace("{goalId}", goalId.toString());
         String dateString = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));

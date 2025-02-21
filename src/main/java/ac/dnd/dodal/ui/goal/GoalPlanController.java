@@ -35,8 +35,9 @@ public class GoalPlanController {
     public ApiResponse<?> getPlansOfGoalByDate(
         @UserId Long userId,
         @PathVariable Long goalId,
-        @RequestParam LocalDate date) {
-        GetPlansOfGoalQuery query = new GetPlansOfGoalQuery(userId, goalId, date);
+        @RequestParam LocalDate date,
+        @RequestParam(required = false, defaultValue = "1") Integer range) {
+        GetPlansOfGoalQuery query = new GetPlansOfGoalQuery(userId, goalId, date, range);
 
         return ApiResponse.success(getPlansOfGoalByDateUseCase.getPlansOfGoalByDate(query));
     }

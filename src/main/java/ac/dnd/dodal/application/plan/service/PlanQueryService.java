@@ -43,7 +43,6 @@ public class PlanQueryService implements
         return planRepository.findAllByHistoryId(query.historyId(), query.pageable());
     }
 
-    // 3일치의 completed 된 history 함께 제공
     @Override
     public List<PlanWithHistoryElement> getPlansOfGoalByDate(GetPlansOfGoalQuery query) {
         if (!planService.isExistByUserIdAndGoalId(query.userId(), query.goalId())) {
@@ -51,7 +50,7 @@ public class PlanQueryService implements
         }
 
         List<PlanModel> plans = planRepository.findAllByGoalIdAndDate(query.goalId(),
-                query.date().atStartOfDay().minusDays(3), query.date().atStartOfDay().plusDays(1));
+                query.date().atStartOfDay().minusDays(query.range()), query.date().atStartOfDay().plusDays(query.range() + 1));
         List<Long> historyIds =
                 plans.stream().map(PlanModel::getHistoryId).distinct().collect(Collectors.toList());
         List<PlanWithHistoryElement> planWithHistoryElements = new ArrayList<>();

@@ -39,8 +39,8 @@ public interface PlanRepository extends JpaRepository<Plan, Long> {
             + "FROM plans p "
             + "WHERE p.goal.goalId = :goalId "
             + "AND p.deletedAt IS NULL "
-            + "AND ((p.startDate <= :endDate AND p.startDate >= :startDate) "
-            + "OR (p.endDate <= :endDate AND p.endDate >= :startDate)) "
+            + "AND ((p.startDate < :endDate AND p.startDate >= :startDate) "
+            + "OR (p.endDate < :endDate AND p.endDate >= :startDate)) "
             + "AND p.goal.deletedAt IS NULL")
     List<PlanModel> findAllByGoalIdAndDate(
         @Param("goalId") Long goalId,
