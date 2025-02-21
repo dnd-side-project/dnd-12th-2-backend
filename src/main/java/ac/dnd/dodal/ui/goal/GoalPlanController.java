@@ -1,7 +1,6 @@
 package ac.dnd.dodal.ui.goal;
 
 import java.time.LocalDate;
-
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,7 +35,10 @@ public class GoalPlanController {
         @UserId Long userId,
         @PathVariable Long goalId,
         @RequestParam LocalDate date,
-        @RequestParam(required = false, defaultValue = "1") Integer range) {
+        @RequestParam(required = false, defaultValue = "0") Integer range) {
+        if (range < 0) {
+            throw new IllegalArgumentException("Range must be greater than 0");
+        }
         GetPlansOfGoalQuery query = new GetPlansOfGoalQuery(userId, goalId, date, range);
 
         return ApiResponse.success(getPlansOfGoalByDateUseCase.getPlansOfGoalByDate(query));
