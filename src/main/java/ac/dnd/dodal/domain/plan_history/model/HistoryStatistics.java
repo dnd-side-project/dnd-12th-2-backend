@@ -64,6 +64,13 @@ public class HistoryStatistics {
         this.failureCount = failureCount;
         this.totalCount = successCount + failureCount;
     }
+
+    public HistoryStatistics(Long historyId) {
+        this.historyId = historyId;
+        this.failureCount = 0;
+        this.successCount = 0;
+        this.totalCount = 0;
+    }
 }
 
 

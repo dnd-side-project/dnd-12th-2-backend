@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import ac.dnd.dodal.application.plan_history.service.HistoryStatisticsService;
+import ac.dnd.dodal.domain.plan_history.model.HistoryStatistics;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -42,6 +44,7 @@ public class PlanCommandService implements
     private final PlanService planService;
     private final PlanFeedbackService planFeedbackService;
     private final UserGuideService userGuideService;
+    private final HistoryStatisticsService historyStatisticsService;
 
     private final ApplicationEventPublisher eventPublisher;
 
@@ -83,6 +86,8 @@ public class PlanCommandService implements
 
         goal.addHistory(command.userId(), planHistory);
         planHistoryService.saveAndFlush(planHistory);
+        HistoryStatistics historyStatistics = new HistoryStatistics(planHistory.getHistoryId());
+        historyStatisticsService.save(historyStatistics);
 
         planHistory.addPlan(plan, null, null);
         goal.addPlan(command.userId(), plan);
