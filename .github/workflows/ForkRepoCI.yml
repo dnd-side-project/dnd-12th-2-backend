@@ -15,6 +15,7 @@ permissions:
 
 env:
   SPRING_CONFIG_LOCATION: classpath:test/resources/application-test.yml
+  DODAL_JASYPT_KEY: ${{ secrets.DODAL_JASYPT_KEY }}
 
 jobs:
   # ✅ Fork 레포에서 PR이 들어오면 Jacoco & SonarCloud 실행

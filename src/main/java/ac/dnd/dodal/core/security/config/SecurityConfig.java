@@ -72,7 +72,7 @@ public class SecurityConfig {
                                             JwtAuthenticationFilter.class)
                             .build();
     }
-    
+
     @Bean
     WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring()
