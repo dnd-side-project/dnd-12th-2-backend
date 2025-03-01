@@ -37,6 +37,7 @@ import ac.dnd.dodal.domain.plan.event.PlanCompletedEvent;
 import ac.dnd.dodal.domain.plan_history.model.PlanHistory;
 import ac.dnd.dodal.domain.plan_history.PlanHistoryFixture;
 import ac.dnd.dodal.domain.plan_history.exception.PlanHistoryExceptionCode;
+import ac.dnd.dodal.domain.plan_history.model.HistoryStatistics;
 import ac.dnd.dodal.application.plan.dto.command.*;
 import ac.dnd.dodal.application.plan_feedback.service.PlanFeedbackService;
 import ac.dnd.dodal.application.plan.dto.CompletePlanCommandFixture;
@@ -44,6 +45,7 @@ import ac.dnd.dodal.application.goal.dto.AddPlanCommandFixture;
 import ac.dnd.dodal.application.goal.service.GoalService;
 import ac.dnd.dodal.application.plan_history.service.PlanHistoryService;
 import ac.dnd.dodal.application.user_guide.service.UserGuideService;
+import ac.dnd.dodal.application.plan_history.service.HistoryStatisticsService;
 
 @ExtendWith(MockitoExtension.class)
 public class PlanCommandServiceTest {
@@ -62,6 +64,9 @@ public class PlanCommandServiceTest {
 
     @Mock
     private UserGuideService userGuideService;
+
+    @Mock
+    private HistoryStatisticsService historyStatisticsService;
 
     @Mock
     private ApplicationEventPublisher eventPublisher;
@@ -212,6 +217,7 @@ public class PlanCommandServiceTest {
 
         // then
         verify(planService).save(any(Plan.class));
+        verify(historyStatisticsService).save(any(HistoryStatistics.class));
     }
 
     @Test
