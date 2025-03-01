@@ -17,13 +17,14 @@ public class Constants {
     public static final String KAKAO_RESOURCE_SERVER_URL = "https://kapi.kakao.com/v2/user/me";
     public static final String APPLE_TOKEN_URL = "https://appleid.apple.com/auth/oauth2/v2/token";
 
-
+    /**
+     * Urls which don't need authentication
+     * but need to be filtered
+     * 
+     * @see JwtAuthenticationFilter
+     */
     public static final List<String> NO_NEED_AUTH_URLS = List.of(
 
-            //로그인 URL
-            //Swagger URL
-            //로그인 없이 둘러볼 수 있는 URL
-            "/hello",
             // 회원가입
             "/api/auth/sign-up",
             // 로그인
@@ -32,7 +33,19 @@ public class Constants {
             "/api/auth/login/kakao",
             "/api/auth/login/naver",
             "/api/auth/login/google",
-            "/api/auth/login/apple",
+            "/api/auth/login/apple"
+    );
+
+    /**
+     * Urls which bypass security filter so that it can be accessed without authentication
+     * Difference from NO_NEED_AUTH_URLS, NO_NEED_AUTH_URLS is 
+     * that they don't need to be authenticated but need to be filtered.
+     * 
+     * @see JwtAuthenticationFilter
+     */
+    public static final List<String> BYPASS_URLS = List.of(
+            // 
+            "/hello",
             // 모니터링 
             "/actuator/**",
             // 피드백 데이터 조회
