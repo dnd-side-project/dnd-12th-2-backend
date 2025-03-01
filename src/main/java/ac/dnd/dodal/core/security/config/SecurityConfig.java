@@ -21,16 +21,13 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
 
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
-@Slf4j
 @EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfig {
 
@@ -43,39 +40,42 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
-                .csrf(AbstractHttpConfigurer::disable)
-                .httpBasic(AbstractHttpConfigurer::disable)
-                .sessionManagement(sessionManagement ->
-                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            return http.csrf(AbstractHttpConfigurer::disable)
+                            .httpBasic(AbstractHttpConfigurer::disable)
+                            .sessionManagement(sessionManagement -> sessionManagement
+                                            .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-                .authorizeHttpRequests(authorizeRequests ->
-                        authorizeRequests
-                                .requestMatchers(Constants.NO_NEED_AUTH_URLS.toArray(String[]::new)).permitAll()
-                                .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                                .anyRequest().authenticated())
+                            .authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                                            .requestMatchers(Constants.NO_NEED_AUTH_URLS
+                                                            .toArray(String[]::new))
+                                            .permitAll().requestMatchers("/api/admin/**")
+                                            .hasRole("ADMIN").anyRequest().authenticated())
 
-                .formLogin(AbstractHttpConfigurer::disable)
+                            .formLogin(AbstractHttpConfigurer::disable)
 
-                .exceptionHandling((exceptionHandling) ->
-                        exceptionHandling
-                                .authenticationEntryPoint(jwtAuthEntryPoint)
-                                .accessDeniedHandler(jwtAccessDeniedHandler)
-                )
+                            .exceptionHandling((exceptionHandling) -> exceptionHandling
+                                            .authenticationEntryPoint(jwtAuthEntryPoint)
+                                            .accessDeniedHandler(jwtAccessDeniedHandler))
 
-                .logout(configurer ->
-                        configurer
-                                .logoutUrl("/api/auth/sign-out")
-                                .addLogoutHandler(customSignOutProcessHandler)
-                                .logoutSuccessHandler(customSignOutResultHandler)
-                                .deleteCookies(Constants.AUTHORIZATION_HEADER, Constants.REAUTHORIZATION))
+                            .logout(configurer -> configurer.logoutUrl("/api/auth/sign-out")
+                                            .addLogoutHandler(customSignOutProcessHandler)
+                                            .logoutSuccessHandler(customSignOutResultHandler)
+                                            .deleteCookies(Constants.AUTHORIZATION_HEADER,
+                                                            Constants.REAUTHORIZATION))
 
-                .addFilterBefore(new CustomLogoutFilter(), LogoutFilter.class)
-                .addFilterBefore(
-                        new JwtAuthenticationFilter(jwtUtil,
-                                new JwtAuthenticationProvider(customUserDetailsService)),
-                        CustomLogoutFilter.class)
-                .addFilterBefore(new JwtExceptionFilter(), JwtAuthenticationFilter.class)
-                .build();
+                            .addFilterBefore(new CustomLogoutFilter(), LogoutFilter.class)
+                            .addFilterBefore(new JwtAuthenticationFilter(jwtUtil,
+                                            new JwtAuthenticationProvider(
+                                                            customUserDetailsService)),
+                                            CustomLogoutFilter.class)
+                            .addFilterBefore(new JwtExceptionFilter(),
+                                            JwtAuthenticationFilter.class)
+                            .build();
+    }
+    
+    @Bean
+    WebSecurityCustomizer webSecurityCustomizer() {
+        return web -> web.ignoring()
+            .requestMatchers(Constants.BYPASS_URLS.toArray(String[]::new));
     }
 }
