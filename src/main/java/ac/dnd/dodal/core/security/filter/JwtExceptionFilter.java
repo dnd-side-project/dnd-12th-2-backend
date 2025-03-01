@@ -70,19 +70,16 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
             setErrorResponse(response, SecurityExceptionCode.TOKEN_UNKNOWN_ERROR);
 
             return;
+        } catch (UserBadRequestException e) {
+            e.printStackTrace();
+            log.error("FilterException throw UserBadRequestException Exception : {}", e.getMessage());
+            setErrorResponse(response, e.getResultCode());
+
+            return;
         } catch (Exception e) {
-            // request에 저장된 예외 정보를 가져옴
-            Object exception = request.getAttribute("exception");
-            if (exception instanceof UserBadRequestException userException) {
-                setErrorResponse(response, userException.getResultCode());
-            } else if (exception instanceof SecurityExceptionCode securityCode) {
-                setErrorResponse(response, securityCode);
-            } else if (exception instanceof JwtException) {
-                setErrorResponse(response, SecurityExceptionCode.TOKEN_UNKNOWN_ERROR);
-            } else {
-                log.error("FilterException throw Exception Exception : {}", e.getMessage());
-                setErrorResponse(response, UserExceptionCode.NOT_FOUND_USER);
-            }
+            e.printStackTrace();
+            log.error("FilterException throw Exception Exception : {}", e.getMessage());
+            setErrorResponse(response, UserExceptionCode.NOT_FOUND_USER);
 
             return;
         }

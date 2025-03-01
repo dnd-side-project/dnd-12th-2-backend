@@ -24,9 +24,11 @@ public class JwtAuthEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response,
                         AuthenticationException authException) throws IOException, ServletException {
 
+        authException.printStackTrace();
         response.setContentType("application/json;charset=UTF-8");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        ApiResponse<Object> apiResponse = ApiResponse.failure(SecurityExceptionCode.ACCESS_DENIED_ERROR);
+        ApiResponse<Object> apiResponse = ApiResponse
+                .failure(SecurityExceptionCode.ACCESS_DENIED_ERROR, authException.getMessage());
         String jsonResponse = objectMapper.writeValueAsString(apiResponse);
         response.getWriter().write(jsonResponse);
     }

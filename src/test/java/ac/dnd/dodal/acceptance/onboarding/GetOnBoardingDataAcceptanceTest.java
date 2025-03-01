@@ -45,11 +45,11 @@ public class GetOnBoardingDataAcceptanceTest extends AcceptanceTest {
 
         // then 403
         assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
-        // SEC009
-        assertThat(apiResponse.code()).isEqualTo(SecurityExceptionCode.ACCESS_DENIED_ERROR.getCode());
-        // Fail
+        // SEC001
+        assertThat(apiResponse.code()).isEqualTo(SecurityExceptionCode.TOKEN_MALFORMED_ERROR.getCode());
+        // Token Malformed Error
         assertThat(apiResponse.message())
-                .isEqualTo(SecurityExceptionCode.ACCESS_DENIED_ERROR.getMessage());
+                .isEqualTo(SecurityExceptionCode.TOKEN_MALFORMED_ERROR.getMessage());
         // data exist
         assertThat(apiResponse.data()).isNull();
     }

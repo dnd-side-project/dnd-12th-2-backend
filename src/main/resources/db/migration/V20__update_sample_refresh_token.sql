@@ -1,0 +1,1 @@
+update users set refresh_token = 'eyJhbGciOiJIUzUxMiJ9.eyJ1aWQiOjEsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzQwODIwNTc0LCJleHAiOjIwMjQ2NDQ1NzR9.YpyYaOtaNuz85cGeacU2OZScBz6jdlV5V8AxxBTSCF7Nis1CcHmHvp5bPeNOEvO219L7ce5yrvkHbUrG71uOIg' where user_id = 1;
