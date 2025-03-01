@@ -25,9 +25,10 @@ public abstract class AcceptanceTest {
 
     protected static final Long userId = 1L;
     protected static final String userEmail = "test1@test.com";
-    protected static final String accessToken = "eyJhbGciOiJIUzUxMiJ9.eyJ1aWQiOjEsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzM5MzA4OTc1LCJleHAiOjE3NDAxODc4NTl9.7nH4G9T2PW9AI7JTCm7RteiechdLWsoeWanh4kX-Yt6UQ4qQVhohXlpA7DYR9fZZwjiyn7GLN73m1LXsNT1Djw";
+    protected static final String accessToken =
+            "eyJhbGciOiJIUzUxMiJ9.eyJ1aWQiOjEsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzQwODIwNTc0LCJleHAiOjIwMjQ2NDQ1NzR9.YpyYaOtaNuz85cGeacU2OZScBz6jdlV5V8AxxBTSCF7Nis1CcHmHvp5bPeNOEvO219L7ce5yrvkHbUrG71uOIg";
     protected static final String refreshToken =
-            "eyJhbGciOiJIUzUxMiJ9.eyJ1aWQiOjEsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzM5MzA4OTc1LCJleHAiOjE3NDAxODc4NTl9.7nH4G9T2PW9AI7JTCm7RteiechdLWsoeWanh4kX-Yt6UQ4qQVhohXlpA7DYR9fZZwjiyn7GLN73m1LXsNT1Djw";
+            "eyJhbGciOiJIUzUxMiJ9.eyJ1aWQiOjEsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzQwODIwNTc0LCJleHAiOjIwMjQ2NDQ1NzR9.YpyYaOtaNuz85cGeacU2OZScBz6jdlV5V8AxxBTSCF7Nis1CcHmHvp5bPeNOEvO219L7ce5yrvkHbUrG71uOIg";
 
     protected static final Long userId2 = 2L;
     protected static final String userEmail2 = "test2@test.com";
