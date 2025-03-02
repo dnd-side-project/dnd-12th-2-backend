@@ -1,9 +1,6 @@
 FROM openjdk:21-jdk-slim AS builder
 WORKDIR /buildMyApp
 
-ARG JASYPT_ENCRYPTOR_PASSWORD
-ENV JASYPT_ENCRYPTOR_PASSWORD=${JASYPT_ENCRYPTOR_PASSWORD}
-
 # Gradle Wrapper 복사
 COPY gradlew .
 COPY gradle gradle

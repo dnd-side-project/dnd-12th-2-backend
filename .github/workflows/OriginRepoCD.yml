@@ -37,9 +37,8 @@ jobs:
 
       # 4. Docker 이미지 빌드 및 푸시
       - name: Build and Push Docker image
-        # JASYPT_ENCRYPTOR_PASSWORD 가 secrets에 들어가야 함.
         run: |
-          docker buildx build --platform linux/amd64 --push --build-arg JASYPT_ENCRYPTOR_PASSWORD=${{ secrets.JASYPT_KEY }} --tag 5hseok/dodal-server:0.0.1 -f ./Dockerfile .
+          docker buildx build --platform linux/amd64 --push --tag 5hseok/dodal-server:0.0.1 -f ./Dockerfile .
 
   Deploy:
     needs: Docker_Build_And_Push
@@ -57,7 +56,7 @@ jobs:
           script: |            
             cd /home/ubuntu
             
-            export JASYPT_ENCRYPTOR_PASSWORD=${{ secrets.JASYPT_KEY }}
+            export DODAL_JASYPT_KEY_IN_PROD=${{ secrets.DODAL_JASYPT_KEY }}
             
             sudo docker-compose pull
 
