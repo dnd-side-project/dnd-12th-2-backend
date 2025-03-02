@@ -18,7 +18,7 @@ env:
   DODAL_JASYPT_KEY: ${{ secrets.DODAL_JASYPT_KEY }}
 
 jobs:
-  # ✅ Fork 레포에서 PR이 들어오면 Jacoco & SonarCloud 실행
+  # Fork 레포에서 PR이 들어오면 Jacoco & SonarCloud 실행
   test-and-analyze:
     runs-on: ubuntu-22.04
 
