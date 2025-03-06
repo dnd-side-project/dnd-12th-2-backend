@@ -1,6 +1,8 @@
 package ac.dnd.dodal.ui.goal;
 
 import java.time.LocalDate;
+import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +22,7 @@ import ac.dnd.dodal.application.plan.dto.query.GetPlansOfGoalQuery;
 import ac.dnd.dodal.ui.plan.request.AddNewPlanRequest;
 import ac.dnd.dodal.ui.plan.request.AddSamePlanRequest;
 import ac.dnd.dodal.ui.plan.request.CreatePlanRequest;
+import ac.dnd.dodal.ui.plan.response.PlanElement;
 
 @RequiredArgsConstructor
 @RestController
@@ -31,7 +34,7 @@ public class GoalPlanController {
     private final GetPlansOfGoalByDateUseCase getPlansOfGoalByDateUseCase;
 
     @GetMapping("/plans")
-    public ApiResponse<?> getPlansOfGoalByDate(
+    public ApiResponse<List<PlanElement>> getPlansOfGoalByDate(
         @UserId Long userId,
         @PathVariable Long goalId,
         @RequestParam LocalDate date,

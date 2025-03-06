@@ -41,7 +41,8 @@ public interface PlanRepository extends JpaRepository<Plan, Long> {
             + "AND p.deletedAt IS NULL "
             + "AND ((p.startDate < :endDate AND p.startDate >= :startDate) "
             + "OR (p.endDate < :endDate AND p.endDate >= :startDate)) "
-            + "AND p.goal.deletedAt IS NULL")
+            + "AND p.goal.deletedAt IS NULL "
+            + "ORDER BY p.startDate ASC")
     List<PlanModel> findAllByGoalIdAndDate(
         @Param("goalId") Long goalId,
         @Param("startDate") LocalDateTime startDate,
