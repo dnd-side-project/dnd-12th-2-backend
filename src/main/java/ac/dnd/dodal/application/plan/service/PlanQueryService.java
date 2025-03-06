@@ -23,7 +23,6 @@ import ac.dnd.dodal.application.plan.dto.query.GetWeeklyAchievementRateOfGoalQue
 import ac.dnd.dodal.application.plan.dto.PlanModel;
 import ac.dnd.dodal.ui.plan.response.PlanElement;
 import ac.dnd.dodal.ui.goal.response.DailyAchievementRateElement;
-import ac.dnd.dodal.ui.plan.response.PlanWithHistoryElement;
 
 @Service
 @RequiredArgsConstructor
@@ -45,26 +44,17 @@ public class PlanQueryService implements
     }
 
     @Override
-    public List<PlanWithHistoryElement> getPlansOfGoalByDate(GetPlansOfGoalQuery query) {
+    public List<PlanElement> getPlansOfGoalByDate(GetPlansOfGoalQuery query) {
         if (!planService.isExistByUserIdAndGoalId(query.userId(), query.goalId())) {
             throw new ForbiddenException();
         }
 
         List<PlanModel> plans = planRepository.findAllByGoalIdAndDate(query.goalId(),
-                query.date().atStartOfDay().minusDays(query.range()), query.date().atStartOfDay().plusDays(query.range() + 1));
-        List<Long> historyIds =
-                plans.stream().map(PlanModel::getHistoryId).distinct().collect(Collectors.toList());
-        List<PlanWithHistoryElement> planWithHistoryElements = new ArrayList<>();
-        for (Long historyId : historyIds) {
-            List<PlanElement> plansByHistoryId =
-                    plans.stream().filter(plan -> plan.getHistoryId().equals(historyId)
-                        // && plan.getCompletedDate() != null)
-                    )
-                            .map(PlanModel::toPlanElement)
-                            .collect(Collectors.toList());
-            planWithHistoryElements.add(new PlanWithHistoryElement(historyId, plansByHistoryId));
-        }
-        return planWithHistoryElements;
+                query.date().atStartOfDay().minusDays(query.range()),
+                query.date().atStartOfDay().plusDays(query.range() + 1));
+        return plans.stream()
+            .map(PlanModel::toPlanElement)
+            .collect(Collectors.toList());
     }
 
     // Todo: 로직 개선 필요. 너무 비효율적이야.
