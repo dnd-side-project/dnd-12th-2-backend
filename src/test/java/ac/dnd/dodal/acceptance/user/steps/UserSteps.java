@@ -26,4 +26,17 @@ public class UserSteps{
                     .extract()
                     .response();
     }
+
+    public static Response getOnboardingQuestions(Map<String, Object> header) {
+        String url = BASE_URL + "/onboarding";
+
+        return given().log().all()
+                    .contentType(ContentType.JSON)
+                    .headers(header)
+                .when()
+                    .get(url)
+                .then().log().all()
+                    .extract()
+                    .response();
+    }
 }
