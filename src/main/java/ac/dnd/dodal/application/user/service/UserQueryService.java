@@ -4,8 +4,6 @@ import ac.dnd.dodal.application.user.repository.UserAnswerRepository;
 import ac.dnd.dodal.application.user.repository.UserRepository;
 import ac.dnd.dodal.application.user.usecase.CheckIsDoneUserAnswerUseCase;
 import ac.dnd.dodal.application.user.usecase.UserQueryUseCase;
-import ac.dnd.dodal.domain.onboarding.exception.OnBoardingExceptionCode;
-import ac.dnd.dodal.domain.onboarding.exception.OnBoardingNotFoundException;
 import ac.dnd.dodal.domain.user.enums.UserExceptionCode;
 import ac.dnd.dodal.domain.user.enums.UserRole;
 import ac.dnd.dodal.domain.user.exception.UserBadRequestException;
@@ -66,9 +64,9 @@ public class UserQueryService implements UserQueryUseCase, CheckIsDoneUserAnswer
         List<UserAnswer> userAnswers =  userAnswerRepository.findAllByUserId(user);
 
         if (userAnswers.isEmpty() || userAnswers == null) {
-            throw new OnBoardingNotFoundException(OnBoardingExceptionCode.NOT_FOUND_USER_ONBOARDING_RESULT);
+            return GetUserAnswerResponseDto.fromUserAnswersOnboardingNotDone();
         }
 
-        return GetUserAnswerResponseDto.fromUserAnswers(userAnswers);
+        return GetUserAnswerResponseDto.fromUserAnswersOnboardingDone(userAnswers);
     }
 }
