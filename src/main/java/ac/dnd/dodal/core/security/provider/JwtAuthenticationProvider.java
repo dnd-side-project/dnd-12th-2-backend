@@ -35,6 +35,11 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
                 throw new UserBadRequestException(UserExceptionCode.NO_SUCH_ROLE) {
                 };
             }
+
+            if (userDetails.getRole() == UserRole.DELETE_USER) {
+                throw new UserBadRequestException(UserExceptionCode.DELETED_USER);
+            }
+
             return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         }
 
