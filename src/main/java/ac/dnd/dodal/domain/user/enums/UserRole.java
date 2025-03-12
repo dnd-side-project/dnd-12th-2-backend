@@ -9,7 +9,6 @@ public enum UserRole {
 
     USER("USER", "ROLE_USER"),
     ADMIN("ADMIN", "ROLE_ADMIN"),
-    DELETE_USER("DELETE_USER", "ROLE_DELETE_USER")
     ;
 
     private final String name;

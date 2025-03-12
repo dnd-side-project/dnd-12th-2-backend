@@ -5,7 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import ac.dnd.dodal.common.annotation.UserId;
 import ac.dnd.dodal.common.exception.InternalServerErrorException;
+import ac.dnd.dodal.ui.auth.response.DeleteUserInfoResponseDto;
+import ac.dnd.dodal.ui.auth.response.UserInfoResponseDto;
 import org.springframework.context.ApplicationEventPublisher;
 
 import ac.dnd.dodal.application.onboarding.repository.AnswerRepository;
@@ -45,6 +48,7 @@ public class UserCommandService implements UserCommandUseCase, CreateUserAnswerU
     private final QuestionRepository questionRepository;
 
     private final ApplicationEventPublisher eventPublisher;
+    private final UserRepository userRepository;
 
     @Override
     public User createUserBySocialSignUp(OAuthUserInfoRequestDto authSignUpRequestDto) {
@@ -120,16 +124,15 @@ public class UserCommandService implements UserCommandUseCase, CreateUserAnswerU
     }
 
     @Override
-    public LocalDateTime delete(Long userId){
+    public DeleteUserInfoResponseDto withdrawUser(Long userId){
 
         try {
-
         User user = userCommandRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(UserExceptionCode.NOT_FOUND_USER));
 
-        user.deleteUser();
+        user.withdrawUser();
 
-        return user.getDeletedAt();
+        return DeleteUserInfoResponseDto.fromUserEntity(user);
 
         } catch (Exception e){
             throw new InternalServerErrorException(UserExceptionCode.DELETE_FAILED);

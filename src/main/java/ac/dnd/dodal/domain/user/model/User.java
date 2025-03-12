@@ -69,9 +69,8 @@ public class User extends BaseEntity {
         this.profileImageUrl = profileImageUrl;
     }
 
-    public void deleteUser(){
+    public void withdrawUser(){
         this.deletedAt = LocalDateTime.now();
-        this.role = UserRole.DELETE_USER;
         this.refreshToken = null;
     }
 
@@ -81,6 +80,5 @@ public class User extends BaseEntity {
 
     public void reactivateDeletedUser(){
         this.deletedAt = null;
-        this.role = UserRole.USER;
     }
 }

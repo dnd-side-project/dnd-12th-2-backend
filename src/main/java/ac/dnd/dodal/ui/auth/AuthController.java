@@ -8,12 +8,15 @@ import ac.dnd.dodal.common.constant.Constants;
 import ac.dnd.dodal.common.response.ApiResponse;
 import ac.dnd.dodal.ui.auth.request.AppleAuthorizationRequestDto;
 import ac.dnd.dodal.ui.auth.request.KakaoAuthorizationRequestDto;
+import ac.dnd.dodal.ui.auth.response.DeleteUserInfoResponseDto;
 import ac.dnd.dodal.ui.auth.response.UserInfoResponseDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 @RestController
 @Slf4j
@@ -46,9 +49,9 @@ public class AuthController {
     return ApiResponse.success(authService.refresh(refreshToken));
   }
 
-  @DeleteMapping("/delete")
-    public ApiResponse<?> softDeleteUser(
+  @DeleteMapping("/withdraw")
+    public ApiResponse<DeleteUserInfoResponseDto> softDeleteUser(
           @UserId Long userId) {
-        return ApiResponse.success(userCommandUseCase.delete(userId));
+        return ApiResponse.success(userCommandUseCase.withdrawUser(userId));
     }
 }

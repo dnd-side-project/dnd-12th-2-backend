@@ -4,9 +4,7 @@ import ac.dnd.dodal.application.user.repository.UserRepository;
 import ac.dnd.dodal.application.user.usecase.UserQueryUseCase;
 import ac.dnd.dodal.common.util.OAuth2Util;
 import ac.dnd.dodal.core.security.util.JwtUtil;
-import ac.dnd.dodal.domain.user.enums.UserExceptionCode;
 import ac.dnd.dodal.domain.user.enums.UserRole;
-import ac.dnd.dodal.domain.user.exception.UserBadRequestException;
 import ac.dnd.dodal.domain.user.model.User;
 import ac.dnd.dodal.ui.auth.request.AppleAuthorizationRequestDto;
 import ac.dnd.dodal.ui.auth.request.KakaoAuthorizationRequestDto;
@@ -107,12 +105,13 @@ public class AuthLoginService {
 
   private User registerNewAppleUser(OAuthByAppleUserInfoRequestDto appleIdTokenParsingDto) {
     // 탈퇴한 이력이 있는 사용자인지 확인
-    if(checkUserWithdrawalHistory(appleIdTokenParsingDto.email())){
-      User user = userQueryUseCase.findByEmailAndRole(appleIdTokenParsingDto.email(), UserRole.DELETE_USER);
-      // 탈퇴한 사용자의 경우, 탈퇴 이력을 삭제하고 다시 가입 처리
-      user.reactivateDeletedUser();
-      return user;
-    } else {
+    User withdrawnUser = checkWithdrawnUser(appleIdTokenParsingDto.appleId());
+
+    if (withdrawnUser != null && withdrawnUser.getDeletedAt() != null) {
+      withdrawnUser.reactivateDeletedUser();
+      return withdrawnUser;
+    }
+    else {
       User newUser =
           new User(
               appleIdTokenParsingDto.email(),
@@ -130,8 +129,7 @@ public class AuthLoginService {
     return userRepository.save(newUser);
   }
 
-  private boolean checkUserWithdrawalHistory(String email) {
-    User user = userQueryUseCase.findByEmailAndRole(email, UserRole.DELETE_USER);
-    return user != null && user.getDeletedAt() != null;
+  private User checkWithdrawnUser(String email) {
+    return userQueryUseCase.findByEmailAndRole(email, UserRole.USER);
   }
 }
