@@ -34,7 +34,7 @@ public class AuthLoginService {
   private final UserRepository userRepository;
 
   // 카카오 소셜 로그인
-  public Object kakaoAuthSocialLogin(KakaoAuthorizationRequestDto kakaoAuthorizationRequestDto) {
+  public UserInfoResponseDto kakaoAuthSocialLogin(KakaoAuthorizationRequestDto kakaoAuthorizationRequestDto) {
     String accessToken = authService.refineToken(kakaoAuthorizationRequestDto.code());
 
     KakaoUserInfoDto kakaoUserInfoDto = getOAuth2UserInfo(accessToken);
@@ -43,7 +43,7 @@ public class AuthLoginService {
   }
 
   // 애플 소셜 로그인
-  public Object appleAuthSocialLogin(AppleAuthorizationRequestDto appleAuthorizationRequestDto) {
+  public UserInfoResponseDto appleAuthSocialLogin(AppleAuthorizationRequestDto appleAuthorizationRequestDto) {
 //    // 토큰 검증
 //    JsonElement jsonElement =
 //        oAuth2Util.verifyAuthorizationCode(appleAuthorizationRequestDto.code());
@@ -65,7 +65,7 @@ public class AuthLoginService {
   }
 
   // 애플 로그인 프로세스
-  public Object processAppleUserLogin(OAuthByAppleUserInfoRequestDto oAuth2AppleUserInfo) {
+  public UserInfoResponseDto processAppleUserLogin(OAuthByAppleUserInfoRequestDto oAuth2AppleUserInfo) {
     User user = userQueryUseCase.findByEmailAndRole(oAuth2AppleUserInfo.appleId(), UserRole.USER);
     if (user == null) {
       User newUser = registerNewAppleUser(oAuth2AppleUserInfo);
@@ -80,7 +80,7 @@ public class AuthLoginService {
   }
 
   // 카카오 로그인 프로세스
-  private Object processKakaoUserLogin(KakaoUserInfoDto kakaoUserInfo, String deviceToken) {
+  private UserInfoResponseDto processKakaoUserLogin(KakaoUserInfoDto kakaoUserInfo, String deviceToken) {
     User user = userQueryUseCase.findByEmailAndRole(kakaoUserInfo.email(), UserRole.USER);
     if (user == null) {
       // 새로운 사용자 등록
@@ -91,7 +91,7 @@ public class AuthLoginService {
   }
 
   // 기존 사용자 로그인 처리
-  private Object handleExistingUserLogin(User user) {
+  private UserInfoResponseDto handleExistingUserLogin(User user) {
     // 토큰 생성 후 업데이트
     JwtTokenDto jwtTokenDto = jwtUtil.generateToken(user.getId(), UserRole.USER);
     user.updateRefreshToken(jwtTokenDto.refreshToken());
