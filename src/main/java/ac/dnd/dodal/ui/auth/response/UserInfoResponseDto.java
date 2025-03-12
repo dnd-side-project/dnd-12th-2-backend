@@ -12,7 +12,6 @@ public record UserInfoResponseDto(
         .nickname(user.getNickname())
         .email(user.getEmail())
         .profileImageUrl(user.getProfileImageUrl())
-            .checkOnboardingSuccess(true)
             .jwtTokenDto(jwtTokenDto)
         .build();
   }
