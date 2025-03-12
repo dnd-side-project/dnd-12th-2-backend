@@ -6,6 +6,7 @@ import ac.dnd.dodal.common.constant.Constants;
 import ac.dnd.dodal.common.response.ApiResponse;
 import ac.dnd.dodal.ui.auth.request.AppleAuthorizationRequestDto;
 import ac.dnd.dodal.ui.auth.request.KakaoAuthorizationRequestDto;
+import ac.dnd.dodal.ui.auth.response.UserInfoResponseDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -23,21 +24,21 @@ public class AuthController {
 
   // 카카오 소셜 로그인
   @PostMapping("/login/kakao")
-  public ApiResponse<?> authKakaoSocialLogin(
+  public ApiResponse<UserInfoResponseDto> authKakaoSocialLogin(
           @RequestBody @Valid KakaoAuthorizationRequestDto kakaoAuthorizationRequestDto) {
     return ApiResponse.success(authLoginService.kakaoAuthSocialLogin(kakaoAuthorizationRequestDto));
   }
 
   // 애플 소셜 로그인
   @PostMapping("/login/apple")
-  public ApiResponse<?> authAppleSocialLogin(
+  public ApiResponse<UserInfoResponseDto> authAppleSocialLogin(
       @RequestBody @Valid AppleAuthorizationRequestDto appleAuthorizationRequestDto) {
     return ApiResponse.success(authLoginService.appleAuthSocialLogin(appleAuthorizationRequestDto));
   }
 
   // 액세스 토큰 재발급 및 리프레시 토큰 업데이트 API
   @PostMapping("/refresh")
-  public ApiResponse<?> refresh(
+  public ApiResponse<UserInfoResponseDto> refresh(
       @NotNull @RequestHeader(Constants.AUTHORIZATION_HEADER) String refreshToken) {
     return ApiResponse.success(authService.refresh(refreshToken));
   }
