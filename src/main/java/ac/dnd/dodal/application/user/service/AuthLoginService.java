@@ -6,7 +6,7 @@ import ac.dnd.dodal.common.util.OAuth2Util;
 import ac.dnd.dodal.core.security.util.JwtUtil;
 import ac.dnd.dodal.domain.user.enums.UserExceptionCode;
 import ac.dnd.dodal.domain.user.enums.UserRole;
-import ac.dnd.dodal.domain.user.exception.UserNotFoundException;
+import ac.dnd.dodal.domain.user.exception.UserBadRequestException;
 import ac.dnd.dodal.domain.user.model.User;
 import ac.dnd.dodal.ui.auth.request.AppleAuthorizationRequestDto;
 import ac.dnd.dodal.ui.auth.request.KakaoAuthorizationRequestDto;
@@ -15,7 +15,6 @@ import ac.dnd.dodal.ui.auth.response.AppleIdTokenParsingDto;
 import ac.dnd.dodal.ui.auth.response.JwtTokenDto;
 import ac.dnd.dodal.ui.auth.response.KakaoUserInfoDto;
 import ac.dnd.dodal.ui.auth.response.UserInfoResponseDto;
-import com.google.gson.JsonElement;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -107,13 +106,32 @@ public class AuthLoginService {
   }
 
   private User registerNewAppleUser(OAuthByAppleUserInfoRequestDto appleIdTokenParsingDto) {
-    User newUser = new User(appleIdTokenParsingDto.email(), null, appleIdTokenParsingDto.deviceToken(), appleIdTokenParsingDto.appleId(), UserRole.USER);
-    return userRepository.save(newUser);
+    // 탈퇴한 이력이 있는 사용자인지 확인
+    if(checkUserWithdrawalHistory(appleIdTokenParsingDto.email())){
+      User user = userQueryUseCase.findByEmailAndRole(appleIdTokenParsingDto.email(), UserRole.DELETE_USER);
+      // 탈퇴한 사용자의 경우, 탈퇴 이력을 삭제하고 다시 가입 처리
+      user.reactivateDeletedUser();
+      return user;
+    } else {
+      User newUser =
+          new User(
+              appleIdTokenParsingDto.email(),
+              null,
+              appleIdTokenParsingDto.deviceToken(),
+              appleIdTokenParsingDto.appleId(),
+              UserRole.USER);
+      return userRepository.save(newUser);
+    }
   }
 
   private User registerNewKakaoUser(KakaoUserInfoDto kakaoUserInfo, String deviceToken) {
     User newUser =
         new User(kakaoUserInfo.nickname(), kakaoUserInfo.profileImageUrl(), deviceToken, kakaoUserInfo.email(), UserRole.USER);
     return userRepository.save(newUser);
+  }
+
+  private boolean checkUserWithdrawalHistory(String email) {
+    User user = userQueryUseCase.findByEmailAndRole(email, UserRole.DELETE_USER);
+    return user != null && user.getDeletedAt() != null;
   }
 }

@@ -1,9 +1,11 @@
 package ac.dnd.dodal.application.user.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import ac.dnd.dodal.common.exception.InternalServerErrorException;
 import org.springframework.context.ApplicationEventPublisher;
 
 import ac.dnd.dodal.application.onboarding.repository.AnswerRepository;
@@ -115,5 +117,22 @@ public class UserCommandService implements UserCommandUseCase, CreateUserAnswerU
         }
 
         eventPublisher.publishEvent(new OnboardingProceededEvent(user.getId(), userAnswers));
+    }
+
+    @Override
+    public LocalDateTime delete(Long userId){
+
+        try {
+
+        User user = userCommandRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(UserExceptionCode.NOT_FOUND_USER));
+
+        user.deleteUser();
+
+        return user.getDeletedAt();
+
+        } catch (Exception e){
+            throw new InternalServerErrorException(UserExceptionCode.DELETE_FAILED);
+        }
     }
 }

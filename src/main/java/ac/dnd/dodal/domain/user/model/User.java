@@ -55,6 +55,10 @@ public class User extends BaseEntity {
         this.refreshToken = refreshToken;
     }
 
+    public void updateUserRole(UserRole role) {
+        this.role = role;
+    }
+
     public void updateUserNickname(String nickname) {
         if (nickname != null && !nickname.isEmpty()) {
             this.nickname = nickname;
@@ -65,7 +69,18 @@ public class User extends BaseEntity {
         this.profileImageUrl = profileImageUrl;
     }
 
+    public void deleteUser(){
+        this.deletedAt = LocalDateTime.now();
+        this.role = UserRole.DELETE_USER;
+        this.refreshToken = null;
+    }
+
     public void deleteUserProfileImageUrl() {
         this.profileImageUrl = null;
+    }
+
+    public void reactivateDeletedUser(){
+        this.deletedAt = null;
+        this.role = UserRole.USER;
     }
 }

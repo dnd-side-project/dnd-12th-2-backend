@@ -2,6 +2,8 @@ package ac.dnd.dodal.ui.auth;
 
 import ac.dnd.dodal.application.user.service.AuthLoginService;
 import ac.dnd.dodal.application.user.service.AuthService;
+import ac.dnd.dodal.application.user.usecase.UserCommandUseCase;
+import ac.dnd.dodal.common.annotation.UserId;
 import ac.dnd.dodal.common.constant.Constants;
 import ac.dnd.dodal.common.response.ApiResponse;
 import ac.dnd.dodal.ui.auth.request.AppleAuthorizationRequestDto;
@@ -21,6 +23,7 @@ public class AuthController {
 
   private final AuthLoginService authLoginService;
   private final AuthService authService;
+  private final UserCommandUseCase userCommandUseCase;
 
   // 카카오 소셜 로그인
   @PostMapping("/login/kakao")
@@ -42,4 +45,10 @@ public class AuthController {
       @NotNull @RequestHeader(Constants.AUTHORIZATION_HEADER) String refreshToken) {
     return ApiResponse.success(authService.refresh(refreshToken));
   }
+
+  @DeleteMapping("/delete")
+    public ApiResponse<?> softDeleteUser(
+          @UserId Long userId) {
+        return ApiResponse.success(userCommandUseCase.delete(userId));
+    }
 }
