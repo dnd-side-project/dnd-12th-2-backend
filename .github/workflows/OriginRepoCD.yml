@@ -55,8 +55,8 @@ jobs:
           --platform linux/amd64 \
           --push \
           --tag 5hseok/dodal-server:0.0.1 \
-          --cache-from type=local, src=/tmp/.buildx-cache \
-          --cache-to type=local,dest-/tmp/.buildx-cache,mode=max \
+          --cache-from type=local,src=/tmp/.buildx-cache \
+          --cache-to type=local,dest=/tmp/.buildx-cache,mode=max \
           --file ./Dockerfile .
 
   Deploy:
