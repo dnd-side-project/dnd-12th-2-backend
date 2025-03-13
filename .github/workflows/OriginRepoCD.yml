@@ -80,3 +80,5 @@ jobs:
             sudo docker-compose pull
 
             sudo docker-compose down || true
+            
+            sudo -E docker-compose up -d
