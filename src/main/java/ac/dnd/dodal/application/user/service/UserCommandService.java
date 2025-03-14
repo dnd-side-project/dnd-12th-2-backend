@@ -131,20 +131,12 @@ public class UserCommandService implements UserCommandUseCase, CreateUserAnswerU
   }
 
   @Override
-  public DeleteUserInfoResponseDto withdrawUser(Long userId) {
-    try {
-      User user =
-          userCommandRepository
-              .findById(userId)
-              .orElseThrow(() -> new UserNotFoundException(UserExceptionCode.NOT_FOUND_USER));
+  public void withdrawUser(Long userId) {
+    User user =
+        userCommandRepository
+            .findById(userId)
+            .orElseThrow(() -> new UserNotFoundException(UserExceptionCode.NOT_FOUND_USER));
 
-      user.withdrawUser();
-
-      return DeleteUserInfoResponseDto.fromUserEntity(user);
-    } catch (UserNotFoundException e) {
-      throw new UserNotFoundException(UserExceptionCode.NOT_FOUND_USER);
-    } catch (Exception e) {
-      throw new InternalServerErrorException(UserExceptionCode.DELETE_FAILED);
-    }
+    user.withdrawUser();
   }
 }

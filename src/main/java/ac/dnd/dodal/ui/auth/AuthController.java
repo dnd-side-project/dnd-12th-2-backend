@@ -8,15 +8,12 @@ import ac.dnd.dodal.common.constant.Constants;
 import ac.dnd.dodal.common.response.ApiResponse;
 import ac.dnd.dodal.ui.auth.request.AppleAuthorizationRequestDto;
 import ac.dnd.dodal.ui.auth.request.KakaoAuthorizationRequestDto;
-import ac.dnd.dodal.ui.auth.response.DeleteUserInfoResponseDto;
 import ac.dnd.dodal.ui.auth.response.UserInfoResponseDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
 
 @RestController
 @Slf4j
@@ -31,7 +28,7 @@ public class AuthController {
   // 카카오 소셜 로그인
   @PostMapping("/login/kakao")
   public ApiResponse<UserInfoResponseDto> authKakaoSocialLogin(
-          @RequestBody @Valid KakaoAuthorizationRequestDto kakaoAuthorizationRequestDto) {
+      @RequestBody @Valid KakaoAuthorizationRequestDto kakaoAuthorizationRequestDto) {
     return ApiResponse.success(authLoginService.kakaoAuthSocialLogin(kakaoAuthorizationRequestDto));
   }
 
@@ -50,8 +47,8 @@ public class AuthController {
   }
 
   @DeleteMapping("/withdraw")
-    public ApiResponse<DeleteUserInfoResponseDto> softDeleteUser(
-          @UserId Long userId) {
-        return ApiResponse.success(userCommandUseCase.withdrawUser(userId));
-    }
+  public ApiResponse<Void> deleteUser(@UserId Long userId) {
+    userCommandUseCase.withdrawUser(userId);
+    return ApiResponse.success();
+  }
 }
