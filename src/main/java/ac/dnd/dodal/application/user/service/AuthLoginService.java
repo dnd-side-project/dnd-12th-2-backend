@@ -31,7 +31,8 @@ public class AuthLoginService {
   private final UserRepository userRepository;
 
   // 카카오 소셜 로그인
-  public UserInfoResponseDto kakaoAuthSocialLogin(KakaoAuthorizationRequestDto kakaoAuthorizationRequestDto) {
+  public UserInfoResponseDto kakaoAuthSocialLogin(
+      KakaoAuthorizationRequestDto kakaoAuthorizationRequestDto) {
     String accessToken = authService.refineToken(kakaoAuthorizationRequestDto.code());
 
     KakaoUserInfoDto kakaoUserInfoDto = getOAuth2UserInfo(accessToken);
@@ -40,10 +41,11 @@ public class AuthLoginService {
   }
 
   // 애플 소셜 로그인
-  public UserInfoResponseDto appleAuthSocialLogin(AppleAuthorizationRequestDto appleAuthorizationRequestDto) {
-//    // 토큰 검증
-//    JsonElement jsonElement =
-//        oAuth2Util.verifyAuthorizationCode(appleAuthorizationRequestDto.code());
+  public UserInfoResponseDto appleAuthSocialLogin(
+      AppleAuthorizationRequestDto appleAuthorizationRequestDto) {
+    //    // 토큰 검증
+    //    JsonElement jsonElement =
+    //        oAuth2Util.verifyAuthorizationCode(appleAuthorizationRequestDto.code());
 
     // 사용자 정보 가져오기
     String id_token = appleAuthorizationRequestDto.code();
@@ -56,13 +58,17 @@ public class AuthLoginService {
     // 애플 로그인 응답 DTO 생성
     OAuthByAppleUserInfoRequestDto oAuthByAppleUserInfoRequestDto =
         new OAuthByAppleUserInfoRequestDto(
-            appleIdTokenParsingDto.sub(), appleIdTokenParsingDto.email(), appleIdTokenParsingDto.email(), appleAuthorizationRequestDto.deviceToken());
+            appleIdTokenParsingDto.sub(),
+            appleIdTokenParsingDto.email(),
+            appleIdTokenParsingDto.email(),
+            appleAuthorizationRequestDto.deviceToken());
 
     return processAppleUserLogin(oAuthByAppleUserInfoRequestDto);
   }
 
   // 애플 로그인 프로세스
-  public UserInfoResponseDto processAppleUserLogin(OAuthByAppleUserInfoRequestDto oAuth2AppleUserInfo) {
+  public UserInfoResponseDto processAppleUserLogin(
+      OAuthByAppleUserInfoRequestDto oAuth2AppleUserInfo) {
     User user = userQueryUseCase.findByEmailAndRole(oAuth2AppleUserInfo.appleId(), UserRole.USER);
     if (user == null) {
       User newUser = registerNewAppleUser(oAuth2AppleUserInfo);
@@ -77,7 +83,8 @@ public class AuthLoginService {
   }
 
   // 카카오 로그인 프로세스
-  private UserInfoResponseDto processKakaoUserLogin(KakaoUserInfoDto kakaoUserInfo, String deviceToken) {
+  private UserInfoResponseDto processKakaoUserLogin(
+      KakaoUserInfoDto kakaoUserInfo, String deviceToken) {
     User user = userQueryUseCase.findByEmailAndRole(kakaoUserInfo.email(), UserRole.USER);
     if (user == null) {
       // 새로운 사용자 등록
@@ -104,32 +111,38 @@ public class AuthLoginService {
   }
 
   private User registerNewAppleUser(OAuthByAppleUserInfoRequestDto appleIdTokenParsingDto) {
-    // 탈퇴한 이력이 있는 사용자인지 확인
-    User withdrawnUser = checkWithdrawnUser(appleIdTokenParsingDto.appleId());
+    User unCheckedUser =
+        userQueryUseCase.findByEmailAndRole(appleIdTokenParsingDto.appleId(), UserRole.USER);
 
-    if (withdrawnUser != null && withdrawnUser.getDeletedAt() != null) {
-      withdrawnUser.reactivateDeletedUser();
-      return withdrawnUser;
+    // 탈퇴한 사용자인 경우 재가입 처리
+    if (isCheckWithdrawnUser(unCheckedUser)) {
+      unCheckedUser.reactivateWithdrawnUser();
+      return unCheckedUser;
     }
-    else {
-      User newUser =
-          new User(
-              appleIdTokenParsingDto.email(),
-              null,
-              appleIdTokenParsingDto.deviceToken(),
-              appleIdTokenParsingDto.appleId(),
-              UserRole.USER);
-      return userRepository.save(newUser);
-    }
+
+    // 신규 사용자인 경우 회원가입 처리
+    User newUser =
+        new User(
+            appleIdTokenParsingDto.email(),
+            null,
+            appleIdTokenParsingDto.deviceToken(),
+            appleIdTokenParsingDto.appleId(),
+            UserRole.USER);
+    return userRepository.save(newUser);
   }
 
   private User registerNewKakaoUser(KakaoUserInfoDto kakaoUserInfo, String deviceToken) {
     User newUser =
-        new User(kakaoUserInfo.nickname(), kakaoUserInfo.profileImageUrl(), deviceToken, kakaoUserInfo.email(), UserRole.USER);
+        new User(
+            kakaoUserInfo.nickname(),
+            kakaoUserInfo.profileImageUrl(),
+            deviceToken,
+            kakaoUserInfo.email(),
+            UserRole.USER);
     return userRepository.save(newUser);
   }
 
-  private User checkWithdrawnUser(String email) {
-    return userQueryUseCase.findByEmailAndRole(email, UserRole.USER);
+  private boolean isCheckWithdrawnUser(User unCheckedUser) {
+    return unCheckedUser != null && unCheckedUser.getDeletedAt() != null;
   }
 }
