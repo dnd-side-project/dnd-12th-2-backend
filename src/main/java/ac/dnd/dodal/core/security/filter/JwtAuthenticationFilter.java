@@ -5,8 +5,10 @@ import ac.dnd.dodal.core.security.JwtAuthenticationToken;
 import ac.dnd.dodal.core.security.info.JwtUserInfo;
 import ac.dnd.dodal.core.security.provider.JwtAuthenticationProvider;
 import ac.dnd.dodal.core.security.util.JwtUtil;
+import ac.dnd.dodal.domain.user.enums.UserExceptionCode;
 import ac.dnd.dodal.domain.user.enums.UserRole;
 
+import ac.dnd.dodal.domain.user.exception.UserBadRequestException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;

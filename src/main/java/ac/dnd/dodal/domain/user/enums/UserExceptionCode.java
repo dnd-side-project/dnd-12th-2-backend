@@ -15,6 +15,7 @@ public enum UserExceptionCode implements ResultCode {
     DUPLICATED_EMAIL("USR004", "Duplicated email"),
     NO_SUCH_EMAIL("USR005", "No such email"),
     DELETED_USER("USR006", "Deleted user"),
+    DELETE_FAILED("USR007", "Failed to delete user"),
     ;
 
     private final String code;

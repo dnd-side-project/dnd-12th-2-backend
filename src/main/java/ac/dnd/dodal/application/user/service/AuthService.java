@@ -2,11 +2,9 @@ package ac.dnd.dodal.application.user.service;
 
 import ac.dnd.dodal.application.user.usecase.UserQueryUseCase;
 import ac.dnd.dodal.common.constant.Constants;
-import ac.dnd.dodal.common.enums.CommonResultCode;
 import ac.dnd.dodal.common.exception.BadRequestException;
 import ac.dnd.dodal.core.security.enums.SecurityExceptionCode;
 import ac.dnd.dodal.core.security.util.JwtUtil;
-import ac.dnd.dodal.domain.user.enums.UserExceptionCode;
 import ac.dnd.dodal.domain.user.model.User;
 import ac.dnd.dodal.ui.auth.response.JwtTokenDto;
 import ac.dnd.dodal.ui.auth.response.UserInfoResponseDto;

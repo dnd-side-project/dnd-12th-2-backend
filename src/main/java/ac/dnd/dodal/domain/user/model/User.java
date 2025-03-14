@@ -65,7 +65,16 @@ public class User extends BaseEntity {
         this.profileImageUrl = profileImageUrl;
     }
 
+    public void withdrawUser(){
+        delete();
+        updateRefreshToken(null);
+    }
+
     public void deleteUserProfileImageUrl() {
         this.profileImageUrl = null;
+    }
+
+    public void reactivateWithdrawnUser(){
+        this.deletedAt = null;
     }
 }

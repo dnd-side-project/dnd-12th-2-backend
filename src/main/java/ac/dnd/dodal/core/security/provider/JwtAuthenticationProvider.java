@@ -1,5 +1,6 @@
 package ac.dnd.dodal.core.security.provider;
 
+import ac.dnd.dodal.common.constant.Constants;
 import ac.dnd.dodal.common.exception.BadRequestException;
 import ac.dnd.dodal.core.security.JwtAuthenticationToken;
 import ac.dnd.dodal.core.security.enums.SecurityExceptionCode;
@@ -35,6 +36,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
                 throw new UserBadRequestException(UserExceptionCode.NO_SUCH_ROLE) {
                 };
             }
+
             return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         }
 

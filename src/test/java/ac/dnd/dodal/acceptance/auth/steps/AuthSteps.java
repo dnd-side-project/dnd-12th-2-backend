@@ -21,4 +21,14 @@ public class AuthSteps extends AcceptanceTest {
             .response();
     }
 
+    public static Response deleteUser(Map<String, Object> header){
+        return given().log().all()
+                .headers(header)
+            .when()
+                .delete(BASE_URL + "/withdraw")
+            .then().log().all()
+                .extract()
+            .response();
+    }
+
 }
