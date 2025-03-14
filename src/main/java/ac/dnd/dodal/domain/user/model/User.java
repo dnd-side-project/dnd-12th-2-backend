@@ -55,10 +55,6 @@ public class User extends BaseEntity {
         this.refreshToken = refreshToken;
     }
 
-    public void updateUserRole(UserRole role) {
-        this.role = role;
-    }
-
     public void updateUserNickname(String nickname) {
         if (nickname != null && !nickname.isEmpty()) {
             this.nickname = nickname;
@@ -70,15 +66,15 @@ public class User extends BaseEntity {
     }
 
     public void withdrawUser(){
-        this.deletedAt = LocalDateTime.now();
-        this.refreshToken = null;
+        delete();
+        updateRefreshToken(null);
     }
 
     public void deleteUserProfileImageUrl() {
         this.profileImageUrl = null;
     }
 
-    public void reactivateDeletedUser(){
+    public void reactivateWithdrawnUser(){
         this.deletedAt = null;
     }
 }
