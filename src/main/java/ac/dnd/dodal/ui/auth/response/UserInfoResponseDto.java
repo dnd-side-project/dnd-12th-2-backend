@@ -6,13 +6,12 @@ import lombok.Builder;
 
 @Builder(access = AccessLevel.PRIVATE)
 public record UserInfoResponseDto(
-    String nickname, String email, String profileImageUrl, boolean checkOnboardingSuccess, JwtTokenDto jwtTokenDto) {
+    String nickname, String email, String profileImageUrl, JwtTokenDto jwtTokenDto) {
   public static UserInfoResponseDto fromUserEntity(User user, JwtTokenDto jwtTokenDto) {
     return UserInfoResponseDto.builder()
         .nickname(user.getNickname())
         .email(user.getEmail())
         .profileImageUrl(user.getProfileImageUrl())
-            .checkOnboardingSuccess(true)
             .jwtTokenDto(jwtTokenDto)
         .build();
   }

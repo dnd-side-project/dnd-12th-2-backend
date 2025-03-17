@@ -6,4 +6,5 @@ import ac.dnd.dodal.ui.auth.request.OAuthUserInfoRequestDto;
 public interface UserCommandUseCase {
     User createUserBySocialSignUp(OAuthUserInfoRequestDto authSignUpRequestDto);
 
+    void withdrawUser(Long userId);
 }
