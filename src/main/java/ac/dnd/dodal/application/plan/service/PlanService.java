@@ -3,6 +3,7 @@ package ac.dnd.dodal.application.plan.service;
 import java.util.List;
 import java.util.Optional;
 
+import ac.dnd.dodal.ui.plan.response.PlanElement;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -55,5 +56,9 @@ public class PlanService {
 
     public boolean isExistByUserIdAndGoalId(Long userId, Long goalId) {
         return planRepository.isExistByUserIdAndGoalId(userId, goalId);
+    }
+
+    public List<PlanElement> findOlderAndNowByHistoryIdOrThrow(Long historyId, Long id) {
+        return planRepository.findOlderAndNowByHistoryId(historyId, id);
     }
 }

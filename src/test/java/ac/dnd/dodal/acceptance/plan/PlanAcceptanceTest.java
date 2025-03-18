@@ -2,6 +2,7 @@ package ac.dnd.dodal.acceptance.plan;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
 import java.util.Map;
 
 import lombok.extern.slf4j.Slf4j;
@@ -39,8 +40,8 @@ public class PlanAcceptanceTest extends AcceptanceTest {
         // when
         Response response =
                 PlanSteps.completePlan(uncompletedPlanId, SUCCESS_STATUS, header, feedbackRequest);
-        ApiResponse<PlanElement> apiResponse =
-                response.as(new TypeRef<ApiResponse<PlanElement>>() {});
+        ApiResponse<List<PlanElement>> apiResponse =
+                response.as(new TypeRef<ApiResponse<List<PlanElement>>>() {});
 
         log.info("response = {}", response.asString());
         // then 200
@@ -49,8 +50,6 @@ public class PlanAcceptanceTest extends AcceptanceTest {
         assertThat(apiResponse.code()).isEqualTo(CommonResultCode.SUCCESS.getCode());
         // Success
         assertThat(apiResponse.message()).isEqualTo(CommonResultCode.SUCCESS.getMessage());
-        // PlanElement
-        assertThat(apiResponse.data()).isInstanceOf(PlanElement.class);
     }
 
     @Test
@@ -63,8 +62,8 @@ public class PlanAcceptanceTest extends AcceptanceTest {
         // when
         Response response =
                 PlanSteps.completePlan(uncompletedPlanId2, FAILURE_STATUS, header, feedbackRequest);
-        ApiResponse<PlanElement> apiResponse =
-                response.as(new TypeRef<ApiResponse<PlanElement>>() {});
+        ApiResponse<List<PlanElement>> apiResponse =
+                response.as(new TypeRef<ApiResponse<List<PlanElement>>>() {});
 
         log.info("response = {}", response.asString());
         // then 200
@@ -73,8 +72,6 @@ public class PlanAcceptanceTest extends AcceptanceTest {
         assertThat(apiResponse.code()).isEqualTo(CommonResultCode.SUCCESS.getCode());
         // Success
         assertThat(apiResponse.message()).isEqualTo(CommonResultCode.SUCCESS.getMessage());
-        // PlanElement
-        assertThat(apiResponse.data()).isInstanceOf(PlanElement.class);
     }
 
     @Test
@@ -87,8 +84,8 @@ public class PlanAcceptanceTest extends AcceptanceTest {
         // when
         Response response =
                 PlanSteps.completePlan(uncompletedPlanId, "wrong", header, feedbackRequest);
-        ApiResponse<PlanElement> apiResponse =
-                response.as(new TypeRef<ApiResponse<PlanElement>>() {});
+        ApiResponse<List<PlanElement>> apiResponse =
+                response.as(new TypeRef<ApiResponse<List<PlanElement>>>() {});
 
         log.info("response = {}", response.asString());
         // then 403

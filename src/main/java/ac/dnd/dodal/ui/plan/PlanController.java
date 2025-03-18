@@ -17,6 +17,8 @@ import ac.dnd.dodal.application.plan.usecase.CompletePlanUseCase;
 import ac.dnd.dodal.ui.feedback.request.CreateFeedbackRequest;
 import ac.dnd.dodal.ui.plan.response.PlanElement;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/plans")
 @RequiredArgsConstructor
@@ -31,8 +33,8 @@ public class PlanController {
         @RequestParam String status,
         @RequestBody CreateFeedbackRequest request
     ) {
-        Plan plan = completePlanUseCase.completePlan(request.toCommand(userId, planId, PlanStatus.of(status)));
+        List<PlanElement> plans = completePlanUseCase.completePlan(request.toCommand(userId, planId, PlanStatus.of(status)));
 
-        return ApiResponse.success(PlanElement.of(plan));
+        return ApiResponse.success(plans);
     }
 }
