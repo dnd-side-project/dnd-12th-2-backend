@@ -15,8 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.context.ApplicationEventPublisher;
 
-import ac.dnd.dodal.common.exception.ForbiddenException;
-import ac.dnd.dodal.domain.plan.exception.PlanExceptionCode;
+import ac.dnd.dodal.common.exception.UnauthorizedException;
 import ac.dnd.dodal.domain.goal.model.Goal;
 import ac.dnd.dodal.domain.guide.enums.GuideType;
 import ac.dnd.dodal.domain.guide.enums.UserType;
@@ -123,7 +122,7 @@ public class PlanCommandService implements
 
         // TODO: 현재 plan crud에서 user에 대한 검증이 없음. getGoal로 수행하는 것은 매우 비효율적 -> 로직 개선 필수
         if (!plan.getGoal().getUserId().equals(command.userId())) {
-            throw new ForbiddenException(PlanExceptionCode.PLAN_NOT_FOUND);
+            throw new UnauthorizedException();
         }
         plan.delete();
         planService.save(plan);

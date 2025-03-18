@@ -15,11 +15,10 @@ import org.springframework.http.HttpStatus;
 public class withdrawUserAcceptanceTest extends AcceptanceTest {
 
     @Test
-    @Order(1000)
     @DisplayName("Withdraw User Test")
     public void withdrawUser() {
         // when
-        Response response = AuthSteps.deleteUser(authorizationHeader);
+        Response response = AuthSteps.deleteUser(authorizationHeader3);
         ApiResponse<?> apiResponse =
                 response.as(new TypeRef<ApiResponse<?>>() {});
         // then 200
@@ -29,5 +28,4 @@ public class withdrawUserAcceptanceTest extends AcceptanceTest {
         // Success
         assertThat(apiResponse.message()).isEqualTo(CommonResultCode.SUCCESS.getMessage());
     }
-    
 }
