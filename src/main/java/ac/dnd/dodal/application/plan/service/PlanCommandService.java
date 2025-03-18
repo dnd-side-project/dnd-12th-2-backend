@@ -108,7 +108,7 @@ public class PlanCommandService implements
         UserType userType = UserType.of(userTypeGuide.getContent());
         String guide =
                 GuidianceGenerator.generateUpdatePlanGuide(userType, feedback.getIndicator());
-
+ 
         plan.getGoal().completePlan(command.userId(), command.status(), plan, feedbacks, guide);
 
         eventPublisher.publishEvent(PlanCompletedEvent.of(plan, feedback));
@@ -127,7 +127,12 @@ public class PlanCommandService implements
         }
         plan.delete();
         planService.save(plan);
-        eventPublisher.publishEvent(new DeletedPlanEvent(plan.getPlanId(), command.userId()));
+        eventPublisher.publishEvent(
+                new DeletedPlanEvent(
+                        plan.getPlanId(),
+                        plan.getHistory().getHistoryId(), 
+                        command.userId(), 
+                        plan.getStatus()));
     }
 
     private List<Plan> generateIterationPlans(AddSamePlanCommand command, Plan plan) {
