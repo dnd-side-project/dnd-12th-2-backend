@@ -346,18 +346,31 @@ public class PlanCommandServiceTest {
     public void complete_failure_plan_failure_by_plan_not_started() {
         // given
         CompletePlanCommand command = CompletePlanCommandFixture.failurePlanCommand();
-        UserGuide userType = new UserGuide
-            (userId, GuideType.USER_TYPE, UserType.GOAL_ORIENTED.getValue());
+        UserGuide userType =
+                new UserGuide(userId, GuideType.USER_TYPE, UserType.GOAL_ORIENTED.getValue());
         uncompletedPlan.setGoal(goal);
         uncompletedPlan.setHistory(planHistory);
         when(planService.findByIdOrThrow(command.planId())).thenReturn(notStartedPlan);
         when(userGuideService.findByUserIdAndTypeOrThrow(userId, GuideType.USER_TYPE))
-            .thenReturn(userType);
+                .thenReturn(userType);
 
         // when & then
         assertThatThrownBy(() -> planCommandService.completePlan(command))
-                        .isInstanceOf(BadRequestException.class)
-                        .hasMessage(PlanExceptionCode.PLAN_SUCCEED_AFTER_START_DATE
-                        .getMessage());
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage(PlanExceptionCode.PLAN_SUCCEED_AFTER_START_DATE.getMessage());
+    }
+
+    @Test
+    @DisplayName("Delete plan success")
+    public void delete_plan_success() {
+        // given
+        DeletePlanCommand command = new DeletePlanCommand(userId, planId);
+        when(planService.findByIdOrThrow(command.planId())).thenReturn(successPlan);
+
+        // when
+        planCommandService.delete(command.planId(), command.userId());
+
+        // then
+        verify(planService).save(any(Plan.class));
     }
 }
