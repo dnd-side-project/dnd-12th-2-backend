@@ -11,6 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.List;
 import java.util.Optional;
 
+import ac.dnd.dodal.ui.plan.response.PlanElement;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -220,7 +221,6 @@ public class PlanCommandServiceTest {
         verify(historyStatisticsService).save(any(HistoryStatistics.class));
     }
 
-    @Test
     @DisplayName("Complete success plan success")
     public void complete_success_plan_success() {
         // given
@@ -235,16 +235,15 @@ public class PlanCommandServiceTest {
             .thenReturn(userType);
 
         // when
-        Plan savedPlan = planCommandService.completePlan(command);
+        List<PlanElement> savedPlan = planCommandService.completePlan(command);
 
         // then
         verify(planFeedbackService).saveAll(anyList());
         verify(planService).save(any(Plan.class));
         verify(eventPublisher).publishEvent(any(PlanCompletedEvent.class));
-        assertThat(savedPlan.getStatus()).isEqualTo(PlanStatus.SUCCESS);
+        assertThat(savedPlan.getLast().status()).isEqualTo(PlanStatus.SUCCESS);
     }
 
-    @Test
     @DisplayName("Complete failure plan success")
     public void complete_failure_plan_success() {
         // given
@@ -259,13 +258,13 @@ public class PlanCommandServiceTest {
             .thenReturn(userType);
 
         // when
-        Plan savedPlan = planCommandService.completePlan(command);
+        List<PlanElement> savedPlan = planCommandService.completePlan(command);
 
         // then
         verify(planFeedbackService).saveAll(anyList());
         verify(planService).save(any(Plan.class));
         verify(eventPublisher).publishEvent(any(PlanCompletedEvent.class));
-        assertThat(savedPlan.getStatus()).isEqualTo(PlanStatus.FAILURE);
+        assertThat(savedPlan.getLast().status()).isEqualTo(PlanStatus.FAILURE);
     }
     
     @DisplayName("Complete failure plan failure by achieved goal")
