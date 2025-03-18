@@ -11,7 +11,9 @@ import ac.dnd.dodal.ui.feedback.request.CreateFeedbackRequest;
 
 public class PlanSteps {
     
-    private static final String COMPLETE_PLAN_URL = "/api/plans/{planId}/complete?status={status}";
+    private static final String BASE_URL = "/api/plans";
+    private static final String COMPLETE_PLAN_URL = BASE_URL + "/{planId}/complete?status={status}";
+    private static final String DELETE_PLAN_URL = BASE_URL + "/{planId}";
 
     public static Response completePlan(Long planId, String status,
             Map<String, Object> header, CreateFeedbackRequest request) {
@@ -28,5 +30,19 @@ public class PlanSteps {
             .then().log().all()
                 .extract()
                 .response();
+    }
+
+    public static Response deletePlan(Long planId, Map<String, Object> header) {
+        String url = DELETE_PLAN_URL
+            .replace("{planId}", planId.toString());
+
+        return given().log().all()
+                .contentType(ContentType.JSON)
+                .headers(header)
+            .when()
+                .delete(url)
+            .then().log().all()
+                .extract()
+            .response();
     }
 }

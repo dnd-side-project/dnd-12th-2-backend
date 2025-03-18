@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import ac.dnd.dodal.common.annotation.UserId;
 import ac.dnd.dodal.common.response.ApiResponse;
@@ -34,5 +35,13 @@ public class PlanController {
         Plan plan = completePlanUseCase.completePlan(request.toCommand(userId, planId, PlanStatus.of(status)));
 
         return ApiResponse.success(PlanElement.of(plan));
+    }
+
+    @DeleteMapping("/{planId}")
+    public ApiResponse<Void> deletePlan(
+        @UserId Long userId,
+        @PathVariable Long planId
+    ) {
+        return ApiResponse.success();
     }
 }
