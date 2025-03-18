@@ -133,6 +133,13 @@ public class Plan extends BaseEntity {
         return this.status != PlanStatus.NONE || this.completedDate != null;
     }
 
+    public void delete() {
+        if (this.deletedAt != null) {
+            throw new BadRequestException(PlanExceptionCode.PLAN_ALREADY_DELETED);
+        }
+        super.delete();
+    }
+
     private void validateTitle(String title) {
         if (title == null || title.isEmpty()) {
             throw new BadRequestException(PlanExceptionCode.PLAN_TITLE_EMPTY);

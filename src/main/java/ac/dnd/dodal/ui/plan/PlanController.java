@@ -15,6 +15,7 @@ import ac.dnd.dodal.common.response.ApiResponse;
 import ac.dnd.dodal.domain.plan.model.Plan;
 import ac.dnd.dodal.domain.plan.enums.PlanStatus;
 import ac.dnd.dodal.application.plan.usecase.CompletePlanUseCase;
+import ac.dnd.dodal.application.plan.usecase.DeletePlanUseCase;
 import ac.dnd.dodal.ui.feedback.request.CreateFeedbackRequest;
 import ac.dnd.dodal.ui.plan.response.PlanElement;
 
@@ -24,6 +25,7 @@ import ac.dnd.dodal.ui.plan.response.PlanElement;
 public class PlanController {
 
     private final CompletePlanUseCase completePlanUseCase;
+    private final DeletePlanUseCase deletePlanUseCase;
 
     @PostMapping("/{planId}/complete")
     public ApiResponse<?> completePlan(
@@ -42,6 +44,8 @@ public class PlanController {
         @UserId Long userId,
         @PathVariable Long planId
     ) {
+        deletePlanUseCase.delete(planId, userId);
+
         return ApiResponse.success();
     }
 }

@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.context.ApplicationEventPublisher;
 
+import ac.dnd.dodal.common.exception.ForbiddenException;
+import ac.dnd.dodal.domain.plan.exception.PlanExceptionCode;
 import ac.dnd.dodal.domain.goal.model.Goal;
 import ac.dnd.dodal.domain.guide.enums.GuideType;
 import ac.dnd.dodal.domain.guide.enums.UserType;
@@ -26,9 +28,7 @@ import ac.dnd.dodal.domain.plan.event.PlanCompletedEvent;
 import ac.dnd.dodal.domain.plan_feedback.model.PlanFeedback;
 import ac.dnd.dodal.application.goal.service.GoalService;
 import ac.dnd.dodal.application.plan.dto.command.*;
-import ac.dnd.dodal.application.plan.usecase.AddPlanUseCase;
-import ac.dnd.dodal.application.plan.usecase.CompletePlanUseCase;
-import ac.dnd.dodal.application.plan.usecase.CreatePlanAndHistoryUseCase;
+import ac.dnd.dodal.application.plan.usecase.*;
 import ac.dnd.dodal.application.plan_feedback.service.PlanFeedbackService;
 import ac.dnd.dodal.application.plan_history.service.PlanHistoryService;
 import ac.dnd.dodal.application.user_guide.service.UserGuideService;
@@ -37,7 +37,7 @@ import ac.dnd.dodal.application.user_guide.service.UserGuideService;
 @Service
 @RequiredArgsConstructor
 public class PlanCommandService implements 
-    AddPlanUseCase, CreatePlanAndHistoryUseCase, CompletePlanUseCase {
+    AddPlanUseCase, CreatePlanAndHistoryUseCase, CompletePlanUseCase, DeletePlanUseCase {
 
     private final GoalService goalService;
     private final PlanHistoryService planHistoryService;
@@ -102,18 +102,30 @@ public class PlanCommandService implements
         // PlanFeedback feedback = new PlanFeedback(command.question(), command.indicator());
         PlanFeedback feedback = new PlanFeedback("조금 더 수월하게 달성하기 위해 무엇을 바꿔볼까요?", "우선 순위를 재조정해요.");
         feedbacks.add(feedback);
-        UserGuide userTypeGuide = userGuideService
-                .findByUserIdAndTypeOrThrow(command.userId(), GuideType.USER_TYPE);
+        UserGuide userTypeGuide =
+                userGuideService.findByUserIdAndTypeOrThrow(command.userId(), GuideType.USER_TYPE);
         UserType userType = UserType.of(userTypeGuide.getContent());
-        String guide = GuidianceGenerator.generateUpdatePlanGuide(userType, feedback.getIndicator());
+        String guide =
+                GuidianceGenerator.generateUpdatePlanGuide(userType, feedback.getIndicator());
 
-        plan.getGoal().completePlan(
-            command.userId(), command.status(), plan, feedbacks, guide);
+        plan.getGoal().completePlan(command.userId(), command.status(), plan, feedbacks, guide);
 
         eventPublisher.publishEvent(PlanCompletedEvent.of(plan, feedback));
         planFeedbackService.saveAll(feedbacks);
         userGuideService.updateUpdatePlanGuide(command.userId(), guide);
         return planService.save(plan);
+    }
+    
+    @Override
+    public void delete(Long planId, Long userId) {
+        Plan plan = planService.findByIdOrThrow(planId);
+
+        // TODO: 현재 plan crud에서 user에 대한 검증이 없음. getGoal로 수행하는 것은 매우 비효율적 -> 로직 개선 필수
+        if (!plan.getGoal().getUserId().equals(userId)) {
+            throw new ForbiddenException(PlanExceptionCode.PLAN_NOT_FOUND);
+        }
+        plan.delete();
+        planService.save(plan);
     }
 
     private List<Plan> generateIterationPlans(AddSamePlanCommand command, Plan plan) {
