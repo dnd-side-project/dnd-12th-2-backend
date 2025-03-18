@@ -10,14 +10,13 @@ import ac.dnd.dodal.application.plan.dto.command.CreatePlanAndHistoryCommand;
 
 public class AddPlanCommandFixture {
 
-    public static AddSamePlanCommand addSamePlanCommand(Long userId, Long goalId, Long planHistoryId, Long planId) {
-        return new AddSamePlanCommand(userId, goalId, planHistoryId, planId,
+    public static AddSamePlanCommand addSamePlanCommand(Long userId, Long goalId, Long planId) {
+        return new AddSamePlanCommand(userId, goalId, planId,
                 LocalDateTime.now(), LocalDateTime.now(), Set.of(DayOfWeek.MONDAY), 1);
     }
 
-    public static AddNewPlanCommand addNewPlanCommand(Long userId, Long goalId, Long planHistoryId,
-            Long planId) {
-        return new AddNewPlanCommand(userId, goalId, planHistoryId, planId, "new title",
+    public static AddNewPlanCommand addNewPlanCommand(Long userId, Long goalId, Long planId) {
+        return new AddNewPlanCommand(userId, goalId, planId, "new title",
                 LocalDateTime.now(), LocalDateTime.now().plusDays(1));
     }
 

@@ -58,27 +58,25 @@ public class GoalPlanController {
         return ApiResponse.success();
     }
 
-    @PostMapping("/plan-histories/{planHistoryId}/plans/{planId}/success")
+    @PostMapping("/plans/{planId}/success")
     public ApiResponse<?> addPlanWhenSuccess(
             @UserId Long userId,
             @PathVariable Long goalId,
-            @PathVariable Long planHistoryId,
             @PathVariable Long planId,
             @RequestBody AddSamePlanRequest request) {
         addPlanUseCase
-                .addSamePlan(request.toAddSamePlanCommand(userId, goalId, planHistoryId, planId));
+                .addSamePlan(request.toAddSamePlanCommand(userId, goalId, planId));
 
         return ApiResponse.success();
     }
 
-    @PostMapping("/plan-histories/{planHistoryId}/plans/{planId}/failure")
+    @PostMapping("/plans/{planId}/failure")
     public ApiResponse<?> addPlanWhenFailure(
         @UserId Long userId,
         @PathVariable Long goalId,
-        @PathVariable Long planHistoryId,
         @PathVariable Long planId,
         @RequestBody AddNewPlanRequest request) {
-        addPlanUseCase.addNewPlan(request.toAddNewPlanCommand(userId, goalId, planHistoryId, planId));
+        addPlanUseCase.addNewPlan(request.toAddNewPlanCommand(userId, goalId, planId));
 
         return ApiResponse.success();
     }

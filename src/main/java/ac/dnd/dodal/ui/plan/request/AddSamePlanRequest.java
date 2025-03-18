@@ -14,8 +14,8 @@ public record AddSamePlanRequest(
 ) {
 
     public AddSamePlanCommand toAddSamePlanCommand(
-            Long userId, Long goalId, Long planHistoryId, Long planId) {
-        return new AddSamePlanCommand(userId, goalId, planHistoryId, planId, startDate, endDate,
+            Long userId, Long goalId, Long planId) {
+        return new AddSamePlanCommand(userId, goalId, planId, startDate, endDate,
                 iterationDays, iterationCount);
     }
 

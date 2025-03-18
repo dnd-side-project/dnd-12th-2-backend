@@ -52,9 +52,9 @@ public class PlanCommandService implements
     @Override
     public void addSamePlan(AddSamePlanCommand command) {
         Goal goal = goalService.findByIdOrThrow(command.goalId());
-        PlanHistory planHistory = planHistoryService.findByIdOrThrow(command.planHistoryId());
         Plan previousPlan = planService.findByIdOrThrow(command.planId());
-        Plan latestPlan = planService.findLatestPlanByHistoryId(command.planHistoryId())
+        PlanHistory planHistory = previousPlan.getHistory();
+        Plan latestPlan = planService.findLatestPlanByHistoryId(planHistory.getHistoryId())
                 .orElse(null);
         List<Plan> plans = generateIterationPlans(command, previousPlan);
 
@@ -68,9 +68,9 @@ public class PlanCommandService implements
     @Override
     public void addNewPlan(AddNewPlanCommand command) {
         Goal goal = goalService.findByIdOrThrow(command.goalId());
-        PlanHistory planHistory = planHistoryService.findByIdOrThrow(command.planHistoryId());
         Plan previousPlan = planService.findByIdOrThrow(command.planId());
-        Plan latestPlan = planService.findLatestPlanByHistoryId(command.planHistoryId())
+        PlanHistory planHistory = previousPlan.getHistory();
+        Plan latestPlan = planService.findLatestPlanByHistoryId(planHistory.getHistoryId())
                 .orElse(null);
         Plan plan = new Plan(command.title(), command.startDate(), command.endDate());
 

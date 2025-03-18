@@ -7,7 +7,6 @@ import java.util.Set;
 public record AddSamePlanCommand(
     Long userId,
     Long goalId,
-    Long planHistoryId,
     Long planId,
     LocalDateTime startDate,
     LocalDateTime endDate,
