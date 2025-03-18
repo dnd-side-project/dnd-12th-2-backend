@@ -16,6 +16,7 @@ import ac.dnd.dodal.domain.plan.model.Plan;
 import ac.dnd.dodal.domain.plan.enums.PlanStatus;
 import ac.dnd.dodal.application.plan.usecase.CompletePlanUseCase;
 import ac.dnd.dodal.application.plan.usecase.DeletePlanUseCase;
+import ac.dnd.dodal.application.plan.dto.command.DeletePlanCommand;
 import ac.dnd.dodal.ui.feedback.request.CreateFeedbackRequest;
 import ac.dnd.dodal.ui.plan.response.PlanElement;
 
@@ -44,7 +45,7 @@ public class PlanController {
         @UserId Long userId,
         @PathVariable Long planId
     ) {
-        deletePlanUseCase.delete(planId, userId);
+        deletePlanUseCase.delete(new DeletePlanCommand(userId, planId));
 
         return ApiResponse.success();
     }

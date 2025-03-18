@@ -25,6 +25,7 @@ import ac.dnd.dodal.domain.guide.util.GuidianceGenerator;
 import ac.dnd.dodal.domain.plan_history.model.PlanHistory;
 import ac.dnd.dodal.domain.plan.model.Plan;
 import ac.dnd.dodal.domain.plan.event.PlanCompletedEvent;
+import ac.dnd.dodal.domain.plan.event.DeletedPlanEvent;
 import ac.dnd.dodal.domain.plan_feedback.model.PlanFeedback;
 import ac.dnd.dodal.application.goal.service.GoalService;
 import ac.dnd.dodal.application.plan.dto.command.*;
@@ -117,15 +118,16 @@ public class PlanCommandService implements
     }
     
     @Override
-    public void delete(Long planId, Long userId) {
-        Plan plan = planService.findByIdOrThrow(planId);
+    public void delete(DeletePlanCommand command) {
+        Plan plan = planService.findByIdOrThrow(command.planId());
 
         // TODO: 현재 plan crud에서 user에 대한 검증이 없음. getGoal로 수행하는 것은 매우 비효율적 -> 로직 개선 필수
-        if (!plan.getGoal().getUserId().equals(userId)) {
+        if (!plan.getGoal().getUserId().equals(command.userId())) {
             throw new ForbiddenException(PlanExceptionCode.PLAN_NOT_FOUND);
         }
         plan.delete();
         planService.save(plan);
+        eventPublisher.publishEvent(new DeletedPlanEvent(plan.getPlanId(), command.userId()));
     }
 
     private List<Plan> generateIterationPlans(AddSamePlanCommand command, Plan plan) {

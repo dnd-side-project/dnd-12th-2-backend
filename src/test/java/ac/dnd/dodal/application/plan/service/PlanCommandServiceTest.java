@@ -34,6 +34,7 @@ import ac.dnd.dodal.domain.plan.exception.PlanExceptionCode;
 import ac.dnd.dodal.domain.plan.model.Plan;
 import ac.dnd.dodal.domain.plan.PlanFixture;
 import ac.dnd.dodal.domain.plan.event.PlanCompletedEvent;
+import ac.dnd.dodal.domain.plan.event.DeletedPlanEvent;
 import ac.dnd.dodal.domain.plan_history.model.PlanHistory;
 import ac.dnd.dodal.domain.plan_history.PlanHistoryFixture;
 import ac.dnd.dodal.domain.plan_history.exception.PlanHistoryExceptionCode;
@@ -46,7 +47,6 @@ import ac.dnd.dodal.application.goal.service.GoalService;
 import ac.dnd.dodal.application.plan_history.service.PlanHistoryService;
 import ac.dnd.dodal.application.user_guide.service.UserGuideService;
 import ac.dnd.dodal.application.plan_history.service.HistoryStatisticsService;
-
 @ExtendWith(MockitoExtension.class)
 public class PlanCommandServiceTest {
 
@@ -368,9 +368,10 @@ public class PlanCommandServiceTest {
         when(planService.findByIdOrThrow(command.planId())).thenReturn(successPlan);
 
         // when
-        planCommandService.delete(command.planId(), command.userId());
+        planCommandService.delete(command);
 
         // then
         verify(planService).save(any(Plan.class));
+        verify(eventPublisher).publishEvent(any(DeletedPlanEvent.class));
     }
 }
