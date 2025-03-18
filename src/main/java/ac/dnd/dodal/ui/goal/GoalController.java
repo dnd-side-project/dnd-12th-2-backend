@@ -4,14 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 
 import ac.dnd.dodal.common.annotation.UserId;
 import ac.dnd.dodal.common.response.ApiResponse;
@@ -27,6 +20,7 @@ public class GoalController {
 
     private final CreateGoalAndPlanUseCase createGoalAndPlanUseCase;
     private final CreateGoalUseCase createGoalUseCase;
+    private final UpdateGoalUseCase updateGoalUseCase;
     private final AchieveGoalUseCase achieveGoalUseCase;
     private final DeleteGoalUseCase deleteGoalUseCase;
     private final GetGoalUseCase getGoalUseCase;
@@ -61,6 +55,17 @@ public class GoalController {
         List<GoalStatisticsResponse> goalStatisticsResponses = getGoalUseCase.getAchievedGoals(userId);
 
         return ApiResponse.success(goalStatisticsResponses);
+    }
+
+    @PatchMapping("/{goalId}")
+    public ApiResponse<Void> updateGoal(
+            @UserId Long userId,
+            @PathVariable Long goalId,
+            @RequestParam("title") String title) {
+        UpdateGoalCommand command = new UpdateGoalCommand(userId, goalId, title);
+        updateGoalUseCase.updateTitle(command);
+
+        return ApiResponse.success();
     }
 
     @PatchMapping("/{goalId}/achieve")

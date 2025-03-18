@@ -67,6 +67,10 @@ public class Goal extends BaseEntity {
         plan.complete(status, feedbacks, guide);
     }
 
+    public void updateTitle(String title){
+        this.title = title;
+    }
+
     public void achieve(Long userId) {
         validateAuthor(userId);
         validateDeleted();
