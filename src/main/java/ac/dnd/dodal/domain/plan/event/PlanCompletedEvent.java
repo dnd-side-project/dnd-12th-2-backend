@@ -21,6 +21,7 @@ public class PlanCompletedEvent {
     private String guide;
     private String title;
 
+    // TODO: 이렇게 가져오면 안됨!!!!!!!! 로직 개선 필수
     public static PlanCompletedEvent of(Plan plan, PlanFeedback feedback) {
         return new PlanCompletedEvent(
             plan.getGoal().getUserId(),
