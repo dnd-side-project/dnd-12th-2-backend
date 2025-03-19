@@ -9,6 +9,7 @@ import java.util.Set;
 
 import ac.dnd.dodal.application.plan_history.service.HistoryStatisticsService;
 import ac.dnd.dodal.domain.plan_history.model.HistoryStatistics;
+import ac.dnd.dodal.ui.plan.response.PlanElement;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -97,10 +98,10 @@ public class PlanCommandService implements
 
     // TODO: MVP 배포 후 직접 입력 받는 것으로 수정
     @Override
-    public Plan completePlan(CompletePlanCommand command) {
+    public List<PlanElement> completePlan(CompletePlanCommand command) {
         Plan plan = planService.findByIdOrThrow(command.planId());
         List<PlanFeedback> feedbacks = new ArrayList<>();
-        // PlanFeedback feedback = new PlanFeedback(command.question(), command.indicator());
+//         PlanFeedback feedback = new PlanFeedback(command.question(), command.indicator());
         PlanFeedback feedback = new PlanFeedback("조금 더 수월하게 달성하기 위해 무엇을 바꿔볼까요?", "우선 순위를 재조정해요.");
         feedbacks.add(feedback);
         UserGuide userTypeGuide =
@@ -114,7 +115,10 @@ public class PlanCommandService implements
         eventPublisher.publishEvent(PlanCompletedEvent.of(plan, feedback));
         planFeedbackService.saveAll(feedbacks);
         userGuideService.updateUpdatePlanGuide(command.userId(), guide);
-        return planService.save(plan);
+        planService.save(plan);
+
+        // 가장 오래된 계획과 개선할 점 을 두 개와 방금 완료한 계획 출력
+        return planService.findOlderAndNowByHistoryIdOrThrow(plan.getHistory().getHistoryId(), plan.getPlanId());
     }
     
     @Override

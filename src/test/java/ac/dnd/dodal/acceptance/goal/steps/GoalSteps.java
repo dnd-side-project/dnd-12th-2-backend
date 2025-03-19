@@ -26,11 +26,11 @@ public class GoalSteps {
                     .extract()
                 .response();
     }
-    
+
     public static Response createGoalAndPlan(
             Map<String, Object> header, CreateGoalAndPlanRequest body) {
         String url = BASE_URL + "/with-plan";
-            
+
         return given().log().all()
                 .contentType(ContentType.JSON)
                 .headers(header)
@@ -40,6 +40,16 @@ public class GoalSteps {
             .then().log().all()
                 .extract()
             .response();
+    }
+
+    public static Response updateGoal(Map<String, Object> header, Long goalId, String title) {
+        return given().log().all()
+                    .headers(header)
+                .when()
+                    .patch(BASE_URL + "/" + goalId + "?title=" + title)
+                .then().log().all()
+                    .extract()
+                .response();
     }
 
     public static Response achieveGoal(Map<String, Object> header, Long goalId) {

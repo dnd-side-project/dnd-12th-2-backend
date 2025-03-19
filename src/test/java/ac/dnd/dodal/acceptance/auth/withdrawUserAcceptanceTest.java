@@ -11,11 +11,9 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.*;
 import org.springframework.http.HttpStatus;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class withdrawUserAcceptanceTest extends AcceptanceTest {
 
     @Test
-    @Order(1000)
     @DisplayName("Withdraw User Test")
     public void withdrawUser() {
         // when

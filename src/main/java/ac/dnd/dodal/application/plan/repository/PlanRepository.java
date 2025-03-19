@@ -64,4 +64,13 @@ public interface PlanRepository extends JpaRepository<Plan, Long> {
             + "AND goal.deletedAt IS NULL "
             + "AND goal.userId = :userId")
     boolean isExistByUserIdAndGoalId(@Param("userId") Long userId, @Param("goalId") Long goalId);
+
+    @Query("SELECT p FROM plans p "
+          + "WHERE p.history.historyId = :historyId "
+          + "ORDER BY p.completedDate ASC "
+          + "LIMIT 2 "
+          + "UNION "
+          + "SELECT p FROM plans p "
+          + "WHERE p.planId = :id")
+    List<PlanElement> findOlderAndNowByHistoryId(Long historyId, Long id);
 }

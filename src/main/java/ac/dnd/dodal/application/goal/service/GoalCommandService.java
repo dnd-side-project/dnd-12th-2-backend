@@ -1,5 +1,6 @@
 package ac.dnd.dodal.application.goal.service;
 
+import ac.dnd.dodal.application.goal.usecase.UpdateGoalUseCase;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ import ac.dnd.dodal.application.goal.usecase.DeleteGoalUseCase;
 @Transactional
 @RequiredArgsConstructor
 public class GoalCommandService
-        implements CreateGoalUseCase, AchieveGoalUseCase, DeleteGoalUseCase {
+        implements CreateGoalUseCase, UpdateGoalUseCase, AchieveGoalUseCase, DeleteGoalUseCase {
 
     private final GoalService goalService;
 
@@ -30,6 +31,14 @@ public class GoalCommandService
         goalService.saveAndFlush(goal);
         eventPublisher.publishEvent(new GoalCreatedEvent(goal));
         return goal.getGoalId();
+    }
+
+    @Override
+    public void updateTitle(UpdateGoalCommand command){
+        Goal goal = goalService.findByIdOrThrow(command.goalId());
+        goal.updateTitle(command.title());
+
+        goalService.save(goal);
     }
 
     @Override
