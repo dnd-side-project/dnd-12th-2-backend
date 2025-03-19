@@ -24,7 +24,7 @@ import ac.dnd.dodal.domain.plan.exception.PlanExceptionCode;
 import ac.dnd.dodal.ui.plan.response.PlanElement;
 
 @Slf4j
-public class PlanAcceptanceTest extends AcceptanceTest {
+public class PlanCompleteAcceptanceTest extends AcceptanceTest {
 
     private static final String SUCCESS_STATUS = "success";
     private static final String FAILURE_STATUS = "failure";
