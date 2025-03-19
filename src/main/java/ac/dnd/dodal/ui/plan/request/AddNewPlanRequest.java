@@ -11,9 +11,8 @@ public record AddNewPlanRequest(
 ) {
 
     public AddNewPlanCommand toAddNewPlanCommand(
-            Long userId, Long goalId, Long planHistoryId, Long planId) {
-        return new AddNewPlanCommand(userId, goalId, planHistoryId, planId, title, startDate,
-                endDate);
+            Long userId, Long goalId, Long planId) {
+        return new AddNewPlanCommand(userId, goalId, planId, title, startDate, endDate);
     }
 
     public AddNewPlanRequest(String title, LocalDateTime startDate, LocalDateTime endDate) {

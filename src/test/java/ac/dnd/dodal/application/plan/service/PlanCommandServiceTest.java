@@ -48,6 +48,7 @@ import ac.dnd.dodal.application.goal.service.GoalService;
 import ac.dnd.dodal.application.plan_history.service.PlanHistoryService;
 import ac.dnd.dodal.application.user_guide.service.UserGuideService;
 import ac.dnd.dodal.application.plan_history.service.HistoryStatisticsService;
+
 @ExtendWith(MockitoExtension.class)
 public class PlanCommandServiceTest {
 
@@ -112,9 +113,9 @@ public class PlanCommandServiceTest {
     public void add_new_plan_success() {
         // given
         AddNewPlanCommand command =
-                AddPlanCommandFixture.addNewPlanCommand(userId, goalId, planHistoryId, planId);
+                AddPlanCommandFixture.addNewPlanCommand(userId, goalId, planId);
         when(planService.findByIdOrThrow(command.planId())).thenReturn(failurePlan);
-        when(planService.findLatestPlanByHistoryId(command.planHistoryId()))
+        when(planService.findLatestPlanByHistoryId(planHistory.getHistoryId()))
                 .thenReturn(Optional.of(failurePlan));
 
         // when
@@ -129,9 +130,9 @@ public class PlanCommandServiceTest {
     public void add_new_plan_failure_uncompleted_plan() {
         // given
         AddNewPlanCommand command =
-                AddPlanCommandFixture.addNewPlanCommand(userId, goalId, planHistoryId, planId);
+                AddPlanCommandFixture.addNewPlanCommand(userId, goalId, planId);
         when(planService.findByIdOrThrow(command.planId())).thenReturn(uncompletedPlan);
-        when(planService.findLatestPlanByHistoryId(command.planHistoryId()))
+        when(planService.findLatestPlanByHistoryId(planHistory.getHistoryId()))
                 .thenReturn(Optional.of(uncompletedPlan));
 
         // when & then
@@ -145,9 +146,9 @@ public class PlanCommandServiceTest {
     public void add_new_plan_failure_not_by_latest_plan() {
         // given
         AddNewPlanCommand command =
-                AddPlanCommandFixture.addNewPlanCommand(userId, goalId, planHistoryId, planId);
+                AddPlanCommandFixture.addNewPlanCommand(userId, goalId, planId);
         when(planService.findByIdOrThrow(command.planId())).thenReturn(successPlan);
-        when(planService.findLatestPlanByHistoryId(command.planHistoryId()))
+        when(planService.findLatestPlanByHistoryId(planHistory.getHistoryId()))
                 .thenReturn(Optional.of(uncompletedPlan));
 
         // when & then
@@ -161,9 +162,9 @@ public class PlanCommandServiceTest {
     public void add_same_plan_success() {
         // given
         AddSamePlanCommand command =
-                AddPlanCommandFixture.addSamePlanCommand(userId, goalId, planHistoryId, planId);
+                AddPlanCommandFixture.addSamePlanCommand(userId, goalId, planId);
         when(planService.findByIdOrThrow(command.planId())).thenReturn(successPlan);
-        when(planService.findLatestPlanByHistoryId(command.planHistoryId()))
+        when(planService.findLatestPlanByHistoryId(planHistory.getHistoryId()))
                 .thenReturn(Optional.of(successPlan));
 
         // when
@@ -178,9 +179,9 @@ public class PlanCommandServiceTest {
     public void add_same_plan_failure_not_by_latest_plan() {
         // given
         AddSamePlanCommand command =
-                AddPlanCommandFixture.addSamePlanCommand(userId, goalId, planHistoryId, planId);
+                AddPlanCommandFixture.addSamePlanCommand(userId, goalId, planId);
         when(planService.findByIdOrThrow(command.planId())).thenReturn(successPlan);
-        when(planService.findLatestPlanByHistoryId(command.planHistoryId()))
+        when(planService.findLatestPlanByHistoryId(planHistory.getHistoryId()))
                 .thenReturn(Optional.of(uncompletedPlan));
 
         // when & then
@@ -194,9 +195,9 @@ public class PlanCommandServiceTest {
     public void add_same_plan_failure_by_uncompleted_plan() {
         // given
         AddSamePlanCommand command =
-                AddPlanCommandFixture.addSamePlanCommand(userId, goalId, planHistoryId, planId);
+                AddPlanCommandFixture.addSamePlanCommand(userId, goalId, planId);
         when(planService.findByIdOrThrow(command.planId())).thenReturn(uncompletedPlan);
-        when(planService.findLatestPlanByHistoryId(command.planHistoryId()))
+        when(planService.findLatestPlanByHistoryId(planHistory.getHistoryId()))
                 .thenReturn(Optional.of(uncompletedPlan));
 
         // when & then

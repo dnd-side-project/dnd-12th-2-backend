@@ -49,8 +49,8 @@ public class AddPlanToGoalAcceptanceTest extends AcceptanceTest {
         AddSamePlanRequest request = PlanUIFixture.addSamePlanRequest();
 
         // when
-        Response response = AddPlanToGoalSteps.addPlanWhenSuccess(goalId, planHistoryId,
-                latestSuccessPlanIdWithHistory_1, authorizationHeader, request);
+        Response response = AddPlanToGoalSteps.addPlanWhenSuccess(
+            goalId, latestSuccessPlanIdWithHistory_1, authorizationHeader, request);
         ApiResponse<Long> apiResponse = response.as(new TypeRef<ApiResponse<Long>>() {});
 
         // then 200
@@ -59,7 +59,7 @@ public class AddPlanToGoalAcceptanceTest extends AcceptanceTest {
         assertThat(apiResponse.code()).isEqualTo(CommonResultCode.SUCCESS.getCode());
         // Success
         assertThat(apiResponse.message()).isEqualTo(CommonResultCode.SUCCESS.getMessage());
-        // Existing Plan History Id
+        // Data is null
         assertThat(apiResponse.data()).isNull();
     }
 
@@ -70,8 +70,8 @@ public class AddPlanToGoalAcceptanceTest extends AcceptanceTest {
         AddNewPlanRequest request = PlanUIFixture.addNewPlanRequest();
 
         // when
-        Response response = AddPlanToGoalSteps.addPlanWhenFailure(goalId, lastFailurePlanHistoryId,
-                latestFailurePlanIdWithHistory_2, authorizationHeader, request);
+        Response response = AddPlanToGoalSteps.addPlanWhenFailure(
+            goalId, latestFailurePlanIdWithHistory_2, authorizationHeader, request);
         ApiResponse<Long> apiResponse = response.as(new TypeRef<ApiResponse<Long>>() {});
 
         // then 200
@@ -80,7 +80,7 @@ public class AddPlanToGoalAcceptanceTest extends AcceptanceTest {
         assertThat(apiResponse.code()).isEqualTo(CommonResultCode.SUCCESS.getCode());
         // Success
         assertThat(apiResponse.message()).isEqualTo(CommonResultCode.SUCCESS.getMessage());
-        // Existing Plan History Id
+        // Data is null
         assertThat(apiResponse.data()).isNull();
     }
 }

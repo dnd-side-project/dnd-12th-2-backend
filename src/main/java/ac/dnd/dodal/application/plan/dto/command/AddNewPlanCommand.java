@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 public record AddNewPlanCommand(
         Long userId,
         Long goalId,
-        Long planHistoryId,
         Long planId,
         String title,
         LocalDateTime startDate,
