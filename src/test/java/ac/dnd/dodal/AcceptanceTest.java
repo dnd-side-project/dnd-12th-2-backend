@@ -34,6 +34,10 @@ public abstract class AcceptanceTest {
     protected static final String userEmail2 = "test2@test.com";
     protected static final String accessToken2 = "eyJhbGciOiJIUzUxMiJ9.eyJ1aWQiOjIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzQwMDAwODg3LCJleHAiOjE3NDA4Nzk3NzF9.B2TGyw8e291ziSz4YE2PBcBXD-zWrHE2ut50Ye5dSQnfY26H20Fi1-riXBU-JBNHTX0O6XSg1PjahZ-x8tD8YA";
 
+    protected static final Long userId3 = 3L;
+    protected static final String userEmail3 = "test3@test.com";
+    protected static final String accessToken3 = "eyJhbGciOiJIUzUxMiJ9.eyJ1aWQiOjMsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzQyMzEzMzY2LCJleHAiOjIwMjYxMzczNjZ9.lWaHYbCjtuNf5jlztPtt4myRpvBmL8Sruhf-tfwN3VtYPwMnnrg_O7ZKrWJULZdEPuW5GUQTYPKHPoKtqRcF7w";
+
     protected static final Long achievedGoalId = 3L;
     protected static final Long deletedGoalId = 2L;
     protected static final Long unachievedGoalId = 1L;
@@ -62,6 +66,8 @@ public abstract class AcceptanceTest {
         = UIFixture.createUnauthorizedRefreshHeader();
     protected static final Map<String, Object> authorizationHeader2
         = UIFixture.createAuthorizationHeader(accessToken2);
+    protected static final Map<String, Object> authorizationHeader3
+        = UIFixture.createAuthorizationHeader(accessToken3);
 
     @BeforeAll
     public static void setUp() {
