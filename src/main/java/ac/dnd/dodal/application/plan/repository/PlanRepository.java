@@ -80,7 +80,7 @@ public interface PlanRepository extends JpaRepository<Plan, Long> {
             + "WHERE p2.planId = :planId "
             + "AND p2.goal.userId = :userId "
             + "AND p2.deletedAt IS NULL) "
-            + "AND p.completedDate < (SELECT p3.completedDate FROM plans p3 "
+            + "AND p.completedDate <= (SELECT p3.completedDate FROM plans p3 "
             + "WHERE p3.planId = :planId "
             + "AND p3.deletedAt IS NULL) "
             + "AND p.deletedAt IS NULL "
