@@ -29,7 +29,7 @@ public class PlanController {
     private final DeletePlanUseCase deletePlanUseCase;
 
     @PostMapping("/{planId}/complete")
-    public ApiResponse<?> completePlan(
+    public ApiResponse<PlanElement> completePlan(
         @UserId Long userId,
         @PathVariable Long planId,
         @RequestParam String status,
