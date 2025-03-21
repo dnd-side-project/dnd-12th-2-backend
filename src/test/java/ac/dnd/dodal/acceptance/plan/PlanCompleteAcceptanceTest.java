@@ -41,8 +41,8 @@ public class PlanCompleteAcceptanceTest extends AcceptanceTest {
         Response response =
                 PlanSteps.completePlan(uncompletedPlanId, SUCCESS_STATUS, header, feedbackRequest);
       
-        ApiResponse<List<PlanElement>> apiResponse =
-                response.as(new TypeRef<ApiResponse<List<PlanElement>>>() {});
+        ApiResponse<PlanElement> apiResponse =
+                response.as(new TypeRef<ApiResponse<PlanElement>>() {});
 
         log.info("response = {}", response.asString());
         // then 200
@@ -64,8 +64,8 @@ public class PlanCompleteAcceptanceTest extends AcceptanceTest {
         Response response =
                 PlanSteps.completePlan(uncompletedPlanId2, FAILURE_STATUS, header, feedbackRequest);
 
-      ApiResponse<List<PlanElement>> apiResponse =
-                response.as(new TypeRef<ApiResponse<List<PlanElement>>>() {});
+        ApiResponse<PlanElement> apiResponse =
+                response.as(new TypeRef<ApiResponse<PlanElement>>() {});
 
         log.info("response = {}", response.asString());
         // then 200

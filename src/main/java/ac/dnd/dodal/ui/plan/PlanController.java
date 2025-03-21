@@ -25,8 +25,6 @@ import ac.dnd.dodal.application.plan.dto.query.GetPlanQuery;
 import ac.dnd.dodal.ui.feedback.request.CreateFeedbackRequest;
 import ac.dnd.dodal.ui.plan.response.PlanElement;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/plans")
 @RequiredArgsConstructor
@@ -46,7 +44,7 @@ public class PlanController {
         Plan plan = completePlanUseCase
                 .completePlan(request.toCommand(userId, planId, PlanStatus.of(status)));
 
-        return ApiResponse.success(plans);
+        return ApiResponse.success(PlanElement.of(plan));
     }
 
     @GetMapping("/{planId}/history")

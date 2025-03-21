@@ -9,7 +9,6 @@ import java.util.Set;
 
 import ac.dnd.dodal.application.plan_history.service.HistoryStatisticsService;
 import ac.dnd.dodal.domain.plan_history.model.HistoryStatistics;
-import ac.dnd.dodal.ui.plan.response.PlanElement;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -96,7 +95,7 @@ public class PlanCommandService implements
     }
 
     @Override
-    public List<PlanElement> completePlan(CompletePlanCommand command) {
+    public Plan completePlan(CompletePlanCommand command) {
         Plan plan = planService.findByIdOrThrow(command.planId());
         List<PlanFeedback> feedbacks = new ArrayList<>();
         PlanFeedback feedback = new PlanFeedback(command.question(), command.indicator());
@@ -112,10 +111,7 @@ public class PlanCommandService implements
         eventPublisher.publishEvent(PlanCompletedEvent.of(plan, feedback));
         planFeedbackService.saveAll(feedbacks);
         userGuideService.updateUpdatePlanGuide(command.userId(), guide);
-        planService.save(plan);
-
-        // 가장 오래된 계획과 개선할 점 을 두 개와 방금 완료한 계획 출력
-        return planService.findOlderAndNowByHistoryIdOrThrow(plan.getHistory().getHistoryId(), plan.getPlanId());
+        return planService.save(plan);
     }
 
     @Override
