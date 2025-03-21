@@ -95,20 +95,18 @@ public class PlanCommandService implements
         planService.save(plan);
     }
 
-    // TODO: MVP 배포 후 직접 입력 받는 것으로 수정
     @Override
     public List<PlanElement> completePlan(CompletePlanCommand command) {
         Plan plan = planService.findByIdOrThrow(command.planId());
         List<PlanFeedback> feedbacks = new ArrayList<>();
-//         PlanFeedback feedback = new PlanFeedback(command.question(), command.indicator());
-        PlanFeedback feedback = new PlanFeedback("조금 더 수월하게 달성하기 위해 무엇을 바꿔볼까요?", "우선 순위를 재조정해요.");
+        PlanFeedback feedback = new PlanFeedback(command.question(), command.indicator());
         feedbacks.add(feedback);
         UserGuide userTypeGuide =
                 userGuideService.findByUserIdAndTypeOrThrow(command.userId(), GuideType.USER_TYPE);
         UserType userType = UserType.of(userTypeGuide.getContent());
         String guide =
                 GuidianceGenerator.generateUpdatePlanGuide(userType, feedback.getIndicator());
- 
+
         plan.getGoal().completePlan(command.userId(), command.status(), plan, feedbacks, guide);
 
         eventPublisher.publishEvent(PlanCompletedEvent.of(plan, feedback));
@@ -119,7 +117,7 @@ public class PlanCommandService implements
         // 가장 오래된 계획과 개선할 점 을 두 개와 방금 완료한 계획 출력
         return planService.findOlderAndNowByHistoryIdOrThrow(plan.getHistory().getHistoryId(), plan.getPlanId());
     }
-    
+
     @Override
     public void delete(DeletePlanCommand command) {
         Plan plan = planService.findByIdOrThrow(command.planId());
