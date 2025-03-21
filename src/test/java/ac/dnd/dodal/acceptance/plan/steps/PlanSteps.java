@@ -14,6 +14,7 @@ public class PlanSteps {
     private static final String BASE_URL = "/api/plans";
     private static final String COMPLETE_PLAN_URL = BASE_URL + "/{planId}/complete?status={status}";
     private static final String DELETE_PLAN_URL = BASE_URL + "/{planId}";
+    private static final String GET_PLAN_HISTORY_URL = BASE_URL + "/{planId}/history";
 
     public static Response completePlan(Long planId, String status,
             Map<String, Object> header, CreateFeedbackRequest request) {
@@ -27,6 +28,20 @@ public class PlanSteps {
                 .body(request)
             .when()
                 .post(url)
+            .then().log().all()
+                .extract()
+                .response();
+    }
+
+    public static Response getPlan(Long planId, Map<String, Object> header) {
+        String url = GET_PLAN_HISTORY_URL
+            .replace("{planId}", planId.toString());
+
+        return given().log().all()
+                .contentType(ContentType.JSON)
+                .headers(header)
+            .when()
+                .get(url)
             .then().log().all()
                 .extract()
                 .response();

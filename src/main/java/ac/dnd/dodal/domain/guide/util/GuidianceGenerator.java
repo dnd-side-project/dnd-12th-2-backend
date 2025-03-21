@@ -19,16 +19,17 @@ public class GuidianceGenerator {
         AnswerContent difficultySetPlan = getDifficultySetPlan(userAnswers);
 
         try {
-            UserType userType = UserType.getByPreferenceAndDifficultySetPlan(
-                    preferenceSetPlan, difficultySetPlan);
+            UserType userType = UserType.getByPreferenceAndDifficultySetPlan(preferenceSetPlan,
+                    difficultySetPlan);
 
             return userType.getValue();
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
             throw new InternalServerErrorException(
-                UserGuideExceptionCode.FAIL_TO_GENERATE_USER_GUIDE, e);
+                    UserGuideExceptionCode.FAIL_TO_GENERATE_USER_GUIDE, e);
         }
     }
+
     public static String generateNewGoalGuide(List<UserAnswer> userAnswers) {
         AnswerContent interestGoal = getInterestGoal(userAnswers);
 

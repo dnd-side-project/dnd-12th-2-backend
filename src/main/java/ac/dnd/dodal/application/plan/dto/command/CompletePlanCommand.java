@@ -25,13 +25,12 @@ public record CompletePlanCommand(
             throw new IllegalArgumentException(
                     "CompletePlanCommand: only SUCCESS or FAILURE status is allowed");
         }
-        // TODO: MVP 배포 후 직접 입력 받는 것으로 수정
-        // if (question == null || question.isEmpty()) {
-        //     throw new IllegalArgumentException("CompletePlanCommand: question is required");
-        // }
-        // if (indicator == null || indicator.isEmpty()) {
-        //     throw new IllegalArgumentException("CompletePlanCommand: indicator is required");
-        // }
+        if (question == null || question.isEmpty()) {
+            throw new IllegalArgumentException("CompletePlanCommand: question is required");
+        }
+        if (indicator == null || indicator.isEmpty()) {
+            throw new IllegalArgumentException("CompletePlanCommand: indicator is required");
+        }
         this.userId = userId;
         this.planId = planId;
         this.status = status;
