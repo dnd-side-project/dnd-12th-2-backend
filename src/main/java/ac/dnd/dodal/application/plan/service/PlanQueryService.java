@@ -17,9 +17,11 @@ import ac.dnd.dodal.application.plan.repository.PlanRepository;
 import ac.dnd.dodal.application.plan.usecase.GetPlansOfHistoryUseCase;
 import ac.dnd.dodal.application.plan.usecase.GetPlansOfGoalByDateUseCase;
 import ac.dnd.dodal.application.plan.usecase.GetWeeklyAchievementRateOfGoalUseCase;
+import ac.dnd.dodal.application.plan.usecase.GetPlanUseCase;
 import ac.dnd.dodal.application.plan.dto.query.GetPlansOfHistoryQuery;
 import ac.dnd.dodal.application.plan.dto.query.GetPlansOfGoalQuery;
 import ac.dnd.dodal.application.plan.dto.query.GetWeeklyAchievementRateOfGoalQuery;
+import ac.dnd.dodal.application.plan.dto.query.GetPlanQuery;
 import ac.dnd.dodal.application.plan.dto.PlanModel;
 import ac.dnd.dodal.ui.plan.response.PlanElement;
 import ac.dnd.dodal.ui.goal.response.DailyAchievementRateElement;
@@ -29,10 +31,18 @@ import ac.dnd.dodal.ui.goal.response.DailyAchievementRateElement;
 public class PlanQueryService implements 
     GetPlansOfHistoryUseCase, 
     GetPlansOfGoalByDateUseCase,
-    GetWeeklyAchievementRateOfGoalUseCase {
+    GetWeeklyAchievementRateOfGoalUseCase,
+    GetPlanUseCase {
 
     private final PlanRepository planRepository;
     private final PlanService planService;
+
+    private final int PLAN_HISTORY_CHUNK_SIZE = 3;
+
+    @Override
+    public List<PlanElement> getPlanHistory(GetPlanQuery query) {
+        return planRepository.findHistoriesByPlanId(query.planId(), query.userId(), PLAN_HISTORY_CHUNK_SIZE);
+    }
 
     @Override
     public Page<PlanElement> getPlansOfHistory(GetPlansOfHistoryQuery query) {

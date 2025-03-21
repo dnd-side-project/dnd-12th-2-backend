@@ -65,12 +65,27 @@ public interface PlanRepository extends JpaRepository<Plan, Long> {
             + "AND goal.userId = :userId")
     boolean isExistByUserIdAndGoalId(@Param("userId") Long userId, @Param("goalId") Long goalId);
 
-    @Query("SELECT p FROM plans p "
-          + "WHERE p.history.historyId = :historyId "
-          + "ORDER BY p.completedDate ASC "
-          + "LIMIT 2 "
-          + "UNION "
-          + "SELECT p FROM plans p "
-          + "WHERE p.planId = :id")
-    List<PlanElement> findOlderAndNowByHistoryId(Long historyId, Long id);
+    @Query("SELECT new ac.dnd.dodal.application.plan.dto.PlanModel("
+            + "p.planId, "
+            + "p.history.historyId, "
+            + "p.goal.goalId, "
+            + "p.title, "
+            + "p.status, "
+            + "p.guide, "
+            + "p.startDate, "
+            + "p.endDate, "
+            + "p.completedDate) "
+            + "FROM plans p "
+            + "WHERE p.history.historyId = (SELECT p2.history.historyId FROM plans p2 "
+            + "WHERE p2.planId = :planId "
+            + "AND p2.goal.userId = :userId "
+            + "AND p2.deletedAt IS NULL) "
+            + "AND p.completedDate < (SELECT p3.completedDate FROM plans p3 "
+            + "WHERE p3.planId = :planId "
+            + "AND p3.deletedAt IS NULL) "
+            + "AND p.deletedAt IS NULL "
+            + "ORDER BY p.completedDate DESC "
+            + "LIMIT :size")
+    List<PlanElement> findHistoriesByPlanId(
+        @Param("planId") Long planId, @Param("userId") Long userId, @Param("size") int size);
 }
