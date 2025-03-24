@@ -23,11 +23,11 @@ spring:
     oauth2:
       apple:
         grant_type: ENC(UA5rYw9fjUYIDFSEgzGVFdU122CQXItZ0yZpk6r3MzQ=)
-        redirect-uri: ENC(2BAMs0/HnVB69/oVKLeYDm+5nzyv2q55Y+toPOAS6/JAZ7DzKxP+mMuE+jHwIreyQBC4aZ7HE9Pfd5yw8f+C1w==)
+        redirect-uri: ENC(fdNcPk0vAkPdxyyDoIK1SRLexCRE5/CGgYZ9uA/Xxu18G+psfpuZIfCUi8edPCcEeuR34AtOW2A=)
         key-id: ENC(Xn4wau7bP3RblVIeAnUSr1ALmWFN843F)
         public-key-uri: https://appleid.apple.com/auth/oauth2/v2/keys
         client:
-          client-id: ENC(tjgLIg7i4IA7BeOO0UfC3cVWzuMwIhBk65uHlrq9ZgI=)
+          client-id: ENC(fsBhpETSgg7s1BcObWLM9G5lJDyWPRfH)
           team-id: ENC(XsmL8nWsaZX89Ndx0a9qLuQb128Dcuxg)
           client-secret: ENC(GWqF1EhbQFwDyzJogwhUDl7EaxOCFpl43xJZQ6hDA7seB6VK54G1qFY9Cpn12my5VF4nIrhz2y7l5z9DlnfsxX8VhUzjc5jQVpq2ehrEK1CqDR0dvRlUWXjlkpe1XYpiC55sqPPp5a2ge5FcKcJYlQAVFzEnRRCK2GOlAZUtgQyxayioZiA02TmwwIo9uHI9EJWDig3Ec8ghElS6u2KFIfitNx0fJuhUMk3MQ0BYbDeX0HztJX3eFE7I3gqskEYkp4Iv+uJG+uQZXqzifAuuulNn0BKyahhcChdqiefHWmJU3dvQ4zlWHq7uGCNN05TysoQpdXYRbUe2arMuLD0lgEWOEHm9S0/E57ibZ1H8Ofg=)
 
