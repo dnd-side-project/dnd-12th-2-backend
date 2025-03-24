@@ -1,6 +1,8 @@
 package ac.dnd.dodal.common.util;
 
 import ac.dnd.dodal.common.constant.Constants;
+import ac.dnd.dodal.common.exception.InternalServerErrorException;
+import ac.dnd.dodal.core.security.enums.SecurityExceptionCode;
 import ac.dnd.dodal.ui.auth.response.KakaoUserInfoDto;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,15 +11,6 @@ import com.google.gson.JsonParser;
 import io.jsonwebtoken.JwsHeader;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
-
 import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -25,6 +18,16 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Base64;
 import java.util.Date;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 @Component
 @Slf4j
@@ -36,16 +39,16 @@ public class OAuth2Util {
   private String appleClientId;
 
   @Value("${spring.security.oauth2.apple.client.team-id}")
-    private String appleTeamId;
+  private String appleTeamId;
 
   @Value("${spring.security.oauth2.apple.key-id}")
-    private String appleKeyId;
+  private String appleKeyId;
 
   @Value("${spring.security.oauth2.apple.client.client-secret}")
   private String appleClientSecret;
 
   @Value("${spring.security.oauth2.apple.public-key-uri}")
-    private String applePublicKeyUri;
+  private String applePublicKeyUri;
 
   @Value("${spring.security.oauth2.apple.grant_type}")
   private String appleGrantType;
@@ -82,35 +85,42 @@ public class OAuth2Util {
     JsonElement element = JsonParser.parseString(response.getBody());
 
     return KakaoUserInfoDto.of(
-            element.getAsJsonObject().getAsJsonObject("kakao_account")
-                    .get("email").getAsString(),
-            element.getAsJsonObject().getAsJsonObject("kakao_account")
-                    .getAsJsonObject("profile").get("nickname").getAsString(),
-            element.getAsJsonObject().getAsJsonObject("kakao_account")
-                    .getAsJsonObject("profile").get("profile_image_url").getAsString()
-    );
+        element.getAsJsonObject().getAsJsonObject("kakao_account").get("email").getAsString(),
+        element
+            .getAsJsonObject()
+            .getAsJsonObject("kakao_account")
+            .getAsJsonObject("profile")
+            .get("nickname")
+            .getAsString(),
+        element
+            .getAsJsonObject()
+            .getAsJsonObject("kakao_account")
+            .getAsJsonObject("profile")
+            .get("profile_image_url")
+            .getAsString());
   }
 
-  private String generateClientSecret(){
+  private String generateClientSecret() {
     LocalDateTime expirationTime = LocalDateTime.now().plusMinutes(5);
 
     return Jwts.builder()
-            .setHeaderParam(JwsHeader.KEY_ID, appleKeyId)
-            .setHeaderParam("alg", "ES256")
-            .setIssuer(appleTeamId)
-            .setAudience("https://appleid.apple.com")
-            .setSubject(appleClientId)
-            .setExpiration(Date.from(expirationTime.atZone(ZoneId.systemDefault()).toInstant()))
-            .setIssuedAt(new Date())
-            .signWith(readPrivateKey(), SignatureAlgorithm.ES256)
-            .compact();
+        .setHeaderParam(JwsHeader.KEY_ID, appleKeyId)
+        .setHeaderParam("alg", "ES256")
+        .setIssuer(appleTeamId)
+        .setAudience("https://appleid.apple.com")
+        .setSubject(appleClientId)
+        .setExpiration(Date.from(expirationTime.atZone(ZoneId.systemDefault()).toInstant()))
+        .setIssuedAt(new Date())
+        .signWith(readPrivateKey(), SignatureAlgorithm.ES256)
+        .compact();
   }
 
   private PrivateKey readPrivateKey() {
     try {
-      String privateKeyPEM = appleClientSecret
+      String privateKeyPEM =
+          appleClientSecret
               .replace("-----BEGIN PRIVATE KEY-----", "")
-              .replace("-----END PRIVATE KEY-----", "")
+              .replace("-----END PRIVATE KEY-----%", "")
               .replaceAll("\\s+", ""); // 공백 및 줄바꿈 제거
 
       byte[] privateKeyBytes = Base64.getDecoder().decode(privateKeyPEM);
@@ -125,25 +135,34 @@ public class OAuth2Util {
     }
   }
 
-  public JsonElement verifyAuthorizationCode(String code) {
+  public String getAppleAccessToken(String code) {
+
     HttpHeaders httpHeaders = new HttpHeaders();
-    httpHeaders.add(Constants.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=utf-8");
+    httpHeaders.add(Constants.CONTENT_TYPE, "application/x-www-form-urlencoded");
 
-    HttpEntity<?> appleTokenRequest = new HttpEntity<>(httpHeaders);
-    log.info("appleTokenRequest" + appleTokenRequest);
+    // 폼 데이터 설정
+    MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
+    formData.add("client_id", appleClientId);
+    formData.add("client_secret", generateClientSecret());
+    formData.add("code", code);
+    formData.add("grant_type", appleGrantType);
 
+    // 요청 엔티티 생성
+    HttpEntity<MultiValueMap<String, String>> requestEntity =
+        new HttpEntity<>(formData, httpHeaders);
+
+    // POST 요청 보내기
     ResponseEntity<String> response =
-        restTemplate.exchange(
-            Constants.APPLE_TOKEN_URL + "?client_id=" + appleClientId + "&client_secret=" + generateClientSecret() + "&code=" + code + "&grant_type=" + appleGrantType,
-            HttpMethod.POST,
-            appleTokenRequest,
-            String.class);
+        restTemplate.postForEntity(Constants.APPLE_TOKEN_URL, requestEntity, String.class);
 
-    if (response.getBody() == null) {
-      throw new RuntimeException("Apple API 요청에 실패했습니다.");
+    if (response.getBody() == null || response.getStatusCode().isError()) {
+      throw new InternalServerErrorException(SecurityExceptionCode.EXTERNAL_SERVER_ERROR);
     }
 
-      return JsonParser.parseString(response.getBody());
+    JsonElement element = JsonParser.parseString(response.getBody());
+
+    // response.getBody에서 "access_token"을 추출하여 반환
+    return element.getAsJsonObject().get("access_token").getAsString();
   }
 
   public <T> T decodePayload(String token, Class<T> targetClass) {
@@ -151,13 +170,38 @@ public class OAuth2Util {
     String payloadJWT = tokenParts[1];
     Base64.Decoder decoder = Base64.getUrlDecoder();
     String payload = new String(decoder.decode(payloadJWT));
-    ObjectMapper objectMapper = new ObjectMapper()
-            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    log.info("Apple 로그인 응답: " + payload);
+    ObjectMapper objectMapper =
+        new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    log.info("Apple login response: " + payload);
     try {
       return objectMapper.readValue(payload, targetClass);
     } catch (Exception e) {
       throw new RuntimeException("Error decoding token payload", e);
+    }
+  }
+
+  public void revokeAppleToken(String accessToken) {
+    HttpHeaders httpHeaders = new HttpHeaders();
+    httpHeaders.add(Constants.CONTENT_TYPE, "application/x-www-form-urlencoded");
+
+    // 폼 데이터 설정
+    MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
+    formData.add("client_id", appleClientId);
+    formData.add("client_secret", generateClientSecret());
+    formData.add("token", accessToken);
+
+    // 요청 엔티티 생성
+    HttpEntity<MultiValueMap<String, String>> requestEntity =
+        new HttpEntity<>(formData, httpHeaders);
+
+    // POST 요청 보내기
+    ResponseEntity<String> response =
+        restTemplate.postForEntity(
+            "https://appleid.apple.com/auth/oauth2/v2/revoke", requestEntity, String.class);
+
+    if (response.getStatusCode().isError()) {
+      log.info("response when user revokes to use apple token : " + response);
+      throw new InternalServerErrorException(SecurityExceptionCode.EXTERNAL_SERVER_ERROR);
     }
   }
 }

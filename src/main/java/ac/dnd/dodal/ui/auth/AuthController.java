@@ -6,9 +6,11 @@ import ac.dnd.dodal.application.user.usecase.UserCommandUseCase;
 import ac.dnd.dodal.common.annotation.UserId;
 import ac.dnd.dodal.common.constant.Constants;
 import ac.dnd.dodal.common.response.ApiResponse;
+import ac.dnd.dodal.common.util.OAuth2Util;
 import ac.dnd.dodal.ui.auth.request.AppleAuthorizationRequestDto;
 import ac.dnd.dodal.ui.auth.request.KakaoAuthorizationRequestDto;
 import ac.dnd.dodal.ui.auth.response.UserInfoResponseDto;
+import ac.dnd.dodal.ui.user.request.WithdrawUserRequestDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ public class AuthController {
   private final AuthLoginService authLoginService;
   private final AuthService authService;
   private final UserCommandUseCase userCommandUseCase;
+  private final OAuth2Util oAuth2Util;
 
   // 카카오 소셜 로그인
   @PostMapping("/login/kakao")
@@ -47,8 +50,10 @@ public class AuthController {
   }
 
   @DeleteMapping("/withdraw")
-  public ApiResponse<Void> deleteUser(@UserId Long userId) {
-    userCommandUseCase.withdrawUser(userId);
+  public ApiResponse<Void> deleteUser(
+          @UserId Long userId,
+          @Valid @RequestBody WithdrawUserRequestDto withdrawUserRequestDto) {
+    userCommandUseCase.withdrawUser(userId, withdrawUserRequestDto);
     return ApiResponse.success();
   }
 }
