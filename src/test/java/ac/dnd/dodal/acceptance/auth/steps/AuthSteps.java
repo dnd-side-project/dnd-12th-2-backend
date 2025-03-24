@@ -1,6 +1,8 @@
 package ac.dnd.dodal.acceptance.auth.steps;
 
 import ac.dnd.dodal.AcceptanceTest;
+import ac.dnd.dodal.ui.user.request.WithdrawUserRequestDto;
+import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
 import java.util.Map;
@@ -23,7 +25,9 @@ public class AuthSteps extends AcceptanceTest {
 
     public static Response deleteUser(Map<String, Object> header){
         return given().log().all()
+                .contentType(ContentType.JSON)
                 .headers(header)
+                .body(new WithdrawUserRequestDto("deviceToken", "authorization_code"))
             .when()
                 .delete(BASE_URL + "/withdraw")
             .then().log().all()

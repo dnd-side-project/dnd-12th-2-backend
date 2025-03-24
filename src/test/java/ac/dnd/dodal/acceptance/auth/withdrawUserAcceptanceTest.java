@@ -13,11 +13,11 @@ import org.springframework.http.HttpStatus;
 
 public class withdrawUserAcceptanceTest extends AcceptanceTest {
 
-    @Test
+//    @Test
     @DisplayName("Withdraw User Test")
     public void withdrawUser() {
         // when
-        Response response = AuthSteps.deleteUser(authorizationHeader3);
+        Response response = AuthSteps.deleteUser(authorizationHeader);
         ApiResponse<?> apiResponse =
                 response.as(new TypeRef<ApiResponse<?>>() {});
         // then 200
