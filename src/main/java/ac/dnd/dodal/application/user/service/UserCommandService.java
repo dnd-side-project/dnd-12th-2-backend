@@ -142,10 +142,7 @@ public class UserCommandService implements UserCommandUseCase, CreateUserAnswerU
 
     String appleAccessToken = oAuth2Util.getAppleAccessToken(appleAuthorizationCode);
 
-    String responseRevokeAppleToken = oAuth2Util.revokeAppleToken(appleAccessToken);
-
-    log.info("Success User Withdraw in Apple Server and response = " + responseRevokeAppleToken);
-
+    oAuth2Util.revokeAppleToken(appleAccessToken);
     // 회원탈퇴 성공 시 User의 deletedAt을 현재 시간으로 업데이트하여 soft delete 처리
     user.withdrawUser();
 

@@ -152,15 +152,21 @@ public class OAuth2Util {
         new HttpEntity<>(formData, httpHeaders);
 
     // POST 요청 보내기
-    ResponseEntity<JsonElement> response =
-        restTemplate.postForEntity(Constants.APPLE_TOKEN_URL, requestEntity, JsonElement.class);
+    log.info("requestEntity when get Apple Access Token: " + requestEntity);
+
+    ResponseEntity<String> response =
+        restTemplate.postForEntity(Constants.APPLE_TOKEN_URL, requestEntity, String.class);
 
     if (response.getBody() == null || response.getStatusCode().isError()) {
       throw new InternalServerErrorException(SecurityExceptionCode.EXTERNAL_SERVER_ERROR);
     }
 
+    JsonElement element = JsonParser.parseString(response.getBody());
+
+    log.info("response when get Apple Access Token: " + response);
+
     // response.getBody에서 "access_token"을 추출하여 반환
-    return response.getBody().getAsJsonObject().get("access_token").getAsString();
+    return element.getAsJsonObject().get("access_token").getAsString();
   }
 
   public <T> T decodePayload(String token, Class<T> targetClass) {
@@ -178,7 +184,7 @@ public class OAuth2Util {
     }
   }
 
-  public String revokeAppleToken(String accessToken) {
+  public void revokeAppleToken(String accessToken) {
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.add(Constants.CONTENT_TYPE, "application/x-www-form-urlencoded");
 
@@ -195,14 +201,15 @@ public class OAuth2Util {
         new HttpEntity<>(formData, httpHeaders);
 
     // POST 요청 보내기
+    log.info("requestEntity when user revokes to use apple token : " + requestEntity);
+
     ResponseEntity<String> response =
         restTemplate.postForEntity(
             "https://appleid.apple.com/auth/oauth2/v2/revoke", requestEntity, String.class);
 
-    if (response.getBody() == null) {
+    if (response.getStatusCode().isError()) {
+      log.info("response when user revokes to use apple token : " + response);
       throw new InternalServerErrorException(SecurityExceptionCode.EXTERNAL_SERVER_ERROR);
     }
-
-    return response.getBody();
   }
 }
