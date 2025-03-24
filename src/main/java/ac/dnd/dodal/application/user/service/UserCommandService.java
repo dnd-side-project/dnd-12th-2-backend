@@ -145,6 +145,8 @@ public class UserCommandService implements UserCommandUseCase, CreateUserAnswerU
     oAuth2Util.revokeAppleToken(appleAccessToken);
     // 회원탈퇴 성공 시 User의 deletedAt을 현재 시간으로 업데이트하여 soft delete 처리
     user.withdrawUser();
+    // 로그 추적을 위한 로그 출력
+    log.info("User {} has been withdrawn.", user.getId());
 
     // TODO: 회원탈퇴 시 이벤트 발행 및 관련 데이터 비동기 삭제 로직 추가
   }

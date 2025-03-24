@@ -152,8 +152,6 @@ public class OAuth2Util {
         new HttpEntity<>(formData, httpHeaders);
 
     // POST 요청 보내기
-    log.info("requestEntity when get Apple Access Token: " + requestEntity);
-
     ResponseEntity<String> response =
         restTemplate.postForEntity(Constants.APPLE_TOKEN_URL, requestEntity, String.class);
 
@@ -162,8 +160,6 @@ public class OAuth2Util {
     }
 
     JsonElement element = JsonParser.parseString(response.getBody());
-
-    log.info("response when get Apple Access Token: " + response);
 
     // response.getBody에서 "access_token"을 추출하여 반환
     return element.getAsJsonObject().get("access_token").getAsString();
@@ -176,7 +172,7 @@ public class OAuth2Util {
     String payload = new String(decoder.decode(payloadJWT));
     ObjectMapper objectMapper =
         new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    log.info("Apple 로그인 응답: " + payload);
+    log.info("Apple login response: " + payload);
     try {
       return objectMapper.readValue(payload, targetClass);
     } catch (Exception e) {
@@ -194,15 +190,11 @@ public class OAuth2Util {
     formData.add("client_secret", generateClientSecret());
     formData.add("token", accessToken);
 
-    log.info("formData: " + formData);
-
     // 요청 엔티티 생성
     HttpEntity<MultiValueMap<String, String>> requestEntity =
         new HttpEntity<>(formData, httpHeaders);
 
     // POST 요청 보내기
-    log.info("requestEntity when user revokes to use apple token : " + requestEntity);
-
     ResponseEntity<String> response =
         restTemplate.postForEntity(
             "https://appleid.apple.com/auth/oauth2/v2/revoke", requestEntity, String.class);
