@@ -55,6 +55,8 @@ public class AuthLoginService {
     AppleIdTokenParsingDto appleIdTokenParsingDto =
         oAuth2Util.decodePayload(id_token, AppleIdTokenParsingDto.class);
 
+    //TODO: identity Token 검증 로직 추가
+
     // 애플 로그인 응답 DTO 생성
     OAuthByAppleUserInfoRequestDto oAuthByAppleUserInfoRequestDto =
         new OAuthByAppleUserInfoRequestDto(

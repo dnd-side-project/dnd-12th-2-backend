@@ -7,6 +7,7 @@ import ac.dnd.dodal.application.user.repository.UserRepository;
 import ac.dnd.dodal.application.user.usecase.CreateUserAnswerUseCase;
 import ac.dnd.dodal.application.user.usecase.UserCommandUseCase;
 import ac.dnd.dodal.common.exception.ForbiddenException;
+import ac.dnd.dodal.common.util.OAuth2Util;
 import ac.dnd.dodal.domain.onboarding.event.OnboardingProceededEvent;
 import ac.dnd.dodal.domain.onboarding.exception.OnBoardingBadRequestException;
 import ac.dnd.dodal.domain.onboarding.exception.OnBoardingExceptionCode;
@@ -19,6 +20,7 @@ import ac.dnd.dodal.domain.user.model.User;
 import ac.dnd.dodal.domain.user.model.UserAnswer;
 import ac.dnd.dodal.ui.auth.request.OAuthUserInfoRequestDto;
 import ac.dnd.dodal.ui.user.request.CreateUserAnswerRequestDto;
+import ac.dnd.dodal.ui.user.request.WithdrawUserRequestDto;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +43,7 @@ public class UserCommandService implements UserCommandUseCase, CreateUserAnswerU
   private final QuestionRepository questionRepository;
 
   private final ApplicationEventPublisher eventPublisher;
+  private final OAuth2Util oAuth2Util;
 
   @Override
   public User createUserBySocialSignUp(OAuthUserInfoRequestDto authSignUpRequestDto) {
@@ -129,12 +132,23 @@ public class UserCommandService implements UserCommandUseCase, CreateUserAnswerU
   }
 
   @Override
-  public void withdrawUser(Long userId) {
+  public void withdrawUser(Long userId, WithdrawUserRequestDto withdrawUserRequestDto) {
     User user =
         userCommandRepository
             .findById(userId)
             .orElseThrow(() -> new UserNotFoundException(UserExceptionCode.NOT_FOUND_USER));
 
+    String appleAuthorizationCode = withdrawUserRequestDto.authorizationCode();
+
+    String appleAccessToken = oAuth2Util.getAppleAccessToken(appleAuthorizationCode);
+
+    String responseRevokeAppleToken = oAuth2Util.revokeAppleToken(appleAccessToken);
+
+    log.info("Success User Withdraw in Apple Server and response = " + responseRevokeAppleToken);
+
+    // 회원탈퇴 성공 시 User의 deletedAt을 현재 시간으로 업데이트하여 soft delete 처리
     user.withdrawUser();
+
+    // TODO: 회원탈퇴 시 이벤트 발행 및 관련 데이터 비동기 삭제 로직 추가
   }
 }
