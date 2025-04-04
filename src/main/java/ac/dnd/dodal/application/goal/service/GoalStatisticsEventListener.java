@@ -1,5 +1,7 @@
 package ac.dnd.dodal.application.goal.service;
 
+import ac.dnd.dodal.domain.goal.event.DeletedGoalEvent;
+import ac.dnd.dodal.domain.user.event.UserWithdrawnEvent;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.context.event.EventListener;
@@ -28,5 +30,10 @@ public class GoalStatisticsEventListener {
 
         goalStatistics.incrementCount(event.getStatus());
         goalStatisticsService.save(goalStatistics);
+    }
+
+    @EventListener
+    public void handleDeletedGoalEvent(DeletedGoalEvent event) {
+        goalStatisticsService.delete(event.getGoalId());
     }
 }
