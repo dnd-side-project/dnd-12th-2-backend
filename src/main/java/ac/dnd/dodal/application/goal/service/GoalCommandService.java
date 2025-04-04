@@ -14,6 +14,8 @@ import ac.dnd.dodal.application.goal.usecase.CreateGoalUseCase;
 import ac.dnd.dodal.application.goal.usecase.AchieveGoalUseCase;
 import ac.dnd.dodal.application.goal.usecase.DeleteGoalUseCase;
 
+import java.util.List;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -56,5 +58,11 @@ public class GoalCommandService
         goal.delete(command.userId());
 
         goalService.save(goal);
+    }
+
+    public void deleteAll(DeleteAllGoalCommand command) {
+        List<Goal> goals = goalService.findAllByUserId(command.userId());
+        goals.forEach(goal -> goal.delete(command.userId()));
+        goalService.saveAll(goals);
     }
 }

@@ -42,4 +42,7 @@ public interface GoalRepository extends JpaRepository<Goal, Long> {
     + "ORDER BY g.updatedAt DESC")
     List<GoalStatisticsResponse> findAchievedGoalStatisticsResponsesByUserId(
         @Param("userId") Long userId);
+
+    @Query("SELECT g FROM goals g WHERE g.userId = :userId AND g.deletedAt IS NULL")
+    List<Goal> findAllByUserId(@Param("userId") Long userId);
 }
