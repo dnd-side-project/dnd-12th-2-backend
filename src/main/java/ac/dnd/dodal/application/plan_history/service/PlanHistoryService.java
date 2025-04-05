@@ -1,5 +1,6 @@
 package ac.dnd.dodal.application.plan_history.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,10 @@ public class PlanHistoryService {
         return planHistoryRepository.saveAndFlush(planHistory);
     }
 
+    public List<PlanHistory> saveAll(List<PlanHistory> planHistories) {
+        return planHistoryRepository.saveAll(planHistories);
+    }
+
     public Optional<PlanHistory> findById(Long planHistoryId) {
         return planHistoryRepository.findById(planHistoryId);
     }
@@ -37,5 +42,9 @@ public class PlanHistoryService {
     public void delete(PlanHistory planHistory) {
         planHistory.delete();
         planHistoryRepository.save(planHistory);
+    }
+
+    public List<PlanHistory> findAllByGoalId(Long goalId) {
+        return planHistoryRepository.findAllByGoalId(goalId);
     }
 }

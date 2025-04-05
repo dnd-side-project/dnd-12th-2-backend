@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 import ac.dnd.dodal.domain.plan_history.model.PlanHistory;
 import ac.dnd.dodal.ui.plan_history.response.HistoryResponse;
 
+import java.util.List;
+
 @Repository
 public interface PlanHistoryRepository extends JpaRepository<PlanHistory, Long> {
 
@@ -35,4 +37,7 @@ public interface PlanHistoryRepository extends JpaRepository<PlanHistory, Long> 
             + "WHERE ph.goal.goalId = :goalId "
             + "AND hs.historyId = :historyId")
     HistoryResponse getHistoryResponseByGoalId(Long goalId, Long historyId);
+
+    @Query("SELECT ph FROM plan_histories ph WHERE ph.goal.goalId = :goalId")
+    List<PlanHistory> findAllByGoalId(Long goalId);
 }
