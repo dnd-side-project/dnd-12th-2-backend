@@ -48,6 +48,10 @@ public interface PlanRepository extends JpaRepository<Plan, Long> {
         @Param("startDate") LocalDateTime startDate,
         @Param("endDate") LocalDateTime endDate);
 
+    @Query("SELECT p FROM plans p where p.goal.goalId = :goalId "
+            + "AND p.deletedAt IS NULL ")
+    List<Plan> findAllByGoalId(Long goalId);
+
     @Query("SELECT COUNT(history) > 0 FROM plan_histories history "
             + "WHERE history.historyId = :historyId "
             + "AND history.deletedAt IS NULL "

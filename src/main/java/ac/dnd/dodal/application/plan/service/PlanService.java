@@ -34,6 +34,10 @@ public class PlanService {
         return planRepository.findById(planId);
     }
 
+    public List<Plan> findAllByGoalId(Long goalId) {
+        return planRepository.findAllByGoalId(goalId);
+    }
+
     public Plan findByIdOrThrow(Long planId) {
         return planRepository.findById(planId)
                 .orElseThrow(() -> new NotFoundException(PlanExceptionCode.PLAN_NOT_FOUND));
