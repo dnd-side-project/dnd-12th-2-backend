@@ -2,6 +2,7 @@ package ac.dnd.dodal.application.plan_feedback.service;
 
 import java.util.List;
 
+import ac.dnd.dodal.application.plan_feedback.dto.command.DeleteAllPlanFeedbackCommand;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -20,5 +21,9 @@ public class PlanFeedbackService {
 
     public List<PlanFeedback> saveAll(List<PlanFeedback> planFeedbacks) {
         return planFeedbackRepository.saveAll(planFeedbacks);
+    }
+
+    public List<PlanFeedback> findAllByPlanId(Long planId) {
+        return planFeedbackRepository.findAllByPlanId(planId);
     }
 }
