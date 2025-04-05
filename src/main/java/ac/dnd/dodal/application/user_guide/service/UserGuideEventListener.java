@@ -3,6 +3,8 @@ package ac.dnd.dodal.application.user_guide.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import ac.dnd.dodal.application.user_guide.dto.command.DeleteAllUserGuideCommand;
+import ac.dnd.dodal.domain.user.event.UserWithdrawnEvent;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.context.event.EventListener;
@@ -35,5 +37,10 @@ public class UserGuideEventListener {
         userGuides.add(newPlanGuide);
         userGuides.add(updatePlanGuide);
         userGuideService.saveAll(userGuides);
+    }
+
+    @EventListener
+    public void onUserWithdrawnEvent(UserWithdrawnEvent event) {
+        userGuideService.deleteAll(new DeleteAllUserGuideCommand(event.getUserId()));
     }
 }
