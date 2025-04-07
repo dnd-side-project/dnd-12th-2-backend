@@ -1,29 +1,63 @@
 package ac.dnd.dodal.application.user.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import ac.dnd.dodal.application.user.dto.UserCommandFixture;
+import ac.dnd.dodal.application.user.repository.UserAnswerRepository;
 import ac.dnd.dodal.application.user.repository.UserRepository;
+import ac.dnd.dodal.common.util.OAuth2Util;
+import ac.dnd.dodal.domain.goal.event.GoalCreatedEvent;
+import ac.dnd.dodal.domain.onboarding.enums.AnswerContent;
 import ac.dnd.dodal.domain.user.enums.UserRole;
+import ac.dnd.dodal.domain.user.event.UserWithdrawnEvent;
 import ac.dnd.dodal.domain.user.model.User;
+import ac.dnd.dodal.domain.user.model.UserAnswer;
 import ac.dnd.dodal.ui.auth.request.OAuthUserInfoRequestDto;
+import ac.dnd.dodal.ui.user.request.WithdrawUserRequestDto;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 @ExtendWith(MockitoExtension.class)
+@SpringBootTest
+@ActiveProfiles("test")
+@Transactional
 public class UserCommandServiceTest {
 
-    @Mock
+    @Autowired
     private UserRepository userRepository;
 
-    @InjectMocks
+    @Autowired
+    private UserAnswerRepository userAnswerRepository;
+
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
+
+    @Autowired
     private UserCommandService userCommandService;
+
+    @MockBean
+    private OAuth2Util oAuth2Util;
+
+    @Captor
+    private ArgumentCaptor<UserWithdrawnEvent> eventCaptor;
 
     private OAuthUserInfoRequestDto authSignUpRequestDto;
     private User mockUser;
@@ -31,12 +65,7 @@ public class UserCommandServiceTest {
     @BeforeEach
     void setUp() {
         authSignUpRequestDto = UserCommandFixture.signUpUser();
-
-        // Mock된 Users 객체 생성
         mockUser = new User("testUser", "testUserProfileImageUrl", "testDeviceToken", "testEmail@test.example", UserRole.USER);
-
-        // ✅ save() 호출 시 mockUser를 반환하도록 설정
-        when(userRepository.save(any(User.class))).thenReturn(mockUser);
     }
 
     @Test
@@ -49,8 +78,51 @@ public class UserCommandServiceTest {
         User user = userCommandService.createUserBySocialSignUp(authSignUpRequestDto);
 
         // then
-        verify(userRepository, times(1)).save(any(User.class));  // userRepository.save()가 1번 호출되었는지 확인
+        assertThat(user.getCreatedAt()).isNotNull();
         assertThat(user.getEmail()).isEqualTo(testDto.email());
         assertThat(user.getNickname()).isEqualTo(testDto.nickname());
+        assertThat(user.getDeletedAt()).isNull();
+    }
+
+    @Test
+    @DisplayName("회원 탈퇴 시 회원 정보와 온보딩 시 응답한 답변들이 삭제된다.")
+    void deleteUserInfoWhenUserWithdraw() {
+        // given
+        User user = userCommandService.createUserBySocialSignUp(authSignUpRequestDto);
+
+        List<UserAnswer> userAnswers = List.of(
+            new UserAnswer("현재 가장 관심 있는 목표 분야를 선택해 주세요.", AnswerContent.INTEREST_GOAL_1, user, 1),
+            new UserAnswer("계획을 세울 때 선호하는 방식을 골라주세요.", AnswerContent.PREFERENCE_SET_PLAN_1, user, 1),
+            new UserAnswer("그동안 계획 설정 시 어려웠던 점을 선택해 주세요.", AnswerContent.DIFFICULTY_SET_PLAN_2, user, 1)
+        );
+
+        WithdrawUserRequestDto withdrawRequest = new WithdrawUserRequestDto(
+            "test_device_token",
+            "test_authorization_code"
+        );
+
+        List<UserAnswer> userAnswerList = userAnswerRepository.saveAll(userAnswers);
+
+        assertThat(userAnswerList).hasSize(3);
+        assertThat(userAnswerList.getFirst().getCreatedAt()).isNotNull();
+        assertThat(userAnswerList.getFirst().getDeletedAt()).isNull();
+
+        // Apple 토큰 관련 Mock 설정
+        when(oAuth2Util.getAppleAccessToken(anyString())).thenReturn("test_access_token");
+
+        // when
+        userCommandService.withdrawUser(user.getId(), withdrawRequest);
+
+        // then
+        assertThat(user.getDeletedAt()).isNotNull();
+
+        try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+        }
+
+        List<UserAnswer> deletedUserAnswers = userAnswerRepository.findAllByUser(user);
+        assertThat(deletedUserAnswers).isEmpty();
     }
 }

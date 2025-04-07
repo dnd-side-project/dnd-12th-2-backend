@@ -139,8 +139,16 @@ public class UserCommandService implements UserCommandUseCase, CreateUserAnswerU
             .findById(userId)
             .orElseThrow(() -> new UserNotFoundException(UserExceptionCode.NOT_FOUND_USER));
 
-    withdrawProcessInAppleTo(withdrawUserRequestDto);
+    withdrawProcessInAppleTo(user, withdrawUserRequestDto);
 
+    deleteUserInfo(user);
+
+    // 로그 추적을 위한 로그 출력
+    log.info("User {} has been withdrawn.", user.getId());
+
+  }
+
+  public void deleteUserInfo(User user) {
     // 회원탈퇴 성공 시 User의 deletedAt을 현재 시간으로 업데이트하여 soft delete 처리
     user.withdrawUser();
 
@@ -148,25 +156,23 @@ public class UserCommandService implements UserCommandUseCase, CreateUserAnswerU
 
     // TODO: 관련 데이터 비동기 삭제 로직 추가
     eventPublisher.publishEvent(new UserWithdrawnEvent(user.getId()));
-
-    // 로그 추적을 위한 로그 출력
-    log.info("User {} has been withdrawn.", user.getId());
-
   }
 
-  private void deleteAllUserAnswerOf(User user) {
+  private List<UserAnswer> deleteAllUserAnswerOf(User user) {
     List<UserAnswer> userAnswers = userAnswerRepository.findAllByUser(user);
     for (UserAnswer userAnswer : userAnswers) {
       userAnswer.delete();
     }
-    userAnswerRepository.saveAll(userAnswers);
+    return userAnswerRepository.saveAll(userAnswers);
   }
 
-  private void withdrawProcessInAppleTo(WithdrawUserRequestDto withdrawUserRequestDto) {
+  public boolean withdrawProcessInAppleTo(User user, WithdrawUserRequestDto withdrawUserRequestDto) {
     String appleAuthorizationCode = withdrawUserRequestDto.authorizationCode();
 
     String appleAccessToken = oAuth2Util.getAppleAccessToken(appleAuthorizationCode);
 
     oAuth2Util.revokeAppleToken(appleAccessToken);
+
+    return true;
   }
 }
