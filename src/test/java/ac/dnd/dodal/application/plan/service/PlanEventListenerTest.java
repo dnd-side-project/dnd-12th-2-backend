@@ -3,7 +3,6 @@ package ac.dnd.dodal.application.plan.service;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import ac.dnd.dodal.IntegrationTest;
-import ac.dnd.dodal.application.plan.repository.PlanRepository;
 import ac.dnd.dodal.domain.goal.GoalFixture;
 import ac.dnd.dodal.domain.goal.event.DeletedGoalEvent;
 import ac.dnd.dodal.domain.plan.model.Plan;

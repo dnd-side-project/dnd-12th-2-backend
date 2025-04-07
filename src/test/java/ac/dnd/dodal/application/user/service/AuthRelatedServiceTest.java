@@ -1,4 +1,5 @@
 package ac.dnd.dodal.application.user.service;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 

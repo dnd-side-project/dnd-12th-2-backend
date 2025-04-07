@@ -1,17 +1,15 @@
 package ac.dnd.dodal.application.plan_history.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import ac.dnd.dodal.IntegrationTest;
-import ac.dnd.dodal.application.plan.service.PlanService;
 import ac.dnd.dodal.application.plan_history.repository.PlanHistoryRepository;
 import ac.dnd.dodal.domain.goal.GoalFixture;
 import ac.dnd.dodal.domain.goal.event.DeletedGoalEvent;
-import ac.dnd.dodal.domain.goal.model.Goal;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class PlanHistoryEventListenerTest extends IntegrationTest {
 

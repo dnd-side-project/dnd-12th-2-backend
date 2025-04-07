@@ -6,11 +6,9 @@ import static org.mockito.Mockito.when;
 
 import ac.dnd.dodal.application.user.dto.UserCommandFixture;
 import ac.dnd.dodal.application.user.repository.UserAnswerRepository;
-import ac.dnd.dodal.application.user.repository.UserRepository;
 import ac.dnd.dodal.common.util.OAuth2Util;
 import ac.dnd.dodal.domain.onboarding.enums.AnswerContent;
 import ac.dnd.dodal.domain.user.enums.UserRole;
-import ac.dnd.dodal.domain.user.event.UserWithdrawnEvent;
 import ac.dnd.dodal.domain.user.model.User;
 import ac.dnd.dodal.domain.user.model.UserAnswer;
 import ac.dnd.dodal.ui.auth.request.OAuthUserInfoRequestDto;
@@ -20,13 +18,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 

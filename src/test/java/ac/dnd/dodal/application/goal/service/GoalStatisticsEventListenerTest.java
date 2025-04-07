@@ -3,21 +3,10 @@ package ac.dnd.dodal.application.goal.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
 
-import ac.dnd.dodal.application.goal.repository.GoalRepository;
-import ac.dnd.dodal.application.user.dto.UserCommandFixture;
-import ac.dnd.dodal.application.user.service.UserCommandService;
-import ac.dnd.dodal.common.exception.NotFoundException;
-import ac.dnd.dodal.domain.goal.event.DeletedGoalEvent;
-import ac.dnd.dodal.domain.user.model.User;
-import ac.dnd.dodal.ui.auth.request.OAuthUserInfoRequestDto;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
-
 import ac.dnd.dodal.IntegrationTest;
+import ac.dnd.dodal.common.exception.NotFoundException;
 import ac.dnd.dodal.domain.goal.GoalFixture;
+import ac.dnd.dodal.domain.goal.event.DeletedGoalEvent;
 import ac.dnd.dodal.domain.goal.event.GoalCreatedEvent;
 import ac.dnd.dodal.domain.goal.model.Goal;
 import ac.dnd.dodal.domain.goal.model.GoalStatistics;
@@ -25,8 +14,10 @@ import ac.dnd.dodal.domain.plan.PlanFixture;
 import ac.dnd.dodal.domain.plan.event.PlanCompletedEvent;
 import ac.dnd.dodal.domain.plan.model.Plan;
 import ac.dnd.dodal.domain.plan_feedback.model.PlanFeedback;
-
-import java.util.List;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 
 public class GoalStatisticsEventListenerTest extends IntegrationTest {
 

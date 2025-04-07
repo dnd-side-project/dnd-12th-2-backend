@@ -1,15 +1,12 @@
 package ac.dnd.dodal.application.goal.service;
 
 import ac.dnd.dodal.domain.goal.event.DeletedGoalEvent;
-import ac.dnd.dodal.domain.user.event.UserWithdrawnEvent;
+import ac.dnd.dodal.domain.goal.event.GoalCreatedEvent;
+import ac.dnd.dodal.domain.goal.model.GoalStatistics;
+import ac.dnd.dodal.domain.plan.event.PlanCompletedEvent;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-
-import ac.dnd.dodal.domain.goal.model.GoalStatistics;
-import ac.dnd.dodal.domain.goal.event.GoalCreatedEvent;
-import ac.dnd.dodal.domain.plan.event.PlanCompletedEvent;
 
 @Component
 @RequiredArgsConstructor

@@ -2,11 +2,9 @@ package ac.dnd.dodal.application.plan_history.service;
 
 import ac.dnd.dodal.domain.plan_history.model.PlanHistory;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor

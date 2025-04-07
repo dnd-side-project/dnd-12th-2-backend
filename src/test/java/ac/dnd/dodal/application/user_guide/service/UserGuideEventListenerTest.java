@@ -7,8 +7,6 @@ import ac.dnd.dodal.domain.guide.model.UserGuide;
 import ac.dnd.dodal.domain.user.UserFixture;
 import ac.dnd.dodal.domain.user.event.UserWithdrawnEvent;
 import java.util.List;
-
-import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
