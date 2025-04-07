@@ -14,7 +14,6 @@ import java.util.List;
 public class PlanHistoryCommandService {
 
     private final PlanHistoryService planHistoryService;
-    private final ApplicationEventPublisher eventPublisher;
 
     public void deleteAllByGoalId(Long goalId) {
         List<PlanHistory> planHistories = planHistoryService.findAllByGoalId(goalId);

@@ -2,15 +2,12 @@ package ac.dnd.dodal.application.user.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import ac.dnd.dodal.application.user.dto.UserCommandFixture;
 import ac.dnd.dodal.application.user.repository.UserAnswerRepository;
 import ac.dnd.dodal.application.user.repository.UserRepository;
 import ac.dnd.dodal.common.util.OAuth2Util;
-import ac.dnd.dodal.domain.goal.event.GoalCreatedEvent;
 import ac.dnd.dodal.domain.onboarding.enums.AnswerContent;
 import ac.dnd.dodal.domain.user.enums.UserRole;
 import ac.dnd.dodal.domain.user.event.UserWithdrawnEvent;
@@ -18,7 +15,6 @@ import ac.dnd.dodal.domain.user.model.User;
 import ac.dnd.dodal.domain.user.model.UserAnswer;
 import ac.dnd.dodal.ui.auth.request.OAuthUserInfoRequestDto;
 import ac.dnd.dodal.ui.user.request.WithdrawUserRequestDto;
-import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -30,7 +26,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,22 +37,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserCommandServiceTest {
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private UserAnswerRepository userAnswerRepository;
-
-    @Autowired
-    private ApplicationEventPublisher eventPublisher;
 
     @Autowired
     private UserCommandService userCommandService;
 
     @MockBean
     private OAuth2Util oAuth2Util;
-
-    @Captor
-    private ArgumentCaptor<UserWithdrawnEvent> eventCaptor;
 
     private OAuthUserInfoRequestDto authSignUpRequestDto;
     private User mockUser;

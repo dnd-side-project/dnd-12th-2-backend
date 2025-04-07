@@ -1,7 +1,15 @@
 package ac.dnd.dodal.application.goal.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertThrows;
 
+import ac.dnd.dodal.application.goal.repository.GoalRepository;
+import ac.dnd.dodal.application.user.dto.UserCommandFixture;
+import ac.dnd.dodal.application.user.service.UserCommandService;
+import ac.dnd.dodal.common.exception.NotFoundException;
+import ac.dnd.dodal.domain.goal.event.DeletedGoalEvent;
+import ac.dnd.dodal.domain.user.model.User;
+import ac.dnd.dodal.ui.auth.request.OAuthUserInfoRequestDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -17,6 +25,8 @@ import ac.dnd.dodal.domain.plan.PlanFixture;
 import ac.dnd.dodal.domain.plan.event.PlanCompletedEvent;
 import ac.dnd.dodal.domain.plan.model.Plan;
 import ac.dnd.dodal.domain.plan_feedback.model.PlanFeedback;
+
+import java.util.List;
 
 public class GoalStatisticsEventListenerTest extends IntegrationTest {
 
@@ -77,4 +87,23 @@ public class GoalStatisticsEventListenerTest extends IntegrationTest {
         assertThat(goalStatistics.getFailureCount())
                 .isEqualTo(previousFailureCount);
     }
+
+    @Test
+    @DisplayName("Goal이 삭제될 때 Goal에 대한 통계도 함께 삭제된다.")
+    void delete_goal_statistics_when_goal_deleted() {
+        //given
+        Goal goal = goalService.saveAndFlush(GoalFixture.goal());
+        Long goalId = goal.getGoalId();
+        assertThat(goalStatisticsService.findByIdOrThrow(goalId)).isNotNull();
+
+        eventPublisher.publishEvent(new DeletedGoalEvent(goalId));
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        //when&then
+        assertThrows(NotFoundException.class, () -> goalStatisticsService.findByIdOrThrow(goalId));  }
 }

@@ -9,6 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import ac.dnd.dodal.domain.user.event.UserWithdrawnEvent;
 import org.mockito.Mock;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -29,6 +30,8 @@ import ac.dnd.dodal.domain.goal.exception.GoalExceptionCode;
 import ac.dnd.dodal.domain.goal.model.Goal;
 import ac.dnd.dodal.application.goal.dto.command.*;
 import ac.dnd.dodal.application.goal.dto.GoalCommandFixture;
+
+import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 public class GoalCommandServiceTest {
@@ -213,7 +216,7 @@ public class GoalCommandServiceTest {
     @Test
     @DisplayName("Delete a goal which is already deleted")
     void delete_goal_already_deleted() {
-        // given
+    // given
         DeleteGoalCommand command = GoalCommandFixture.deleteGoalCommand(userId, goalId);
         when(goalService.findByIdOrThrow(goalId))
             .thenReturn(deletedGoal);
@@ -223,4 +226,19 @@ public class GoalCommandServiceTest {
                 .isInstanceOf(ForbiddenException.class)
                 .hasMessage(GoalExceptionCode.GOAL_ALREADY_DELETED.getMessage());
     }
+
+    @Test
+    @DisplayName("사용자의 모든 목표를 삭제한다.")
+    void delete_all_goals_when_user_withdrawn() {
+        // given
+        DeleteAllGoalCommand command = GoalCommandFixture.deleteAllGoalCommand();
+        when(goalService.findAllByUserId(userId)).thenReturn(List.of(goal));
+
+        // when
+        goalCommandService.deleteAll(command);
+
+        // then
+        verify(goalService).saveAll(argThat(goals -> goals.getFirst().getDeletedAt() != null));
+    }
+
 }

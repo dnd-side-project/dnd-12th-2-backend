@@ -65,7 +65,9 @@ public class UserGuideService {
     @Transactional
     public void deleteAll(DeleteAllUserGuideCommand command) {
         List<UserGuide> userGuides = findAllByUserId(command.getUserId());
-
-        userGuides.forEach(this::delete);
+        for (UserGuide userGuide : userGuides) {
+            userGuide.delete();
+        }
+        userGuideRepository.saveAll(userGuides);
     }
 }
