@@ -11,8 +11,14 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface UserGuideRepository extends JpaRepository<UserGuide, UserGuideId> {
 
-    @Query("SELECT ug FROM user_guides ug WHERE ug.userId = :userId AND ug.deletedAt IS NULL")
+    @Query("SELECT ug FROM user_guides ug "
+            + "WHERE ug.userId = :userId "
+            + "AND ug.deletedAt IS NULL")
     List<UserGuide> findAllByUserId(Long userId);
 
+    @Query("SELECT ug FROM user_guides ug "
+            + "WHERE ug.userId = :userId "
+            + "AND ug.type = :type "
+            + "AND ug.deletedAt IS NULL")
     Optional<UserGuide> findByUserIdAndType(Long userId, GuideType type);
 }
