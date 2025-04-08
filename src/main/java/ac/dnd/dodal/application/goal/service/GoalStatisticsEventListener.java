@@ -6,6 +6,7 @@ import ac.dnd.dodal.domain.goal.model.GoalStatistics;
 import ac.dnd.dodal.domain.plan.event.PlanCompletedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -29,6 +30,7 @@ public class GoalStatisticsEventListener {
         goalStatisticsService.save(goalStatistics);
     }
 
+    @Async
     @EventListener
     public void handleDeletedGoalEvent(DeletedGoalEvent event) {
         goalStatisticsService.delete(event.getGoalId());

@@ -4,6 +4,7 @@ import ac.dnd.dodal.application.plan_feedback.dto.command.DeleteAllPlanFeedbackC
 import ac.dnd.dodal.domain.plan.event.DeletedPlanEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,6 +13,7 @@ public class PlanFeedbackEventListener {
 
     private final PlanFeedbackCommandService planFeedbackCommandService;
 
+    @Async
     @EventListener
     public void handleDeletedPlanEvent(DeletedPlanEvent event) {
         planFeedbackCommandService.deleteAll(

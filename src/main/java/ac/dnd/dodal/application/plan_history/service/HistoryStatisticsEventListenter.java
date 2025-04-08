@@ -3,6 +3,7 @@ package ac.dnd.dodal.application.plan_history.service;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import ac.dnd.dodal.domain.plan_history.model.HistoryStatistics;
@@ -26,6 +27,7 @@ public class HistoryStatisticsEventListenter {
         historyStatisticsService.save(historyStatistics);
     }
 
+    @Async
     @EventListener
     public void handleDeletedPlanEvent(DeletedPlanEvent event) {
         if (event.getStatus() == PlanStatus.NONE) {

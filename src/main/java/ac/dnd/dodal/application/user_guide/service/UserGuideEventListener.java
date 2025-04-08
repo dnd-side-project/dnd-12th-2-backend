@@ -8,6 +8,7 @@ import ac.dnd.dodal.domain.user.event.UserWithdrawnEvent;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import ac.dnd.dodal.domain.onboarding.event.OnboardingProceededEvent;
@@ -39,6 +40,7 @@ public class UserGuideEventListener {
         userGuideService.saveAll(userGuides);
     }
 
+    @Async
     @EventListener
     public void onUserWithdrawnEvent(UserWithdrawnEvent event) {
         userGuideService.deleteAll(new DeleteAllUserGuideCommand(event.getUserId()));
