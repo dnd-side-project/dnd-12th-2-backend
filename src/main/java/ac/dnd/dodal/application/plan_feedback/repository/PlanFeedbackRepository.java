@@ -12,6 +12,6 @@ import java.util.List;
 @Repository
 public interface PlanFeedbackRepository extends JpaRepository<PlanFeedback, PlanFeedbackId> {
 
-    @Query("SELECT pf FROM plan_feedbacks pf WHERE pf.plan.planId = :planId")
+    @Query("SELECT pf FROM plan_feedbacks pf WHERE pf.plan.planId = :planId AND pf.deletedAt IS NULL")
     List<PlanFeedback> findAllByPlanId(Long planId);
 }

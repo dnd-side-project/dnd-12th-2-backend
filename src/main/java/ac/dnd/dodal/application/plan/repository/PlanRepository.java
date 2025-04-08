@@ -18,6 +18,7 @@ import ac.dnd.dodal.ui.plan.response.PlanElement;
 public interface PlanRepository extends JpaRepository<Plan, Long> {
 
     @Query("SELECT p FROM plans p WHERE p.history.historyId = :historyId "
+            + "AND p.deletedAt IS NULL "
             + "ORDER BY p.endDate DESC LIMIT 1")
     Optional<Plan> findLatestPlanByHistoryId(@Param("historyId") Long historyId);
 

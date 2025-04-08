@@ -23,6 +23,7 @@ public interface PlanHistoryRepository extends JpaRepository<PlanHistory, Long> 
             + "FROM history_statistics hs "
             + "JOIN plan_histories ph ON hs.historyId = ph.historyId "
             + "WHERE ph.goal.goalId = :goalId "
+            + "AND ph.deletedAt IS NULL "
             + "ORDER BY hs.totalCount DESC")
     Page<HistoryResponse> getHistoryResponsesByGoalId(Long goalId, Pageable pageable);
 
@@ -35,9 +36,11 @@ public interface PlanHistoryRepository extends JpaRepository<PlanHistory, Long> 
             + "FROM history_statistics hs "
             + "JOIN plan_histories ph ON hs.historyId = ph.historyId "
             + "WHERE ph.goal.goalId = :goalId "
+            + "AND ph.deletedAt IS NULL "
             + "AND hs.historyId = :historyId")
     HistoryResponse getHistoryResponseByGoalId(Long goalId, Long historyId);
 
-    @Query("SELECT ph FROM plan_histories ph WHERE ph.goal.goalId = :goalId")
+    @Query("SELECT ph FROM plan_histories ph WHERE ph.goal.goalId = :goalId"
+            + " AND ph.deletedAt IS NULL")
     List<PlanHistory> findAllByGoalId(Long goalId);
 }
