@@ -180,7 +180,7 @@ public class OAuth2Util {
     }
   }
 
-  public void revokeAppleToken(String accessToken) {
+  public boolean revokeAppleToken(String accessToken) {
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.add(Constants.CONTENT_TYPE, "application/x-www-form-urlencoded");
 
@@ -203,5 +203,7 @@ public class OAuth2Util {
       log.info("response when user revokes to use apple token : " + response);
       throw new InternalServerErrorException(SecurityExceptionCode.EXTERNAL_SERVER_ERROR);
     }
+
+    return true;
   }
 }

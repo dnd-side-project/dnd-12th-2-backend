@@ -1,13 +1,13 @@
 package ac.dnd.dodal.application.goal.service;
 
-import lombok.RequiredArgsConstructor;
-
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
-
-import ac.dnd.dodal.domain.goal.model.GoalStatistics;
+import ac.dnd.dodal.domain.goal.event.DeletedGoalEvent;
 import ac.dnd.dodal.domain.goal.event.GoalCreatedEvent;
+import ac.dnd.dodal.domain.goal.model.GoalStatistics;
 import ac.dnd.dodal.domain.plan.event.PlanCompletedEvent;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
@@ -28,5 +28,11 @@ public class GoalStatisticsEventListener {
 
         goalStatistics.incrementCount(event.getStatus());
         goalStatisticsService.save(goalStatistics);
+    }
+
+    @Async
+    @EventListener
+    public void handleDeletedGoalEvent(DeletedGoalEvent event) {
+        goalStatisticsService.delete(event.getGoalId());
     }
 }

@@ -11,11 +11,9 @@ import ac.dnd.dodal.ui.user.request.CreateUserAnswerRequestDto;
 import ac.dnd.dodal.ui.user.response.GetUserAnswerResponseDto;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.response.Response;
+import java.util.List;
 import org.junit.jupiter.api.*;
 import org.springframework.http.HttpStatus;
-import org.testcontainers.shaded.org.checkerframework.common.value.qual.DoesNotMatchRegex;
-
-import java.util.List;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CreateUserAnswerAcceptanceTest extends AcceptanceTest {

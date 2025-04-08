@@ -1,6 +1,7 @@
 package ac.dnd.dodal.application.goal.service;
 
 import ac.dnd.dodal.application.goal.usecase.UpdateGoalUseCase;
+import ac.dnd.dodal.domain.goal.event.DeletedGoalEvent;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -13,6 +14,8 @@ import ac.dnd.dodal.application.goal.dto.command.*;
 import ac.dnd.dodal.application.goal.usecase.CreateGoalUseCase;
 import ac.dnd.dodal.application.goal.usecase.AchieveGoalUseCase;
 import ac.dnd.dodal.application.goal.usecase.DeleteGoalUseCase;
+
+import java.util.List;
 
 @Service
 @Transactional
@@ -56,5 +59,16 @@ public class GoalCommandService
         goal.delete(command.userId());
 
         goalService.save(goal);
+    }
+
+    public void deleteAll(DeleteAllGoalCommand command) {
+        List<Goal> goals = goalService.findAllByUserId(command.userId());
+        goals
+                .forEach(goal -> {
+                    goal.delete(command.userId());
+                    eventPublisher.publishEvent(new DeletedGoalEvent(goal.getGoalId()));
+                });
+
+        goalService.saveAll(goals);
     }
 }

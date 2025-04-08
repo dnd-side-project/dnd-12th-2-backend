@@ -61,7 +61,7 @@ public class UserQueryService implements UserQueryUseCase, CheckIsDoneUserAnswer
         User user = userQueryRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(UserExceptionCode.NOT_FOUND_USER));
 
-        List<UserAnswer> userAnswers =  userAnswerRepository.findAllByUserId(user);
+        List<UserAnswer> userAnswers =  userAnswerRepository.findAllByUser(user);
 
         if (userAnswers.isEmpty() || userAnswers == null) {
             return GetUserAnswerResponseDto.fromUserAnswersOnboardingNotDone();

@@ -6,6 +6,6 @@ import ac.dnd.dodal.domain.user.model.User;
 public class UserQueryFixture {
 
     public static User saveUser() {
-        return UserFixture.createUser("test@test.example.com", "testUser", "profileImageURLExample", "deviceTokenExample");
+        return UserFixture.createUser();
     }
 }

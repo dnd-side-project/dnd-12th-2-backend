@@ -2,6 +2,8 @@ package ac.dnd.dodal.application.user_guide.service;
 
 import java.util.List;
 import java.util.Optional;
+
+import ac.dnd.dodal.application.user_guide.dto.command.DeleteAllUserGuideCommand;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -61,9 +63,11 @@ public class UserGuideService {
     }
 
     @Transactional
-    public void deleteAll(Long userId) {
-        List<UserGuide> userGuides = findAllByUserId(userId);
-
-        userGuides.forEach(this::delete);
+    public void deleteAll(DeleteAllUserGuideCommand command) {
+        List<UserGuide> userGuides = findAllByUserId(command.getUserId());
+        for (UserGuide userGuide : userGuides) {
+            userGuide.delete();
+        }
+        userGuideRepository.saveAll(userGuides);
     }
 }

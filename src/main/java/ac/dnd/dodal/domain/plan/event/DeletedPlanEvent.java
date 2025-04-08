@@ -13,6 +13,5 @@ public class DeletedPlanEvent {
 
     private final Long planId;
     private final Long historyId;
-    private final Long userId;
     private final PlanStatus status;
 }

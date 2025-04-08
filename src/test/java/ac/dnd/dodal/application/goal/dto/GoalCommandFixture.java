@@ -2,6 +2,7 @@ package ac.dnd.dodal.application.goal.dto;
 
 import ac.dnd.dodal.application.goal.dto.command.CreateGoalCommand;
 import ac.dnd.dodal.application.goal.dto.command.AchieveGoalCommand;
+import ac.dnd.dodal.application.goal.dto.command.DeleteAllGoalCommand;
 import ac.dnd.dodal.application.goal.dto.command.DeleteGoalCommand;
 
 public class GoalCommandFixture {
@@ -48,5 +49,9 @@ public class GoalCommandFixture {
 
     public static DeleteGoalCommand deleteGoalCommand() {
         return deleteGoalCommand(USER_ID, GOAL_ID);
+    }
+
+    public static DeleteAllGoalCommand deleteAllGoalCommand() {
+        return new DeleteAllGoalCommand(USER_ID);
     }
 }

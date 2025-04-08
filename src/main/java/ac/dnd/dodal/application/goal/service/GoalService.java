@@ -1,6 +1,8 @@
 package ac.dnd.dodal.application.goal.service;
 
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,10 @@ public class GoalService {
         return goalRepository.save(goal);
     }
 
+    public List<Goal> saveAll(List<Goal> goals) {
+        return goalRepository.saveAll(goals);
+    }
+
     public Goal saveAndFlush(Goal goal) {
         return goalRepository.saveAndFlush(goal);
     }
@@ -30,5 +36,9 @@ public class GoalService {
     public Goal findByIdOrThrow(Long goalId) {
         return goalRepository.findById(goalId)
                 .orElseThrow(() -> new NotFoundException(GoalExceptionCode.GOAL_NOT_FOUND));
+    }
+
+    public List<Goal> findAllByUserId(Long userId) {
+        return goalRepository.findAllByUserId(userId);
     }
 }
