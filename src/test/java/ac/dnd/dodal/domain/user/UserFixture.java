@@ -21,6 +21,6 @@ public class UserFixture {
   }
 
   public static User createUser() {
-    return new User("testUser", "testUserProfileImageUrl", "testDeviceToken", "testEmail@test.example", UserRole.USER);
+    return new User(NICKNAME, profileImage, deviceToken, EMAIL, UserRole.USER);
   }
 }
