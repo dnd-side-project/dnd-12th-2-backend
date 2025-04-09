@@ -41,7 +41,7 @@ public class PlanHistoryEventListenerTest extends IntegrationTest {
         }
 
         // then
-        assertThat(planHistoryRepository.findAllByGoalId(goalId).getFirst().getDeletedAt()).isNotNull();
-        assertThat(planHistoryRepository.findAllByGoalId(goalId).getLast().getDeletedAt()).isNotNull();
+        assertThat(planHistoryRepository.findAllByGoalIdWithDeleted(goalId).getFirst().getDeletedAt()).isNotNull();
+        assertThat(planHistoryRepository.findAllByGoalIdWithDeleted(goalId).getLast().getDeletedAt()).isNotNull();
     }
 }

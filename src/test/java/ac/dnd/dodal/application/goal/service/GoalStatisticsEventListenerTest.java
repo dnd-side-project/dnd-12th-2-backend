@@ -57,7 +57,7 @@ public class GoalStatisticsEventListenerTest extends IntegrationTest {
         Plan plan = PlanFixture.successPlan();
         Long goalId = plan.getGoal().getGoalId();
         PlanFeedback feedback = new PlanFeedback(
-                plan, "question", "indicator", null, null, null);
+                plan, "question", "indicator");
         GoalStatistics previousGoalStatistics = goalStatisticsService.findByIdOrThrow(goalId);
         int previousSuccessCount = previousGoalStatistics.getSuccessCount();
         int previousFailureCount = previousGoalStatistics.getFailureCount();

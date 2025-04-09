@@ -10,12 +10,10 @@ public class PlanFeedbackFixture {
     private static final Plan PLAN = PlanFixture.plan();
 
     public static PlanFeedback planFeedback() {
-        return new PlanFeedback(PLAN, "question", "indicator",
-                LocalDateTime.now(), LocalDateTime.now(), null);
+        return new PlanFeedback(PLAN, "question", "indicator");
     }
 
     public static PlanFeedback deletedPlanFeedback() {
-        return new PlanFeedback(PLAN, "question", "indicator",
-                LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now());
+        return new PlanFeedback(PLAN, "question", "indicator");
     }
 }

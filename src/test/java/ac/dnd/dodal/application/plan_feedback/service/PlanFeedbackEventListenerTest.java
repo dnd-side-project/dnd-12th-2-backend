@@ -7,6 +7,8 @@ import ac.dnd.dodal.domain.plan.model.Plan;
 import ac.dnd.dodal.domain.plan_feedback.model.PlanFeedback;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 
@@ -16,6 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class PlanFeedbackEventListenerTest extends IntegrationTest {
 
+    private static final Logger log = LoggerFactory.getLogger(PlanFeedbackEventListenerTest.class);
     @Autowired
     private ApplicationEventPublisher eventPublisher;
 
@@ -28,7 +31,8 @@ public class PlanFeedbackEventListenerTest extends IntegrationTest {
         // given
         Plan plan = PlanFixture.plan();
         List<PlanFeedback> planFeedbacks = planFeedbackService.findAllByPlanId(plan.getPlanId());
-        assertThat(planFeedbacks).isNotEmpty();
+        assertThat(planFeedbacks).hasSize(3);
+        assertThat(planFeedbacks.getFirst().getCreatedAt()).isNotNull();
         assertThat(planFeedbacks.getFirst().getDeletedAt()).isNull();
         assertThat(planFeedbacks.getLast().getDeletedAt()).isNull();
         // when

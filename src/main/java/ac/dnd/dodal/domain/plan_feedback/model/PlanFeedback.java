@@ -43,16 +43,13 @@ public class PlanFeedback extends BaseEntity {
     }
 
     public PlanFeedback(String question, String indicator) {
-        this(null, question, indicator, null, null, null);
+        this(null, question, indicator);
     }
 
-    public PlanFeedback(Plan plan, String question, String indicator, LocalDateTime createdAt,
-            LocalDateTime updatedAt, LocalDateTime deletedAt) {
+    public PlanFeedback(Plan plan, String question, String indicator) {
+        super();
         this.plan = plan;
         this.question = question;
         this.indicator = indicator;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.deletedAt = deletedAt;
     }
 }
