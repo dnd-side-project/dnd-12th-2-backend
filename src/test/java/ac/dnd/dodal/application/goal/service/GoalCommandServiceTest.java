@@ -1,25 +1,15 @@
 package ac.dnd.dodal.application.goal.service;
 
-import static org.mockito.Mockito.when;
-
-import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.verify;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import org.mockito.Mock;
-import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.extension.ExtendWith;
-
-import org.springframework.test.util.ReflectionTestUtils;
-import org.springframework.context.ApplicationEventPublisher;
-
+import ac.dnd.dodal.application.goal.dto.GoalCommandFixture;
+import ac.dnd.dodal.application.goal.dto.command.*;
 import ac.dnd.dodal.common.exception.BadRequestException;
 import ac.dnd.dodal.common.exception.ForbiddenException;
 import ac.dnd.dodal.common.exception.UnauthorizedException;
@@ -27,8 +17,16 @@ import ac.dnd.dodal.domain.goal.GoalFixture;
 import ac.dnd.dodal.domain.goal.event.GoalCreatedEvent;
 import ac.dnd.dodal.domain.goal.exception.GoalExceptionCode;
 import ac.dnd.dodal.domain.goal.model.Goal;
-import ac.dnd.dodal.application.goal.dto.command.*;
-import ac.dnd.dodal.application.goal.dto.GoalCommandFixture;
+import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.test.util.ReflectionTestUtils;
 
 @ExtendWith(MockitoExtension.class)
 public class GoalCommandServiceTest {
@@ -213,7 +211,7 @@ public class GoalCommandServiceTest {
     @Test
     @DisplayName("Delete a goal which is already deleted")
     void delete_goal_already_deleted() {
-        // given
+    // given
         DeleteGoalCommand command = GoalCommandFixture.deleteGoalCommand(userId, goalId);
         when(goalService.findByIdOrThrow(goalId))
             .thenReturn(deletedGoal);
@@ -223,4 +221,19 @@ public class GoalCommandServiceTest {
                 .isInstanceOf(ForbiddenException.class)
                 .hasMessage(GoalExceptionCode.GOAL_ALREADY_DELETED.getMessage());
     }
+
+    @Test
+    @DisplayName("사용자의 모든 목표를 삭제한다.")
+    void delete_all_goals_when_user_withdrawn() {
+        // given
+        DeleteAllGoalCommand command = GoalCommandFixture.deleteAllGoalCommand();
+        when(goalService.findAllByUserId(userId)).thenReturn(List.of(goal));
+
+        // when
+        goalCommandService.deleteAll(command);
+
+        // then
+        verify(goalService).saveAll(argThat(goals -> goals.getFirst().getDeletedAt() != null));
+    }
+
 }

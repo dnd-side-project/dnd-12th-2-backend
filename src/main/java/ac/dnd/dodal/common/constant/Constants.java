@@ -15,7 +15,8 @@ public class Constants {
     // 소셜 로그인 관련 상수
     public static final String APPLE_PUBLIC_KEYS_URL = "https://appleid.apple.com/auth/keys";
     public static final String KAKAO_RESOURCE_SERVER_URL = "https://kapi.kakao.com/v2/user/me";
-    public static final String APPLE_TOKEN_URL = "https://appleid.apple.com/auth/oauth2/v2/token";
+    public static final String APPLE_TOKEN_URL = "https://appleid.apple.com/auth/token";
+    public static final String APPLE_REVOKE_URL = "https://appleid.apple.com/auth/revoke";
 
     /**
      * Urls which don't need authentication

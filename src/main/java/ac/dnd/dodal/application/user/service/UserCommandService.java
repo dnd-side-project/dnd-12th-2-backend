@@ -15,6 +15,7 @@ import ac.dnd.dodal.domain.onboarding.exception.OnBoardingNotFoundException;
 import ac.dnd.dodal.domain.onboarding.model.Answer;
 import ac.dnd.dodal.domain.user.enums.UserExceptionCode;
 import ac.dnd.dodal.domain.user.enums.UserRole;
+import ac.dnd.dodal.domain.user.event.UserWithdrawnEvent;
 import ac.dnd.dodal.domain.user.exception.UserNotFoundException;
 import ac.dnd.dodal.domain.user.model.User;
 import ac.dnd.dodal.domain.user.model.UserAnswer;
@@ -81,7 +82,7 @@ public class UserCommandService implements UserCommandUseCase, CreateUserAnswerU
     }
 
     // 사용자의 답변이 존재하는지 확인
-    List<UserAnswer> existUserAnswer = userAnswerRepository.findAllByUserId(user);
+    List<UserAnswer> existUserAnswer = userAnswerRepository.findAllByUser(user);
     if (existUserAnswer != null && !existUserAnswer.isEmpty()) {
       throw new OnBoardingBadRequestException(OnBoardingExceptionCode.ALREADY_ANSWERED);
     }
@@ -138,16 +139,40 @@ public class UserCommandService implements UserCommandUseCase, CreateUserAnswerU
             .findById(userId)
             .orElseThrow(() -> new UserNotFoundException(UserExceptionCode.NOT_FOUND_USER));
 
+    withdrawProcessInAppleTo(user, withdrawUserRequestDto);
+
+    deleteUserInfo(user);
+
+    // 로그 추적을 위한 로그 출력
+    log.info("User {} has been withdrawn.", user.getId());
+
+  }
+
+  public void deleteUserInfo(User user) {
+    // 회원탈퇴 성공 시 User의 deletedAt을 현재 시간으로 업데이트하여 soft delete 처리
+    user.withdrawUser();
+
+    deleteAllUserAnswerOf(user);
+
+    // TODO: 관련 데이터 비동기 삭제 로직 추가
+    eventPublisher.publishEvent(new UserWithdrawnEvent(user.getId()));
+  }
+
+  private List<UserAnswer> deleteAllUserAnswerOf(User user) {
+    List<UserAnswer> userAnswers = userAnswerRepository.findAllByUser(user);
+    for (UserAnswer userAnswer : userAnswers) {
+      userAnswer.delete();
+    }
+    return userAnswerRepository.saveAll(userAnswers);
+  }
+
+  public boolean withdrawProcessInAppleTo(User user, WithdrawUserRequestDto withdrawUserRequestDto) {
     String appleAuthorizationCode = withdrawUserRequestDto.authorizationCode();
 
     String appleAccessToken = oAuth2Util.getAppleAccessToken(appleAuthorizationCode);
 
     oAuth2Util.revokeAppleToken(appleAccessToken);
-    // 회원탈퇴 성공 시 User의 deletedAt을 현재 시간으로 업데이트하여 soft delete 처리
-    user.withdrawUser();
-    // 로그 추적을 위한 로그 출력
-    log.info("User {} has been withdrawn.", user.getId());
 
-    // TODO: 회원탈퇴 시 이벤트 발행 및 관련 데이터 비동기 삭제 로직 추가
+    return true;
   }
 }

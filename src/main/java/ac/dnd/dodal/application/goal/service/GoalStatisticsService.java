@@ -38,4 +38,8 @@ public class GoalStatisticsService implements GetGoalSuccessRateUseCase {
 
         return GoalStatisticsResponse.of(goalStatistics);
     }
+
+    public void delete(Long goalId) {
+        goalStatisticsRepository.deleteById(goalId);
+    }
 }

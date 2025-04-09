@@ -18,6 +18,7 @@ import ac.dnd.dodal.ui.plan.response.PlanElement;
 public interface PlanRepository extends JpaRepository<Plan, Long> {
 
     @Query("SELECT p FROM plans p WHERE p.history.historyId = :historyId "
+            + "AND p.deletedAt IS NULL "
             + "ORDER BY p.endDate DESC LIMIT 1")
     Optional<Plan> findLatestPlanByHistoryId(@Param("historyId") Long historyId);
 
@@ -47,6 +48,13 @@ public interface PlanRepository extends JpaRepository<Plan, Long> {
         @Param("goalId") Long goalId,
         @Param("startDate") LocalDateTime startDate,
         @Param("endDate") LocalDateTime endDate);
+
+    @Query("SELECT p FROM plans p where p.goal.goalId = :goalId "
+            + "AND p.deletedAt IS NULL ")
+    List<Plan> findAllByGoalId(Long goalId);
+
+    @Query("SELECT p FROM plans p where p.goal.goalId = :goalId ")
+    List<Plan> findAllDeletedPlanByGoalId(Long goalId);
 
     @Query("SELECT COUNT(history) > 0 FROM plan_histories history "
             + "WHERE history.historyId = :historyId "

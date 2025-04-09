@@ -6,6 +6,7 @@ import ac.dnd.dodal.ui.auth.request.OAuthUserInfoRequestDto;
 
 public class UserFixture {
 
+  public static final Long USER_ID = 1L;
   private static final String EMAIL = "testEmail@test.example";
   private static final String NICKNAME = "testUser";
   private static final String profileImage = "testProfileImageURL";
@@ -19,7 +20,7 @@ public class UserFixture {
     return new OAuthUserInfoRequestDto(NICKNAME, EMAIL, profileImage, appleId, deviceToken);
   }
 
-  public static User createUser(String email, String nickname, String profileImageUrl, String deviceToken) {
-    return new User("testUser", "testUserProfileImageUrl", "testDeviceToken", "testEmail@test.example", UserRole.USER);
+  public static User createUser() {
+    return new User(NICKNAME, profileImage, deviceToken, EMAIL, UserRole.USER);
   }
 }

@@ -128,8 +128,22 @@ public class PlanCommandService implements
                 new DeletedPlanEvent(
                         plan.getPlanId(),
                         plan.getHistory().getHistoryId(), 
-                        command.userId(), 
                         plan.getStatus()));
+    }
+
+    public void deleteAllByGoalId(DeleteAllPlanCommand command) {
+        List<Plan> plans = planService.findAllByGoalId(command.getGoalId());
+        plans.forEach(plan -> {
+            plan.delete();
+            eventPublisher.publishEvent(
+                    new DeletedPlanEvent(
+                            plan.getPlanId(),
+                            plan.getHistory().getHistoryId(),
+                            plan.getStatus()
+                    )
+            );
+        });
+        planService.saveAll(plans);
     }
 
     private List<Plan> generateIterationPlans(AddSamePlanCommand command, Plan plan) {
