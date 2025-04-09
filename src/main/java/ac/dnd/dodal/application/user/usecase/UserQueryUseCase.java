@@ -9,6 +9,8 @@ public interface UserQueryUseCase {
 
   User findByEmailAndRole(String email, UserRole role);
 
+  User findByEmailAndRoleIncludeWithdrawnUser(String email, UserRole role);
+
   Optional<User> findByEmail(String email);
 
   void checkDuplicatedEmail(String email);
