@@ -2,6 +2,7 @@ package ac.dnd.dodal.application.goal.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import ac.dnd.dodal.IntegrationTest;
 import ac.dnd.dodal.application.goal.repository.GoalRepository;
 import ac.dnd.dodal.application.user.dto.UserCommandFixture;
 import ac.dnd.dodal.application.user.service.UserCommandService;
@@ -9,19 +10,13 @@ import ac.dnd.dodal.domain.goal.model.Goal;
 import ac.dnd.dodal.domain.user.event.UserWithdrawnEvent;
 import ac.dnd.dodal.domain.user.model.User;
 import ac.dnd.dodal.ui.auth.request.OAuthUserInfoRequestDto;
-import jakarta.transaction.Transactional;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.test.context.ActiveProfiles;
 
-@SpringBootTest
-@ActiveProfiles("test")
-@Transactional
-public class GoalEventListenerTest {
+public class GoalEventListenerTest extends IntegrationTest {
 
     @Autowired
     private ApplicationEventPublisher eventPublisher;

@@ -1,9 +1,11 @@
 package ac.dnd.dodal;
 
+import ac.dnd.dodal.config.AsyncConfigTest;
 import jakarta.transaction.Transactional;
 
 import org.jasypt.encryption.StringEncryptor;
 
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,6 +27,7 @@ import ac.dnd.dodal.application.plan.repository.PlanRepository;
 @Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
+@Import(AsyncConfigTest.class)
 public abstract class IntegrationTest {
 
     @Autowired

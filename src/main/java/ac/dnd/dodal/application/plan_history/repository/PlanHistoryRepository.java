@@ -43,4 +43,7 @@ public interface PlanHistoryRepository extends JpaRepository<PlanHistory, Long> 
     @Query("SELECT ph FROM plan_histories ph WHERE ph.goal.goalId = :goalId"
             + " AND ph.deletedAt IS NULL")
     List<PlanHistory> findAllByGoalId(Long goalId);
+
+    @Query("SELECT ph FROM plan_histories ph WHERE ph.goal.goalId = :goalId")
+    List<PlanHistory> findAllByGoalIdWithDeleted(Long goalId);
 }
