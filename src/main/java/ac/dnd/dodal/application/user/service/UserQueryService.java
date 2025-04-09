@@ -58,7 +58,7 @@ public class UserQueryService implements UserQueryUseCase, CheckIsDoneUserAnswer
     @Override
     public GetUserAnswerResponseDto checkIsDoneUserAnswer(Long userId) {
 
-        User user = userQueryRepository.findById(userId)
+        User user = userQueryRepository.findByUserId(userId)
                 .orElseThrow(() -> new UserNotFoundException(UserExceptionCode.NOT_FOUND_USER));
 
         List<UserAnswer> userAnswers =  userAnswerRepository.findAllByUser(user);
