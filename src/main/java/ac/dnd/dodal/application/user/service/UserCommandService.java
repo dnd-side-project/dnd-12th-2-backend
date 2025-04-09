@@ -150,9 +150,9 @@ public class UserCommandService implements UserCommandUseCase, CreateUserAnswerU
 
   public void deleteUserInfo(User user) {
     // 회원탈퇴 성공 시 User의 deletedAt을 현재 시간으로 업데이트하여 soft delete 처리
-    user.withdrawUser();
-
     deleteAllUserAnswerOf(user);
+
+    user.withdrawUser();
 
     // TODO: 관련 데이터 비동기 삭제 로직 추가
     eventPublisher.publishEvent(new UserWithdrawnEvent(user.getId()));

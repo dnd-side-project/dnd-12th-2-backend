@@ -103,7 +103,8 @@ public class UserCommandServiceTest {
                 Thread.currentThread().interrupt();
         }
 
-        List<UserAnswer> deletedUserAnswers = userAnswerRepository.findAllByUser(user);
-        assertThat(deletedUserAnswers).isEmpty();
+        List<UserAnswer> deletedUserAnswers = userAnswerRepository.findAllByUserWithDeleted(user);
+        assertThat(deletedUserAnswers.getFirst().getDeletedAt()).isNotNull();
+        assertThat(deletedUserAnswers.getLast().getDeletedAt()).isNotNull();
     }
 }
