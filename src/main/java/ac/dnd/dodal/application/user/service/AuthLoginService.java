@@ -114,7 +114,7 @@ public class AuthLoginService {
 
   private User registerNewAppleUser(OAuthByAppleUserInfoRequestDto appleIdTokenParsingDto) {
     User unCheckedUser =
-        userQueryUseCase.findByEmailAndRole(appleIdTokenParsingDto.appleId(), UserRole.USER);
+        userQueryUseCase.findByEmailAndRoleIncludeWithdrawnUser(appleIdTokenParsingDto.appleId(), UserRole.USER);
 
     // 탈퇴한 사용자인 경우 재가입 처리
     if (isCheckWithdrawnUser(unCheckedUser)) {

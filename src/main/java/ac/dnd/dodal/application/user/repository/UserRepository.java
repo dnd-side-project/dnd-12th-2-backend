@@ -25,8 +25,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
   @Query("SELECT u FROM User u WHERE u.id = :id AND u.refreshToken IS NOT NULL")
   Optional<User> findByIdAndRefreshTokenNotNull(Long id);
 
-  @Query("SELECT u FROM User u WHERE u.email = :email AND u.role = :role")
+  @Query("SELECT u FROM User u WHERE u.email = :email AND u.role = :role AND u.deletedAt IS NULL")
   User findByEmailAndRole(String email, UserRole role);
+
+  @Query("SELECT u FROM User u WHERE u.email = :email AND u.role = :role")
+  User findByEmailAndRoleIncludeWithdrawnUser(String email, UserRole role);
 
   @Query(
       "SELECT CASE WHEN COUNT(u) > 0 THEN TRUE ELSE FALSE END FROM User u WHERE u.email = :email")

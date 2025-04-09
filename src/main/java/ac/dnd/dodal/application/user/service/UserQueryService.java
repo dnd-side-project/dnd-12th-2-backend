@@ -32,6 +32,11 @@ public class UserQueryService implements UserQueryUseCase, CheckIsDoneUserAnswer
     }
 
     @Override
+    public User findByEmailAndRoleIncludeWithdrawnUser(String email, UserRole role) {
+        return userQueryRepository.findByEmailAndRoleIncludeWithdrawnUser(email, role);
+    }
+
+    @Override
     public Optional<User> findByEmail(String email) {
         return userQueryRepository.findByEmail(email);
     }
@@ -63,7 +68,7 @@ public class UserQueryService implements UserQueryUseCase, CheckIsDoneUserAnswer
 
         List<UserAnswer> userAnswers =  userAnswerRepository.findAllByUser(user);
 
-        if (userAnswers.isEmpty() || userAnswers == null) {
+        if (userAnswers.isEmpty()) {
             return GetUserAnswerResponseDto.fromUserAnswersOnboardingNotDone();
         }
 
